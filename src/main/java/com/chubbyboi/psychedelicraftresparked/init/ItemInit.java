@@ -81,6 +81,9 @@ public class ItemInit {
         .setUseAction(EnumAction.BOW)
         .setFinishSound(SoundEvents.ENTITY_LEASHKNOT_PLACE) ; // Leash kinda sounds snorty
 
+    public static final ItemDrinkable SYRINGE = new ItemDrinkable("syringe", 10, 10, 25, ItemDrinkable.ConsumptionType.INJECT)
+        .setFinishSound(SoundEvents.ENTITY_PLAYER_HURT);
+
 
 
     // ==================== TOBACCO ITEMS ====================

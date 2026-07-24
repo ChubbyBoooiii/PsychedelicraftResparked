@@ -101,7 +101,7 @@ public class DrugCocaine extends DrugBase {
 
     @Override
     public float getBloomHallucinationStrength() {
-        return zeroToOne(getActiveValue(), 0.0f, 0.6f) * 1.5f;
+        return zeroToOne(getActiveValue(), 0.0f, 1.0f);
     }
 
     @Override

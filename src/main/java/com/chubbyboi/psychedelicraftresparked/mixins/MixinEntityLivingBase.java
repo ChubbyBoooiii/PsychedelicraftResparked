@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.mixins;
 
+import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokable;
 import com.chubbyboi.psychedelicraftresparked.item.PsychItem;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,7 +15,7 @@ public class MixinEntityLivingBase {
 
     @Inject(method = "playEquipSound", at = @At("HEAD"), cancellable = true)
     private void suppressEquipSoundForPsychItems(ItemStack stack, CallbackInfo ci) {
-        if (!stack.isEmpty() && stack.getItem() instanceof PsychItem) {
+        if (!stack.isEmpty() && (stack.getItem() instanceof PsychItem || stack.getItem() instanceof ItemDrinkable)) {
             ci.cancel();
         }
     }

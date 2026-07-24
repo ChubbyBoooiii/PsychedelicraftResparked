@@ -2,8 +2,12 @@ package com.chubbyboi.psychedelicraftresparked.item;
 
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.Tags;
+import com.chubbyboi.psychedelicraftresparked.fluids.DrinkableFluid;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
+import com.chubbyboi.psychedelicraftresparked.fluids.InjectableFluid;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -12,15 +16,24 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFluidContainer {
 
@@ -38,6 +51,7 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
     private final ConsumptionType consumptionType;
     private final int consumptionVolume;
     private final int useDuration;
+    private SoundEvent finishSound;
 
     public ItemDrinkable(String name, int capacity, int consumptionVolume, int useDuration, ConsumptionType consumptionType) {
         super(capacity);
@@ -54,6 +68,11 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
         });
 
         ItemInit.ITEMS.add(this);
+    }
+
+    public ItemDrinkable setFinishSound(SoundEvent finishSound) {
+        this.finishSound = finishSound;
+        return this;
     }
 
     @Override
@@ -78,6 +97,60 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
     }
 
     @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        super.getSubItems(tab, items);
+        if (!isInCreativeTab(tab)) {
+            return;
+        }
+
+        for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
+            boolean compatible = consumptionType == ConsumptionType.DRINK
+                ? fluid instanceof DrinkableFluid && ((DrinkableFluid) fluid).canDrink(new FluidStack(fluid, capacity), null)
+                : fluid instanceof InjectableFluid && ((InjectableFluid) fluid).canInject(new FluidStack(fluid, capacity), null);
+
+            if (compatible) {
+                ItemStack stack = new ItemStack(this);
+                IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                if (handler != null) {
+                    handler.fill(new FluidStack(fluid, capacity), true);
+                }
+                items.add(stack);
+            }
+        }
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        FluidStack fluidStack = getContainedFluidStack(stack);
+        if (fluidStack != null) {
+            return I18n.translateToLocalFormatted(getTranslationKey(stack) + ".full.name", fluidStack.getFluid().getLocalizedName(fluidStack));
+        }
+        return super.getItemStackDisplayName(stack);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+
+        FluidStack fluidStack = getContainedFluidStack(stack);
+        if (fluidStack == null) {
+            tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("psychedelicraftresparked.tooltip.fluid.empty"));
+        } else {
+            tooltip.add(TextFormatting.GRAY + fluidStack.getFluid().getLocalizedName(fluidStack) + " (" + fluidStack.amount + "mB/" + capacity + "mB)");
+        }
+    }
+
+    @Nullable
+    private FluidStack getContainedFluidStack(ItemStack stack) {
+        IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        if (handler == null) {
+            return null;
+        }
+        FluidStack fluidStack = handler.drain(capacity, false);
+        return fluidStack != null && fluidStack.amount > 0 ? fluidStack : null;
+    }
+
+    @Override
     public EnumAction getItemUseAction(ItemStack stack) {
         return consumptionType.useAction;
     }
@@ -91,6 +164,10 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
         if (!worldIn.isRemote) {
             consume(stack, entityLiving, true);
+
+            if (finishSound != null) {
+                worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, finishSound, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+            }
         }
         return stack;
     }

@@ -8,6 +8,8 @@ import com.chubbyboi.psychedelicraftresparked.util.RegistryHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
@@ -43,12 +45,12 @@ public class PsychedelicraftResparked {
     }
 
     @Mod.EventHandler
-    public void init(FMLPreInitializationEvent event) {
+    public void init(FMLInitializationEvent event) {
         RegistryHandler.initRegistries();
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPreInitializationEvent event) {
+    public void postInit(FMLPostInitializationEvent event) {
         RegistryHandler.postInitRegistries();
     }
 

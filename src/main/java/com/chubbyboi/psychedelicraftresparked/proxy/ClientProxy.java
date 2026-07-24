@@ -52,5 +52,10 @@ public class ClientProxy extends CommonProxy {
             (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
             ItemInit.MUG
         );
+
+        event.getItemColors().registerItemColorHandler(
+            (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
+            ItemInit.SYRINGE
+        );
     }
 }

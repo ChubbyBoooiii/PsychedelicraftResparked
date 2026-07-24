@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/syringe"
+  },
+  "overrides": [
+    {
+      "predicate": { "filled": 1 },
+      "model": "psychedelicraftresparked:item/syringe_filled"
+    }
+  ]
+}

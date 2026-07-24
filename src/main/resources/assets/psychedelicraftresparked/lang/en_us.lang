@@ -1,6 +1,8 @@
 # Creative Tabs
 itemGroup.psychedelicrafResparkedTab=Psychedelicraft Resparked
 
+
+
 # ITEMS
 # Drug Delivery Items
 item.pipe.name=Pipe
@@ -19,9 +21,12 @@ item.hash_muffin.name=Hash Muffin
 
 # Cocaine
 item.cocaine_powder.name=Cocaine Powder
+item.syringe.name=Syringe
+item.syringe.full.name=%s Syringe
 
-# Fluids
+# Fluid Items
 item.mug.name=Mug
+item.mug.full.name=Mug of %s
 
 # Tobacco
 item.tobacco_seeds.name=Tobacco Seeds
@@ -52,8 +57,12 @@ item.harmonium.black.name=Black Harmonium
 item.brown_magic_mushrooms.name=Brown Magic Mushrooms
 item.red_magic_mushrooms.name=Red Magic Mushrooms
 
+
+
 #BLOCKS
 tile.drying_table.name=Drying Table
+
+
 
 #TILE ENTITIES
 container.drying_table=Drying Table
@@ -64,11 +73,22 @@ container.drying_table.total_speed=Total Speed: %.1f%%
 container.drying_table.rain_warning=§c§lCannot dry in rain!
 container.drying_table.progress=Progress: %d%%
 
+
+
 #DEATH MESSAGES
 death.attack.stroke=%1$s had a stroke
 death.attack.heartFailure=%1$s's heart stopped beating
 death.attack.respiratoryFailure=%1$s had a respiratory failure
 death.attack.alcoholPoisoning=%1$s died of alcohol poisoning
 
+
+
 #STATUS MESSAGES
 psychedelicraftresparked.sleep.blocked=The drugs in your body keep you awake
+psychedelicraftresparked.tooltip.fluid.empty=Empty
+
+
+
+#FLUIDS
+fluid.coffee=Coffee
+fluid.cocaine_fluid=Cocaine

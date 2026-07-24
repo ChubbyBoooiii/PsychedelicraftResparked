@@ -1,12 +1,15 @@
 package com.chubbyboi.psychedelicraftresparked.recipes;
 
 import com.chubbyboi.psychedelicraftresparked.Tags;
+import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CraftingRecipes {
@@ -108,6 +111,26 @@ public class CraftingRecipes {
             "GGG",
             'G', "blockGlassColorless",
             'P', "paneGlassColorless"
+        );
+
+        // Syringe
+        GameRegistry.addShapedRecipe(
+            new ResourceLocation(Tags.MOD_ID, "syringe"),
+            null,
+            new ItemStack(ItemInit.SYRINGE, 1),
+            "I",
+            "G",
+            'G', "blockGlassColorless",
+            'I', "ingotIron"
+        );
+
+        // Cocaine Fluid Syringe (fill an empty syringe with Cocaine Powder + a water bucket)
+        ForgeRegistries.RECIPES.register(
+            new RecipeFillContainer(
+                new FluidStack(FluidInit.COCAINE_FLUID, 10),
+                Ingredient.fromItem(ItemInit.COCAINE_POWDER),
+                Ingredient.fromItem(Items.WATER_BUCKET)
+            ).setRegistryName(Tags.MOD_ID, "fill_syringe_cocaine")
         );
 
         // Harmonium
