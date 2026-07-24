@@ -1,0 +1,28 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/cigar_3"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, 90, 25],
+      "translation": [-2, 0, -1],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, -90, -25],
+      "translation": [-2, 0, -1],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 90, 25],
+      "translation": [0, 2, 0],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, -90, -25],
+      "translation": [0, 2, 0],
+      "scale": [0.4, 0.4, 0.4]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+    "heartbeat": {
+        "category": "player",
+        "sounds": ["psychedelicraftresparked:heartbeat"]
+    },
+    "breath": {
+        "category": "player",
+        "sounds": ["psychedelicraftresparked:breath"]
+    }
+}

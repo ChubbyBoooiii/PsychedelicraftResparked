@@ -1,0 +1,22 @@
+package com.chubbyboi.psychedelicraftresparked.mixins;
+
+import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
+import net.minecraft.client.renderer.GlStateManager;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(GlStateManager.class)
+public class MixinGlStateManager {
+
+    @Inject(method = "disableTexture2D", at = @At("HEAD"))
+    private static void onDisableTexture2D(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().pauseForUntexturedDraw();
+    }
+
+    @Inject(method = "enableTexture2D", at = @At("HEAD"))
+    private static void onEnableTexture2D(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().resumeAfterUntexturedDraw();
+    }
+}

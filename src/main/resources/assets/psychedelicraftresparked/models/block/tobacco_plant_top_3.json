@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures" : {
+    "cross": "psychedelicraftresparked:blocks/tobacco_plant_top_3"
+  }
+}

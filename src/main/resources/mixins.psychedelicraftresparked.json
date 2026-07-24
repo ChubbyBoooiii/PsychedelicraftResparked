@@ -1,0 +1,17 @@
+{
+	"package": "com.chubbyboi.psychedelicraftresparked.mixins",
+	"required": true,
+	"refmap": "mixins.psychedelicraftresparked.refmap.json",
+	"target": "@env(DEFAULT)",
+	"minVersion": "0.8.5",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"MixinEntityLivingBase"
+	],
+	"server": [],
+	"client": [
+		"MixinEntityRenderer",
+		"MixinGlStateManager",
+		"EntityLivingBaseAccessor"
+	]
+}

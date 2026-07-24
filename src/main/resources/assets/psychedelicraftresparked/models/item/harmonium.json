@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/harmonium",
+    "layer1": "psychedelicraftresparked:items/harmonium_glowstone"
+  }
+}

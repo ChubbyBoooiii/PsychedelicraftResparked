@@ -1,0 +1,26 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/bong"
+  },
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [0, -90, 25],
+      "translation": [0, 4, 0],
+      "scale": [0.6, 0.6, 0.6]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 90, -25],
+      "translation": [0, 4, 0],
+      "scale": [0.6, 0.6, 0.6]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "smoking": 1
+      },
+      "model": "psychedelicraftresparked:item/bong_in_use"
+    }
+  ]
+}

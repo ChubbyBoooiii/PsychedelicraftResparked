@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "enchanting_table_base",
+    "textures": {
+      "particle": "psychedelicraftresparked:blocks/drying_table_bottom",
+      "bottom": "psychedelicraftresparked:blocks/drying_table_bottom",
+      "top": "psychedelicraftresparked:blocks/drying_table_top",
+      "side": "psychedelicraftresparked:blocks/drying_table_side"
+    }
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {}
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/blunt"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, 90, 25],
+      "translation": [-2, 0, -1],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, -90, -25],
+      "translation": [-2, 0, -1],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 90, 25],
+      "translation": [0, 2, 0],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, -90, -25],
+      "translation": [0, 2, 0],
+      "scale": [0.4, 0.4, 0.4]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": { "smoking": 1 },
+      "model": "psychedelicraftresparked:item/blunt_in_use"
+    },
+    {
+      "predicate": { "damage": 0.334 },
+      "model": "psychedelicraftresparked:item/blunt_1"
+    },
+    {
+      "predicate": { "damage": 0.334, "smoking": 1 },
+      "model": "psychedelicraftresparked:item/blunt_in_use_1"
+    },
+    {
+      "predicate": { "damage": 0.667 },
+      "model": "psychedelicraftresparked:item/blunt_2"
+    },
+    {
+      "predicate": { "damage": 0.667, "smoking": 1 },
+      "model": "psychedelicraftresparked:item/blunt_in_use_2"
+    },
+    {
+      "predicate": { "damage": 1.0 },
+      "model": "psychedelicraftresparked:item/blunt_3"
+    },
+    {
+      "predicate": { "damage": 1.0, "smoking": 1 },
+      "model": "psychedelicraftresparked:item/blunt_in_use_3"
+    }
+  ]
+}
