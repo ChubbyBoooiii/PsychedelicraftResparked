@@ -20,6 +20,9 @@ item.blunt.name=Blunt
 item.hash_muffin.name=Hash Muffin
 
 # Cocaine
+item.coca_seeds.name=Coca Seeds
+item.coca_leaf.name=Coca Leaf
+item.dried_coca_leaves.name=Dried Coca Leaves
 item.cocaine_powder.name=Cocaine Powder
 item.syringe.name=Syringe
 item.syringe.full.name=%s Syringe

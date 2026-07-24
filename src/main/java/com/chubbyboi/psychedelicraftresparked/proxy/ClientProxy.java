@@ -13,8 +13,10 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -57,5 +59,11 @@ public class ClientProxy extends CommonProxy {
             (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
             ItemInit.SYRINGE
         );
+    }
+
+    @SubscribeEvent
+    public void onTextureStitch(TextureStitchEvent.Pre event) {
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/clear_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
     }
 }

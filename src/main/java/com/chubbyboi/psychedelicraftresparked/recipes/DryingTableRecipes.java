@@ -24,6 +24,7 @@ public class DryingTableRecipes {
         addDryingTableRecipes(new ItemStack(ItemInit.TOBACCO_LEAF), new ItemStack(ItemInit.DRIED_TOBACCO, 3), 5.0F);
         addDryingTableRecipes(new ItemStack(Blocks.BROWN_MUSHROOM), new ItemStack(ItemInit.BROWN_SHROOMS, 3), 5.0F);
         addDryingTableRecipes(new ItemStack(Blocks.RED_MUSHROOM), new ItemStack(ItemInit.RED_SHROOMS, 3), 5.0F);
+        addDryingTableRecipes(new ItemStack(ItemInit.COCA_LEAF), new ItemStack(ItemInit.DRIED_COCA_LEAVES, 3), 5.0F);
     }
 
     public void addDryingTableRecipes(ItemStack inputs, ItemStack result, float experience) {

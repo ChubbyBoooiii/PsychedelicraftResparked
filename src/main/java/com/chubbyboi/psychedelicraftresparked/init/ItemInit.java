@@ -75,6 +75,11 @@ public class ItemInit {
 
 
     // ==================== COCAINE ITEMS ====================
+    // Raw/dried materials
+    public static final PsychSeeds COCA_SEEDS = new PsychSeeds("coca_seeds");
+    public static final Item COCA_LEAF = new PsychItem("coca_leaf");
+    public static final Item DRIED_COCA_LEAVES = new PsychItem("dried_coca_leaves");
+
     // Cocaine Drugs
     public static final Item COCAINE_POWDER = new ItemIngestable("cocaine_powder", 0, 0.0F)
         .setDrugInfluence("cocaine", 0, 0.002, 0.003, 0.35)
@@ -165,6 +170,7 @@ public class ItemInit {
     public static void setCropForSeeds() {
         CANNABIS_SEEDS.setBlockCrop(BlockInit.CANNABIS_PLANT);
         TOBACCO_SEEDS.setBlockCrop(BlockInit.TOBACCO_PLANT);
+        COCA_SEEDS.setBlockCrop(BlockInit.COCA_PLANT);
     }
 
     private static Item createItemBlock(net.minecraft.block.Block block) {
