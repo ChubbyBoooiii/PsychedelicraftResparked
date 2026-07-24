@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemInit {
-    public static final List<Item> ITEMS = new ArrayList<Item>();
+    public static final List<Item> ITEMS = new ArrayList<>();
 
     // ==================== FUNCTIONAL BLOCKS ====================
     public static final Item DRYING_TABLE_ITEM = createItemBlock(BlockInit.DRYING_TABLE);
@@ -70,8 +70,7 @@ public class ItemInit {
 
     // Hash Muffin
     public static final Item HASH_MUFFIN = new ItemIngestable("hash_muffin", 5, 0.2F)
-        .setDrugInfluence("cannabis", 120, 0.004, 0.002, 0.8)
-        .setConsumeDuration(32);
+        .setDrugInfluence("cannabis", 120, 0.004, 0.002, 0.8);
 
 
 
@@ -80,8 +79,7 @@ public class ItemInit {
     public static final Item COCAINE_POWDER = new ItemIngestable("cocaine_powder", 0, 0.0F)
         .setDrugInfluence("cocaine", 0, 0.002, 0.003, 0.35)
         .setUseAction(EnumAction.BOW)
-        .setFinishSound(SoundEvents.ENTITY_LEASHKNOT_PLACE)  // Leash kinda sounds snorty
-        .setConsumeDuration(32);
+        .setFinishSound(SoundEvents.ENTITY_LEASHKNOT_PLACE) ; // Leash kinda sounds snorty
 
 
 
@@ -140,6 +138,17 @@ public class ItemInit {
             );
         }
     }
+
+
+
+    // ==================== SHROOMS ITEMS ====================
+    public static final Item BROWN_SHROOMS = new ItemIngestable("brown_magic_mushrooms", 3, 0.1F)
+        .setDrugInfluence("brownshrooms", 15, 0.005, 0.003, 0.5)
+        .setConsumeDuration(16);
+
+    public static final Item RED_SHROOMS = new ItemIngestable("red_magic_mushrooms", 3, 0.1F)
+        .setDrugInfluence("redshrooms", 15, 0.005, 0.003, 0.5)
+        .setConsumeDuration(16);
 
 
 

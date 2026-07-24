@@ -2,6 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.recipes;
 
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.google.common.collect.Maps;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;
@@ -21,6 +22,8 @@ public class DryingTableRecipes {
         addDryingTableRecipes(new ItemStack(ItemInit.CANNABIS_LEAF), new ItemStack(ItemInit.DRIED_CANNABIS_LEAVES, 3), 5.0F);
         addDryingTableRecipes(new ItemStack(ItemInit.CANNABIS_BUD), new ItemStack(ItemInit.DRIED_CANNABIS_BUDS, 3), 5.0F);
         addDryingTableRecipes(new ItemStack(ItemInit.TOBACCO_LEAF), new ItemStack(ItemInit.DRIED_TOBACCO, 3), 5.0F);
+        addDryingTableRecipes(new ItemStack(Blocks.BROWN_MUSHROOM), new ItemStack(ItemInit.BROWN_SHROOMS, 3), 5.0F);
+        addDryingTableRecipes(new ItemStack(Blocks.RED_MUSHROOM), new ItemStack(ItemInit.RED_SHROOMS, 3), 5.0F);
     }
 
     public void addDryingTableRecipes(ItemStack inputs, ItemStack result, float experience) {

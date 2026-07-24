@@ -48,6 +48,10 @@ item.harmonium.green.name=Green Harmonium
 item.harmonium.red.name=Red Harmonium
 item.harmonium.black.name=Black Harmonium
 
+# Shrooms
+item.brown_magic_mushrooms.name=Brown Magic Mushrooms
+item.red_magic_mushrooms.name=Red Magic Mushrooms
+
 #BLOCKS
 tile.drying_table.name=Drying Table
 
