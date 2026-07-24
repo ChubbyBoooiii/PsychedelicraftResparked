@@ -64,9 +64,16 @@ item.red_magic_mushrooms.name=Red Magic Mushrooms
 item.coffea_cherries.name=Coffee Cherries
 item.coffee_beans.name=Coffee Beans
 
+# Peyote
+item.peyote.name=Peyote
+item.dried_peyote.name=Dried Peyote
+item.peyote_joint.name=Peyote Joint
+
+
 
 # BLOCKS
 tile.drying_table.name=Drying Table
+tile.peyote.name=Peyote
 
 
 

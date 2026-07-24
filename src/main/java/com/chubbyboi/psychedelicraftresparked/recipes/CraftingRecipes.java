@@ -56,6 +56,10 @@ public class CraftingRecipes {
         // Coffee
         GameRegistry.addSmelting(ItemInit.COFFEA_CHERRIES, new ItemStack(ItemInit.COFFEE_BEANS), 0.2F);
 
+        // Peyote
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "peyote_joint"), null, new ItemStack(ItemInit.PEYOTE_JOINT, 1), "P", "D", "P", 'D', ItemInit.DRIED_PEYOTE, 'P', Items.PAPER);
+
+
 
 
         // ==================== FLUID FILLING ====================

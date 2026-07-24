@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "age=0": { "model": "psychedelicraftresparked:peyote" },
+    "age=1": { "model": "psychedelicraftresparked:peyote" },
+    "age=2": { "model": "psychedelicraftresparked:peyote" },
+    "age=3": { "model": "psychedelicraftresparked:peyote" }
+  }
+}

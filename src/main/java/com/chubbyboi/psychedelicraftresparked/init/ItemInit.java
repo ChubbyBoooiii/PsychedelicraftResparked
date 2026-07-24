@@ -166,6 +166,21 @@ public class ItemInit {
     public static final Item COFFEE_BEANS = new PsychItem("coffee_beans");
 
 
+
+    // ==================== PEYOTE ITEMS ====================
+    // Raw/dried materials
+    public static final Item PEYOTE = createItemBlock(BlockInit.PEYOTE_PLANT);
+
+    // Peyote Drugs
+    public static final Item DRIED_PEYOTE = new ItemIngestable("dried_peyote", 1, 0.1F)
+        .setDrugInfluence("peyote", 15, 0.005, 0.003, 0.5)
+        .setConsumeDuration(16);
+    public static final Item PEYOTE_JOINT = new ItemSmokable("peyote_joint")
+        .addDrugInfluence("peyote",20, 0.003, 0.0015, 0.4)
+        .setSmokeDuration(40);
+
+
+
     // ==================== FLUID RELATED ====================
     public static final ItemDrinkable MUG = new ItemDrinkable("mug", 500, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
 

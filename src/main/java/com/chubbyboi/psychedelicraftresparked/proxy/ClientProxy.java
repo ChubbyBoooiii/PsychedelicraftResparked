@@ -4,12 +4,14 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.DrugVisualRendere
 import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationEntitySpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.SmokeMonsterSpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
 import com.chubbyboi.psychedelicraftresparked.commands.CommandHallucinationDebug;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -32,6 +34,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerRenderers() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDryingTable.class, new TileEntityRendererDryingTable());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPeyote.class, new TileEntityRendererPeyote());
 
         ShaderPipeline.getInstance().init();
         WorldShaderEffect.getInstance().init();

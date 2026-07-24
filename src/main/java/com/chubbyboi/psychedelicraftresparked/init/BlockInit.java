@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.init;
 
+import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
 import com.chubbyboi.psychedelicraftresparked.block.BlockTallCrop;
 import com.chubbyboi.psychedelicraftresparked.block.PsychBlockDryingTable;
 import net.minecraft.block.Block;
@@ -18,6 +19,8 @@ public class BlockInit {
     public static final BlockTallCrop TOBACCO_PLANT = new BlockTallCrop("tobacco_plant", 15, 3);
     public static final BlockTallCrop COCA_PLANT = new BlockTallCrop("coca_plant", 15, 3);
     public static final BlockTallCrop COFFEA_PLANT = new BlockTallCrop("coffea_plant", 15, 2);
+
+    public static final BlockPeyote PEYOTE_PLANT = new BlockPeyote("peyote");
 
     // Call after init so the seeds and crops exist
     public static void setCropDropsAndSeeds() {
