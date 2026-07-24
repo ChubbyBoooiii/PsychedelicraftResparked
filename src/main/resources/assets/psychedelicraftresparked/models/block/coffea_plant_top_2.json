@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures" : {
+    "cross": "psychedelicraftresparked:blocks/coffea_plant_top_2"
+  }
+}

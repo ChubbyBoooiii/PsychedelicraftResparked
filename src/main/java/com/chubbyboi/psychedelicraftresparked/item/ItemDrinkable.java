@@ -93,6 +93,14 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
                     container.setTagCompound(null);
                 }
             }
+
+            @Override
+            public boolean canFillFluidType(FluidStack fluid) {
+                Fluid f = fluid.getFluid();
+                return consumptionType == ConsumptionType.DRINK
+                    ? f instanceof DrinkableFluid && ((DrinkableFluid) f).canDrink(fluid, null)
+                    : f instanceof InjectableFluid && ((InjectableFluid) f).canInject(fluid, null);
+            }
         };
     }
 

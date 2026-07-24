@@ -160,6 +160,12 @@ public class ItemInit {
 
 
 
+    // ==================== COFFEE RELATED ====================
+    // Raw/dried materials
+    public static final PsychSeeds COFFEA_CHERRIES = new PsychSeeds("coffea_cherries");
+    public static final Item COFFEE_BEANS = new PsychItem("coffee_beans");
+
+
     // ==================== FLUID RELATED ====================
     public static final ItemDrinkable MUG = new ItemDrinkable("mug", 500, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
 
@@ -171,6 +177,7 @@ public class ItemInit {
         CANNABIS_SEEDS.setBlockCrop(BlockInit.CANNABIS_PLANT);
         TOBACCO_SEEDS.setBlockCrop(BlockInit.TOBACCO_PLANT);
         COCA_SEEDS.setBlockCrop(BlockInit.COCA_PLANT);
+        COFFEA_CHERRIES.setBlockCrop(BlockInit.COFFEA_PLANT);
     }
 
     private static Item createItemBlock(net.minecraft.block.Block block) {

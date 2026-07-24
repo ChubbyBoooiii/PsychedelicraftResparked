@@ -1,0 +1,37 @@
+{
+  "variants": {
+    "age=0,top=false": { "model": "psychedelicraftresparked:coffea_plant_0" },
+    "age=1,top=false": { "model": "psychedelicraftresparked:coffea_plant_0" },
+    "age=2,top=false": { "model": "psychedelicraftresparked:coffea_plant_1" },
+    "age=3,top=false": { "model": "psychedelicraftresparked:coffea_plant_1" },
+    "age=4,top=false": { "model": "psychedelicraftresparked:coffea_plant_1" },
+    "age=5,top=false": { "model": "psychedelicraftresparked:coffea_plant_2" },
+    "age=6,top=false": { "model": "psychedelicraftresparked:coffea_plant_2" },
+    "age=7,top=false": { "model": "psychedelicraftresparked:coffea_plant_3" },
+    "age=8,top=false": { "model": "psychedelicraftresparked:coffea_plant_3" },
+    "age=9,top=false": { "model": "psychedelicraftresparked:coffea_plant_4" },
+    "age=10,top=false": { "model": "psychedelicraftresparked:coffea_plant_4" },
+    "age=11,top=false": { "model": "psychedelicraftresparked:coffea_plant_5" },
+    "age=12,top=false": { "model": "psychedelicraftresparked:coffea_plant_5" },
+    "age=13,top=false": { "model": "psychedelicraftresparked:coffea_plant_6" },
+    "age=14,top=false": { "model": "psychedelicraftresparked:coffea_plant_6" },
+    "age=15,top=false": { "model": "psychedelicraftresparked:coffea_plant_7" },
+
+    "age=0,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_0" },
+    "age=1,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_0" },
+    "age=2,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_0" },
+    "age=3,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_0" },
+    "age=4,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_1" },
+    "age=5,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_1" },
+    "age=6,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_1" },
+    "age=7,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_1" },
+    "age=8,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_1" },
+    "age=9,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_2" },
+    "age=10,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_2" },
+    "age=11,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_2" },
+    "age=12,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_2" },
+    "age=13,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_2" },
+    "age=14,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_2" },
+    "age=15,top=true": { "model": "psychedelicraftresparked:coffea_plant_top_3" }
+  }
+}

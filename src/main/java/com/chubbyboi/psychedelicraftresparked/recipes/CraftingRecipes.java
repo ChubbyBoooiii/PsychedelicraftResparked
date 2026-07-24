@@ -5,6 +5,7 @@ import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -52,9 +53,13 @@ public class CraftingRecipes {
             );
         }
 
+        // Coffee
+        GameRegistry.addSmelting(ItemInit.COFFEA_CHERRIES, new ItemStack(ItemInit.COFFEE_BEANS), 0.2F);
+
 
 
         // ==================== FLUID FILLING ====================
         ForgeRegistries.RECIPES.register(new RecipeFillContainer(new FluidStack(FluidInit.COCAINE_FLUID, 10), Ingredient.fromItem(ItemInit.COCAINE_POWDER), Ingredient.fromItem(Items.WATER_BUCKET)).setRegistryName(Tags.MOD_ID, "fill_syringe_cocaine"));
+        ForgeRegistries.RECIPES.register(new RecipeFillContainer(new FluidStack(FluidInit.COFFEE, 500), Ingredient.fromItem(ItemInit.COFFEE_BEANS), Ingredient.fromItem(ItemInit.COFFEE_BEANS), Ingredient.fromItem(Items.WATER_BUCKET)).setRegistryName(Tags.MOD_ID, "fill_mug_coffee"));
     }
 }

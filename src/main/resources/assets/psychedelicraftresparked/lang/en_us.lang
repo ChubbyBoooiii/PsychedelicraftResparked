@@ -60,14 +60,17 @@ item.harmonium.black.name=Black Harmonium
 item.brown_magic_mushrooms.name=Brown Magic Mushrooms
 item.red_magic_mushrooms.name=Red Magic Mushrooms
 
+# Coffee
+item.coffea_cherries.name=Coffee Cherries
+item.coffee_beans.name=Coffee Beans
 
 
-#BLOCKS
+# BLOCKS
 tile.drying_table.name=Drying Table
 
 
 
-#TILE ENTITIES
+# TILE ENTITIES
 container.drying_table=Drying Table
 container.drying_table.drying_efficiency=§lDrying Efficiency
 container.drying_table.light_percent=Light: %.1f%%
