@@ -15,6 +15,7 @@ uniform vec2 pixelSize;
 uniform int fogMode;
 uniform int fogEnabled;
 uniform int lightmapEnabled;
+uniform int lightingEnabled;
 uniform int texture2DEnabled;
 uniform vec4 overrideColor;
 uniform int useScreenTexCoords;
@@ -48,6 +49,15 @@ void main() {
     if (lightmapEnabled == 1) {
         vec4 lighting = texture2D(lightmapTex, gl_TexCoord[1].st);
         gl_FragColor.rgb *= lighting.rgb;
+    }
+
+    if (lightingEnabled == 1) {
+        vec3 finalLight = gl_LightModel.ambient.rgb;
+        for (int i = 0; i < 2; i++) {
+            vec3 lightVec = normalize(gl_LightSource[i].position.xyz);
+            finalLight += gl_FrontLightProduct[i].diffuse.rgb * max(dot(normalVector, lightVec), 0.0);
+        }
+        gl_FragColor.rgb *= clamp(finalLight, 0.0, 1.0);
     }
 
     gl_FragColor = clamp(gl_FragColor, 0.0, 1.0);

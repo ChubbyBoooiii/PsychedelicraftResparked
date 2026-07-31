@@ -29,6 +29,8 @@ public class WorldShaderEffect {
     private int shaderProgram = 0;
 
     private boolean active = false;
+    private boolean bound = false;
+    private boolean lightingEnabled = false;
 
     public void init() {
         try {
@@ -60,6 +62,7 @@ public class WorldShaderEffect {
         }
 
         active = true;
+        bound = true;
         GL20.glUseProgram(shaderProgram);
 
         float ticks = mc.ingameGUI.getUpdateCounter() + partialTicks;
@@ -78,6 +81,9 @@ public class WorldShaderEffect {
 
         boolean texture2DEnabled = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
         GL20.glUniform1i(uniform("texture2DEnabled"), texture2DEnabled ? 1 : 0);
+
+        lightingEnabled = GL11.glIsEnabled(GL11.GL_LIGHTING);
+        GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
 
         GL20.glUniform1i(uniform("lightmapEnabled"), 1);
 
@@ -116,21 +122,35 @@ public class WorldShaderEffect {
 
     public void deactivate() {
         active = false;
+        bound = false;
         if (shaderProgram == 0) {
             return;
         }
         GL20.glUseProgram(0);
     }
 
+    public void setLightingEnabled(boolean enabled) {
+        if (shaderProgram == 0) {
+            return;
+        }
+        lightingEnabled = enabled;
+        if (bound) {
+            GL20.glUniform1i(uniform("lightingEnabled"), enabled ? 1 : 0);
+        }
+    }
+
     public void pauseForUntexturedDraw() {
         if (active && shaderProgram != 0) {
             GL20.glUseProgram(0);
+            bound = false;
         }
     }
 
     public void resumeAfterUntexturedDraw() {
         if (active && shaderProgram != 0) {
             GL20.glUseProgram(shaderProgram);
+            bound = true;
+            GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
         }
     }
 
