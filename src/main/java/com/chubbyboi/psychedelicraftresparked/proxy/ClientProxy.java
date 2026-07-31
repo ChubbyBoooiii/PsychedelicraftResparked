@@ -4,6 +4,7 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.DrugVisualRendere
 import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationEntitySpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.SmokeMonsterSpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererBarrel;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererMashTub;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
@@ -11,6 +12,7 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShad
 import com.chubbyboi.psychedelicraftresparked.commands.CommandHallucinationDebug;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
@@ -38,6 +40,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDryingTable.class, new TileEntityRendererDryingTable());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPeyote.class, new TileEntityRendererPeyote());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMashTub.class, new TileEntityRendererMashTub());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new TileEntityRendererBarrel());
 
         ShaderPipeline.getInstance().init();
         WorldShaderEffect.getInstance().init();

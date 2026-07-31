@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 public class FluidHelper {
 
     public static final int BUCKET_VOLUME = 1000;
+    public static final int FLUID_IO_SPEED_PER_TICK = 100;
 
     public static FluidStack drink(ItemStack stack, EntityLivingBase entity, int maxDrunk, boolean doDrink) {
         IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);

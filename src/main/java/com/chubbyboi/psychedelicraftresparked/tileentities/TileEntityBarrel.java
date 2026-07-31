@@ -1,20 +1,21 @@
 package com.chubbyboi.psychedelicraftresparked.tileentities;
 
-import com.chubbyboi.psychedelicraftresparked.fluids.FermentableFluid;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
-import com.chubbyboi.psychedelicraftresparked.recipes.MashTubRecipes;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -24,53 +25,21 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nullable;
 
-public class TileEntityMashTub extends TileEntity implements ITickable, ISidedInventory {
-    public static final int CAPACITY = 16000;
-    public static final int INGREDIENT_SLOTS = 7;
-    public static final int FLUID_IO_SLOT = 7;
-    public static final int SLOT_COUNT = 8;
+public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInventory {
+    public static final int CAPACITY = 8000;
+    public static final int FLUID_IO_SLOT = 0;
+    public static final int SLOT_COUNT = 1;
 
-    private static final int[] SLOTS = new int[SLOT_COUNT];
-    static {
-        for (int i = 0; i < SLOT_COUNT; i++) SLOTS[i] = i;
-    }
+    private static final int[] SLOTS = {FLUID_IO_SLOT};
 
     private final FluidTank tank = new FluidTank(CAPACITY);
     private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
 
-    public boolean fermenting;
-    public int fermentationProgress;
-    public int totalFermentationTime;
     public boolean drainingMode;
 
-    private EnumFacing primaryDirection;
+    private int rotation;
 
-    public void setPrimaryDirection(EnumFacing primaryDirection) {
-        this.primaryDirection = primaryDirection;
-    }
-
-    @Nullable
-    public EnumFacing getPrimaryDirection() {
-        return primaryDirection;
-    }
-
-    @Nullable
-    public EnumFacing getSecondaryDirection() {
-        return primaryDirection == null ? null : primaryDirection.rotateY();
-    }
-
-    public static float rotationFor(EnumFacing primary) {
-        if (primary == null) {
-            return 0.0F;
-        }
-        switch (primary) {
-            case SOUTH: return 270.0F;
-            case WEST: return 180.0F;
-            case NORTH: return 90.0F;
-            case EAST:
-            default: return 0.0F;
-        }
-    }
+    private float tapRotation;
 
     @Override
     public void update() {
@@ -78,29 +47,10 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
             return;
         }
 
-        boolean dirty = false;
-
         if (processFluidIO()) {
-            dirty = true;
-        }
-
-        if (fermenting) {
-            if (tickFermentation()) {
-                dirty = true;
-            }
-        } else if (!isInputLocked() && collectNearbyItems()) {
-            dirty = true;
-        }
-
-        if (dirty) {
             markDirty();
             world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
         }
-    }
-
-    public boolean isInputLocked() {
-        FluidStack fluid = tank.getFluid();
-        return fluid != null && fluid.amount > 0 && fluid.getFluid() != FluidRegistry.WATER;
     }
 
     private boolean processFluidIO() {
@@ -180,106 +130,34 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
         return true;
     }
 
-    private boolean collectNearbyItems() {
-        AxisAlignedBB box = new AxisAlignedBB(pos).grow(1.0, 0.5, 1.0);
-        boolean changed = false;
-        for (EntityItem entityItem : world.getEntitiesWithinAABB(EntityItem.class, box)) {
-            if (!entityItem.isDead && !entityItem.cannotPickup()) {
-                ItemStack before = entityItem.getItem();
-                ItemStack remainder = insertIntoIngredientSlots(before);
-                if (remainder.getCount() != before.getCount()) {
-                    changed = true;
-                }
-                if (remainder.isEmpty()) {
-                    entityItem.setDead();
-                } else {
-                    entityItem.setItem(remainder);
-                }
-            }
-        }
-        return changed;
-    }
-
-    private ItemStack insertIntoIngredientSlots(ItemStack stack) {
-        stack = stack.copy();
-        for (int i = 0; i < INGREDIENT_SLOTS && !stack.isEmpty(); i++) {
-            if (items.get(i).isEmpty()) {
-                items.set(i, stack.splitStack(1));
-            }
-        }
-        return stack;
-    }
-
-    public boolean hasMatchingRecipe() {
-        return MashTubRecipes.getInstance().findMatch(tank, items) != null;
-    }
-
-    public boolean startFermenting() {
-        if (fermenting || world.isRemote) {
-            return false;
-        }
-
-        MashTubRecipes.Recipe recipe = MashTubRecipes.getInstance().findMatch(tank, items);
-        if (recipe == null) {
-            return false;
-        }
-
-        recipe.consumeIngredients(items);
-        tank.setFluid(new FluidStack(recipe.getOutput(), tank.getFluidAmount()));
-
-        fermenting = true;
-        fermentationProgress = 0;
-        totalFermentationTime = getFermentationTimeNeeded();
-
+    public void toggleDrainingMode() {
+        drainingMode = !drainingMode;
         markDirty();
-        world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-        return true;
-    }
-
-    private int getFermentationTimeNeeded() {
-        FluidStack stack = tank.getFluid();
-        if (stack == null || !(stack.getFluid() instanceof FermentableFluid)) {
-            return -1;
-        }
-        return ((FermentableFluid) stack.getFluid()).fermentationTime(stack, true);
-    }
-
-    private boolean tickFermentation() {
-        FluidStack stack = tank.getFluid();
-        if (stack == null || !(stack.getFluid() instanceof FermentableFluid)) {
-            fermenting = false;
-            return true;
-        }
-
-        FermentableFluid fermentable = (FermentableFluid) stack.getFluid();
-        int needed = fermentable.fermentationTime(stack, true);
-        if (needed < 0) {
-            fermenting = false;
-            return true;
-        }
-
-        totalFermentationTime = needed;
-        fermentationProgress++;
-        if (fermentationProgress >= needed) {
-            fermentationProgress = 0;
-            fermentable.fermentStep(stack, true);
-            return true;
-        }
-        return false;
     }
 
     public FluidTank getTank() {
         return tank;
     }
 
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation & 3;
+    }
+
+    public float getTapRotation() {
+        return tapRotation;
+    }
+
+    public void setTapRotation(float tapRotation) {
+        this.tapRotation = tapRotation;
+    }
+
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return INFINITE_EXTENT_AABB;
-    }
-
-    public void toggleDrainingMode() {
-        drainingMode = !drainingMode;
-        markDirty();
     }
 
     // ==================== Capabilities ====================
@@ -305,12 +183,9 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setTag("Tank", tank.writeToNBT(new NBTTagCompound()));
-        compound.setBoolean("Fermenting", fermenting);
-        compound.setInteger("FermentationProgress", fermentationProgress);
-        compound.setInteger("TotalFermentationTime", totalFermentationTime);
-        if (primaryDirection != null) {
-            compound.setInteger("PrimaryDirection", primaryDirection.getHorizontalIndex());
-        }
+        compound.setBoolean("DrainingMode", drainingMode);
+        compound.setInteger("Rotation", rotation);
+        compound.setFloat("TapRotation", tapRotation);
         ItemStackHelper.saveAllItems(compound, items);
         return compound;
     }
@@ -319,12 +194,9 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         tank.readFromNBT(compound.getCompoundTag("Tank"));
-        fermenting = compound.getBoolean("Fermenting");
-        fermentationProgress = compound.getInteger("FermentationProgress");
-        totalFermentationTime = compound.getInteger("TotalFermentationTime");
-        if (compound.hasKey("PrimaryDirection")) {
-            primaryDirection = EnumFacing.byHorizontalIndex(compound.getInteger("PrimaryDirection"));
-        }
+        drainingMode = compound.getBoolean("DrainingMode");
+        rotation = compound.getInteger("Rotation");
+        tapRotation = compound.getFloat("TapRotation");
         items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, items);
     }
@@ -335,12 +207,12 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     }
 
     @Override
-    public net.minecraft.network.play.server.SPacketUpdateTileEntity getUpdatePacket() {
-        return new net.minecraft.network.play.server.SPacketUpdateTileEntity(pos, 0, getUpdateTag());
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
     }
 
     @Override
-    public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
     }
 
@@ -416,12 +288,9 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        if (index == FLUID_IO_SLOT) {
-            return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) != null
-                || stack.getItem() == Items.WATER_BUCKET
-                || stack.getItem() == Items.BUCKET;
-        }
-        return index < INGREDIENT_SLOTS && !isInputLocked();
+        return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) != null
+            || stack.getItem() == Items.WATER_BUCKET
+            || stack.getItem() == Items.BUCKET;
     }
 
     @Override
@@ -441,7 +310,7 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public String getName() {
-        return "container.mash_tub";
+        return "container.barrel";
     }
 
     @Override
@@ -450,36 +319,29 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     }
 
     @Override
-    public net.minecraft.util.text.ITextComponent getDisplayName() {
-        return new net.minecraft.util.text.TextComponentTranslation(getName());
+    public ITextComponent getDisplayName() {
+        return new TextComponentTranslation(getName());
     }
 
     @Override
     public int getField(int id) {
         switch (id) {
-            case 0: return fermenting ? 1 : 0;
-            case 1: return fermentationProgress;
-            case 2: return totalFermentationTime;
-            case 3: return tank.getFluidAmount();
-            case 4: return drainingMode ? 1 : 0;
+            case 0: return tank.getFluidAmount();
+            case 1: return drainingMode ? 1 : 0;
             default: return 0;
         }
     }
 
     @Override
     public void setField(int id, int value) {
-        switch (id) {
-            case 0: fermenting = value != 0; break;
-            case 1: fermentationProgress = value; break;
-            case 2: totalFermentationTime = value; break;
-            case 4: drainingMode = value != 0; break;
-            default: break;
+        if (id == 1) {
+            drainingMode = value != 0;
         }
     }
 
     @Override
     public int getFieldCount() {
-        return 5;
+        return 2;
     }
 
     @Override

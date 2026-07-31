@@ -101,6 +101,14 @@ container.mash_tub.empty=Empty
 container.mash_tub.fill=Fill
 container.mash_tub.drain=Drain
 
+# Barrel
+tile.barrel.name=Barrel
+tile.barrel.full.name=Barrel of %s
+container.barrel=Barrel
+container.barrel.empty=Empty
+container.barrel.fill=Fill
+container.barrel.drain=Drain
+
 
 
 #DEATH MESSAGES

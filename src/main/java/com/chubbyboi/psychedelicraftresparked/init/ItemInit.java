@@ -2,6 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.init;
 
 import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluence;
 import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluenceHarmonium;
+import com.chubbyboi.psychedelicraftresparked.item.ItemBarrel;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemIngestable;
@@ -27,6 +28,7 @@ public class ItemInit {
     // ==================== FUNCTIONAL BLOCKS ====================
     public static final Item DRYING_TABLE_ITEM = createItemBlock(BlockInit.DRYING_TABLE);
     public static final ItemMashTub MASH_TUB = new ItemMashTub("mash_tub");
+    public static final ItemBarrel BARREL_ITEM = new ItemBarrel(BlockInit.BARREL);
 
 
 

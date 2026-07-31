@@ -78,6 +78,18 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
     }
 
     @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        FluidStack fluidStack = getContainedFluidStack(stack);
+        return fluidStack != null && fluidStack.amount < capacity;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        FluidStack fluidStack = getContainedFluidStack(stack);
+        return fluidStack != null ? 1.0 - ((double) fluidStack.amount / (double) capacity) : 0.0;
+    }
+
+    @Override
     public int getItemStackLimit(ItemStack stack) {
         IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
         return handler != null && handler.drain(1, false) != null ? 1 : 64;

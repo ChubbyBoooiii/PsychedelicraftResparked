@@ -1,18 +1,13 @@
 package com.chubbyboi.psychedelicraftresparked.gui;
 
 import com.chubbyboi.psychedelicraftresparked.Tags;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.FluidGuiRenderer;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
-import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
 import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -152,53 +147,7 @@ public class MashTubGui extends GuiContainer {
             ? (tankHeight * this.tileentity.getTank().getFluidAmount()) / TileEntityMashTub.CAPACITY
             : 0;
         if (fluid != null && fillHeight > 0) {
-            drawTiledFluidRect(fluid, tankX, tankY + tankHeight - fillHeight, tankWidth, fillHeight);
+            FluidGuiRenderer.drawTiledFluidRect(fluid, tankX, tankY + tankHeight - fillHeight, tankWidth, fillHeight);
         }
-    }
-
-    private void drawTiledFluidRect(FluidStack fluid, int x, int y, int width, int height) {
-        TextureAtlasSprite sprite = this.mc.getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
-
-        int color = FluidHelper.getDisplayColor(fluid);
-        float a = ((color >> 24) & 0xFF) / 255.0F;
-        if (a <= 0.0F) {
-            a = 1.0F;
-        }
-        float r = ((color >> 16) & 0xFF) / 255.0F;
-        float g = ((color >> 8) & 0xFF) / 255.0F;
-        float b = (color & 0xFF) / 255.0F;
-
-        this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color(r, g, b, a);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-
-        int tileSize = 32;
-        for (int dx = 0; dx < width; dx += tileSize) {
-            int drawWidth = Math.min(tileSize, width - dx);
-            float u1 = sprite.getInterpolatedU(0.0);
-            float u2 = sprite.getInterpolatedU(drawWidth * 16.0 / tileSize);
-            for (int dy = 0; dy < height; dy += tileSize) {
-                int drawHeight = Math.min(tileSize, height - dy);
-                float v1 = sprite.getInterpolatedV(0.0);
-                float v2 = sprite.getInterpolatedV(drawHeight * 16.0 / tileSize);
-
-                int x1 = x + dx, x2 = x1 + drawWidth;
-                int y1 = y + dy, y2 = y1 + drawHeight;
-
-                buffer.pos(x1, y2, 0).tex(u1, v2).endVertex();
-                buffer.pos(x2, y2, 0).tex(u2, v2).endVertex();
-                buffer.pos(x2, y1, 0).tex(u2, v1).endVertex();
-                buffer.pos(x1, y1, 0).tex(u1, v1).endVertex();
-            }
-        }
-        tessellator.draw();
-
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.disableBlend();
     }
 }
