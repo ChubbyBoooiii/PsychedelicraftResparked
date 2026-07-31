@@ -2,6 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.gui;
 
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
+import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -52,9 +53,15 @@ public class DryingTableGui extends GuiContainer {
             int totalDryingTime = this.tileentity.getField(1);
             // Percent to 1dp
             double dryingPercent = Math.round(dryingProgress / totalDryingTime * 1000) / 10.0;
+            float progressPerTick = this.tileentity.getField(2) / 1000F;
+            int remainingUnits = Math.max(0, totalDryingTime - Math.round(dryingProgress));
+            int ticksLeft = progressPerTick > 0.0F ? (int) (remainingUnits / progressPerTick) : 0;
 
             if (mouseX >= progressX && mouseX < progressX + 24 && mouseY <= progressY && mouseY > progressY - 16) {
-                this.drawHoveringText(I18n.format("container.drying_table.progress", dryingPercent), mouseX, mouseY);
+                this.drawHoveringText(Arrays.asList(
+                    I18n.format("container.drying_table.progress", dryingPercent),
+                    I18n.format("container.drying_table.time_left", TimeHelper.formatTicksAsTime(ticksLeft))
+                ), mouseX, mouseY);
             }
         }
     }

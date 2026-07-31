@@ -1,5 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.init;
 
+import com.chubbyboi.psychedelicraftresparked.block.BlockMashTub;
+import com.chubbyboi.psychedelicraftresparked.block.BlockMashTubCompanion;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
 import com.chubbyboi.psychedelicraftresparked.block.BlockTallCrop;
 import com.chubbyboi.psychedelicraftresparked.block.PsychBlockDryingTable;
@@ -13,6 +15,8 @@ public class BlockInit {
 
     // Functional Blocks
     public static final Block DRYING_TABLE = new PsychBlockDryingTable("drying_table");
+    public static final BlockMashTub MASH_TUB = new BlockMashTub("mash_tub");
+    public static final BlockMashTubCompanion MASH_TUB_COMPANION = new BlockMashTubCompanion("mash_tub_companion");
 
     // Crops - only pass the crop item, seed and crop drops will be set later after items initialise
     public static final BlockTallCrop CANNABIS_PLANT = new BlockTallCrop("cannabis_plant", 15, 3);

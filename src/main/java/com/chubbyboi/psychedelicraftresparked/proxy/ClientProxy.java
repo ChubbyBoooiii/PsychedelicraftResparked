@@ -4,6 +4,7 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.DrugVisualRendere
 import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationEntitySpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.SmokeMonsterSpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererMashTub;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
@@ -11,6 +12,7 @@ import com.chubbyboi.psychedelicraftresparked.commands.CommandHallucinationDebug
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
@@ -35,6 +37,7 @@ public class ClientProxy extends CommonProxy {
     public void registerRenderers() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDryingTable.class, new TileEntityRendererDryingTable());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPeyote.class, new TileEntityRendererPeyote());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMashTub.class, new TileEntityRendererMashTub());
 
         ShaderPipeline.getInstance().init();
         WorldShaderEffect.getInstance().init();
@@ -68,5 +71,7 @@ public class ClientProxy extends CommonProxy {
     public void onTextureStitch(TextureStitchEvent.Pre event) {
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/clear_still"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_bubble"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_splash"));
     }
 }

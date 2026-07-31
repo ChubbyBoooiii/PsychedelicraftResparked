@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.fluids;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -58,9 +59,20 @@ public class FluidHelper {
         if (handler != null) {
             FluidStack fluidStack = handler.drain(Integer.MAX_VALUE, false);
             if (fluidStack != null) {
-                return fluidStack.getFluid().getColor(fluidStack);
+                return getDisplayColor(fluidStack);
             }
         }
         return 0xFFFFFF;
+    }
+
+    public static int getDisplayColor(FluidStack fluidStack) {
+        if (fluidStack == null) {
+            return 0xFFFFFFFF;
+        }
+        int color = fluidStack.getFluid().getColor(fluidStack);
+        if (color == 0xFFFFFFFF && fluidStack.getFluid() == FluidRegistry.WATER) {
+            return 0xFF3F76E4;
+        }
+        return color;
     }
 }

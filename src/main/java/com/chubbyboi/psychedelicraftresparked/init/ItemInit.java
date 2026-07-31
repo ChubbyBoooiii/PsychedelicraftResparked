@@ -5,6 +5,7 @@ import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluenceHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemIngestable;
+import com.chubbyboi.psychedelicraftresparked.item.ItemMashTub;
 import com.chubbyboi.psychedelicraftresparked.item.ItemPipeOfSmokeMonsters;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokingTool;
@@ -25,6 +26,7 @@ public class ItemInit {
 
     // ==================== FUNCTIONAL BLOCKS ====================
     public static final Item DRYING_TABLE_ITEM = createItemBlock(BlockInit.DRYING_TABLE);
+    public static final ItemMashTub MASH_TUB = new ItemMashTub("mash_tub");
 
 
 
@@ -178,6 +180,7 @@ public class ItemInit {
     public static final Item PEYOTE_JOINT = new ItemSmokable("peyote_joint")
         .addDrugInfluence("peyote",20, 0.003, 0.0015, 0.4)
         .setSmokeDuration(40);
+
 
 
 

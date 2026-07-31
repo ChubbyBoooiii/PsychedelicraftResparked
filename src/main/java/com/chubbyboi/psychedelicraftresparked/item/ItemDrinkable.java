@@ -48,6 +48,8 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
         }
     }
 
+    private static final int GULP_COOLDOWN_TICKS = 20;
+
     private final ConsumptionType consumptionType;
     private final int consumptionVolume;
     private final int useDuration;
@@ -171,10 +173,15 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
         if (!worldIn.isRemote) {
-            consume(stack, entityLiving, true);
+            FluidStack drunk = consume(stack, entityLiving, true);
 
-            if (finishSound != null) {
-                worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, finishSound, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+            if (drunk != null) {
+                if (finishSound != null) {
+                    worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, finishSound, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+                }
+                if (entityLiving instanceof EntityPlayer) {
+                    ((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, GULP_COOLDOWN_TICKS);
+                }
             }
         }
         return stack;
@@ -183,6 +190,10 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
+
+        if (playerIn.getCooldownTracker().hasCooldown(this)) {
+            return new ActionResult<>(EnumActionResult.FAIL, stack);
+        }
 
         if (consume(stack, playerIn, false) != null) {
             playerIn.setActiveHand(handIn);

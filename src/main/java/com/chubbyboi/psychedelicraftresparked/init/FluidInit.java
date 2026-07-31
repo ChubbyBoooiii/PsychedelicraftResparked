@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.init;
 
+import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidDrug;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -28,8 +29,23 @@ public class FluidInit {
         COCAINE_FLUID.addDrugInfluencePerBucket("cocaine", 0, 0.005, 0.01, 50.0);
     }
 
+    // ==================== ALCOHOL ====================
+
+    public static final FluidAlcohol WHEAT = new FluidAlcohol(
+        "wheat",
+        new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"),
+        0.25, 1.7, 0.1,
+        FluidAlcohol.TickInfo.ofMinutes(40, 40, 30, 30)
+    );
+
+    static {
+        WHEAT.setColor(0xffcfa049);
+    }
+
     public static void registerFluids() {
         FluidRegistry.registerFluid(COFFEE);
         FluidRegistry.registerFluid(COCAINE_FLUID);
+        FluidRegistry.registerFluid(WHEAT);
     }
 }

@@ -72,12 +72,13 @@ item.peyote_joint.name=Peyote Joint
 
 
 # BLOCKS
-tile.drying_table.name=Drying Table
 tile.peyote.name=Peyote
 
 
 
 # TILE ENTITIES
+# Drying Table
+tile.drying_table.name=Drying Table
 container.drying_table=Drying Table
 container.drying_table.drying_efficiency=§lDrying Efficiency
 container.drying_table.light_percent=Light: %.1f%%
@@ -85,6 +86,20 @@ container.drying_table.temp_percent=Biome Temperature: %d%%
 container.drying_table.total_speed=Total Speed: %.1f%%
 container.drying_table.rain_warning=§c§lCannot dry in rain!
 container.drying_table.progress=Progress: %d%%
+container.drying_table.time_left=Time left: %s
+
+# Mash Tub
+item.mash_tub.name=Mash Tub
+tile.mash_tub.name=Mash Tub
+tile.mash_tub_companion.name=Mash Tub
+container.mash_tub=Mash Tub
+container.mash_tub.start_fermenting=Start Fermenting
+container.mash_tub.fermenting=Fermenting: %s%%
+container.mash_tub.spoiling=Spoiling: %s%%
+container.mash_tub.time_left=Time left: %s
+container.mash_tub.empty=Empty
+container.mash_tub.fill=Fill
+container.mash_tub.drain=Drain
 
 
 
@@ -105,3 +120,12 @@ psychedelicraftresparked.tooltip.fluid.empty=Empty
 #FLUIDS
 fluid.coffee=Coffee
 fluid.cocaine_fluid=Cocaine
+
+# Alcohol - Wheat
+fluid.wheat=Wheat Wort
+fluid.wheat.ferment_1=Wheat Half Wash
+fluid.wheat.ferment_2=Wheat Wash
+fluid.wheat.mature=Wheat Wash (%d DM)
+fluid.wheat.distill=Wheat Vodka (%d TD)
+fluid.wheat.dmature=Wheat Whisky (%d DM)
+fluid.wheat.vinegar=Wheat Vinegar
