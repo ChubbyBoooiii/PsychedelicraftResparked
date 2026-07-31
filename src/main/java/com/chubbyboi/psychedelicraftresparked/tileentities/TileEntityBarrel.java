@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.tileentities;
 
+import com.chubbyboi.psychedelicraftresparked.fluids.FermentableFluid;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -32,7 +33,36 @@ public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInv
 
     private static final int[] SLOTS = {FLUID_IO_SLOT};
 
-    private final FluidTank tank = new FluidTank(CAPACITY);
+    // topping up an aged barrel dilutes its progress, draining it fully resets it.
+    private final FluidTank tank = new FluidTank(CAPACITY) {
+        @Override
+        public int fill(FluidStack resource, boolean doFill) {
+            int filled = super.fill(resource, doFill);
+            if (doFill && filled > 0) {
+                double amountFilled = (double) filled / (double) getFluidAmount();
+                timeFermented = (int) Math.floor(timeFermented * (1.0 - amountFilled));
+            }
+            return filled;
+        }
+
+        @Override
+        public FluidStack drain(FluidStack resource, boolean doDrain) {
+            FluidStack drained = super.drain(resource, doDrain);
+            if (doDrain && drained != null && getFluidAmount() == 0) {
+                timeFermented = 0;
+            }
+            return drained;
+        }
+
+        @Override
+        public FluidStack drain(int maxDrain, boolean doDrain) {
+            FluidStack drained = super.drain(maxDrain, doDrain);
+            if (doDrain && drained != null && getFluidAmount() == 0) {
+                timeFermented = 0;
+            }
+            return drained;
+        }
+    };
     private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
 
     public boolean drainingMode;
@@ -40,9 +70,24 @@ public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInv
     private int rotation;
 
     private float tapRotation;
+    private int timeLeftTapOpen;
+
+    private int timeFermented;
 
     @Override
     public void update() {
+        if (timeLeftTapOpen > 0) {
+            timeLeftTapOpen--;
+        }
+        if (timeLeftTapOpen > 0 && tapRotation < ((float) Math.PI) * 0.5F) {
+            tapRotation += ((float) Math.PI) * 0.1F;
+        }
+        if (timeLeftTapOpen == 0 && tapRotation > 0.0F) {
+            tapRotation -= ((float) Math.PI) * 0.1F;
+        }
+
+        tickMaturation();
+
         if (world.isRemote) {
             return;
         }
@@ -51,6 +96,45 @@ public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInv
             markDirty();
             world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
         }
+    }
+
+    public void openTap() {
+        timeLeftTapOpen = 20;
+    }
+
+    private void tickMaturation() {
+        int neededMaturationTime = getNeededMaturationTime();
+        if (neededMaturationTime < 0) {
+            return;
+        }
+
+        if (timeFermented >= neededMaturationTime) {
+            if (!world.isRemote) {
+                FermentableFluid fermentable = (FermentableFluid) tank.getFluid().getFluid();
+                fermentable.fermentStep(tank.getFluid(), false);
+                timeFermented = 0;
+                markDirty();
+                world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+            }
+        } else {
+            timeFermented++;
+        }
+    }
+
+    public int getTimeFermented() {
+        return timeFermented;
+    }
+
+    public int getNeededMaturationTime() {
+        FluidStack fluidStack = tank.getFluid();
+        if (fluidStack == null || !(fluidStack.getFluid() instanceof FermentableFluid)) {
+            return -1;
+        }
+        return ((FermentableFluid) fluidStack.getFluid()).fermentationTime(fluidStack, false);
+    }
+
+    public boolean isMaturing() {
+        return getNeededMaturationTime() >= 0;
     }
 
     private boolean processFluidIO() {
@@ -151,10 +235,6 @@ public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInv
         return tapRotation;
     }
 
-    public void setTapRotation(float tapRotation) {
-        this.tapRotation = tapRotation;
-    }
-
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return INFINITE_EXTENT_AABB;
@@ -186,6 +266,8 @@ public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInv
         compound.setBoolean("DrainingMode", drainingMode);
         compound.setInteger("Rotation", rotation);
         compound.setFloat("TapRotation", tapRotation);
+        compound.setInteger("TimeLeftTapOpen", timeLeftTapOpen);
+        compound.setInteger("TimeFermented", timeFermented);
         ItemStackHelper.saveAllItems(compound, items);
         return compound;
     }
@@ -197,6 +279,8 @@ public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInv
         drainingMode = compound.getBoolean("DrainingMode");
         rotation = compound.getInteger("Rotation");
         tapRotation = compound.getFloat("TapRotation");
+        timeLeftTapOpen = compound.getInteger("TimeLeftTapOpen");
+        timeFermented = compound.getInteger("TimeFermented");
         items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, items);
     }
@@ -328,6 +412,7 @@ public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInv
         switch (id) {
             case 0: return tank.getFluidAmount();
             case 1: return drainingMode ? 1 : 0;
+            case 2: return timeFermented;
             default: return 0;
         }
     }
@@ -336,12 +421,14 @@ public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInv
     public void setField(int id, int value) {
         if (id == 1) {
             drainingMode = value != 0;
+        } else if (id == 2) {
+            timeFermented = value;
         }
     }
 
     @Override
     public int getFieldCount() {
-        return 2;
+        return 3;
     }
 
     @Override

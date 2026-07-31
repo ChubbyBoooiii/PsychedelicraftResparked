@@ -4,6 +4,7 @@ import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import com.chubbyboi.psychedelicraftresparked.util.GuiHandler;
 import net.minecraft.block.Block;
@@ -12,6 +13,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -68,6 +70,46 @@ public class BlockBarrel extends Block implements ITileEntityProvider {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (!(tileEntity instanceof TileEntityBarrel)) {
+            return false;
+        }
+        TileEntityBarrel barrel = (TileEntityBarrel) tileEntity;
+
+        ItemStack heldItem = player.getHeldItem(hand);
+        IFluidHandlerItem handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+
+        if (!heldItem.isEmpty() && handler != null) {
+            if (!world.isRemote) {
+                boolean split = heldItem.getCount() > 1;
+                ItemStack stack = split ? heldItem.splitStack(1) : heldItem;
+                IFluidHandlerItem stackHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+
+                if (stackHandler != null) {
+                    FluidStack simulated = barrel.getTank().drain(FluidHelper.BUCKET_VOLUME, false);
+                    if (simulated != null && simulated.amount > 0) {
+                        int accepted = stackHandler.fill(simulated, false);
+                        if (accepted > 0) {
+                            FluidStack drained = barrel.getTank().drain(accepted, true);
+                            stackHandler.fill(drained, true);
+                        }
+                    }
+                }
+
+                if (split) {
+                    if (!player.inventory.addItemStackToInventory(stack)) {
+                        world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, stack));
+                    }
+                } else {
+                    player.setHeldItem(hand, stack);
+                }
+
+                barrel.openTap();
+                world.notifyBlockUpdate(pos, state, state, 3);
+            }
+            return true;
+        }
+
         if (!world.isRemote) {
             player.openGui(PsychedelicraftResparked.instance, GuiHandler.BARREL_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }

@@ -108,6 +108,8 @@ container.barrel=Barrel
 container.barrel.empty=Empty
 container.barrel.fill=Fill
 container.barrel.drain=Drain
+container.barrel.maturing=Maturing: %s%%
+container.barrel.time_left=Time left: %s
 
 
 

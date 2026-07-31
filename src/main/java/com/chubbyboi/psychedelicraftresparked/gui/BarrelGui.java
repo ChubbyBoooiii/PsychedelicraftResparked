@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.gui;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.FluidGuiRenderer;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
+import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -12,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class BarrelGui extends GuiContainer {
@@ -67,6 +69,21 @@ public class BarrelGui extends GuiContainer {
                 name + " (" + amount + "mB / " + TileEntityBarrel.CAPACITY + "mB)"
             ), mouseX, mouseY);
         }
+
+        if (this.tileentity.isMaturing()) {
+            int arrowX = this.guiLeft + 23;
+            int arrowY = this.guiTop + 14;
+            if (mouseX >= arrowX && mouseX < arrowX + 24 && mouseY >= arrowY && mouseY < arrowY + 17) {
+                int progress = this.tileentity.getTimeFermented();
+                int total = this.tileentity.getNeededMaturationTime();
+                int percent = total > 0 ? Math.min(100, (int) (progress * 100.0 / total)) : 0;
+                int ticksLeft = Math.max(0, total - progress);
+                this.drawHoveringText(Arrays.asList(
+                    I18n.format("container.barrel.maturing", percent),
+                    I18n.format("container.barrel.time_left", TimeHelper.formatTicksAsTime(ticksLeft))
+                ), mouseX, mouseY);
+            }
+        }
     }
 
     @Override
@@ -79,6 +96,17 @@ public class BarrelGui extends GuiContainer {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(TEXTURE);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+
+        if (this.tileentity.isMaturing()) {
+            int total = this.tileentity.getNeededMaturationTime();
+            if (total > 0) {
+                int filled = (int) (24 * (long) this.tileentity.getTimeFermented() / total);
+                filled = Math.max(0, Math.min(24, filled));
+                if (filled > 0) {
+                    this.drawTexturedModalRect(this.guiLeft + 23, this.guiTop + 14, 176, 0, filled, 17);
+                }
+            }
+        }
 
         int tankX = this.guiLeft + 60;
         int tankY = this.guiTop + 14;

@@ -15,6 +15,7 @@ public class BarrelContainer extends Container {
     private final TileEntityBarrel tileentity;
     private int fluidAmount;
     private boolean drainingMode;
+    private int timeFermented;
 
     public BarrelContainer(InventoryPlayer player, TileEntityBarrel tileentity) {
         this.tileentity = tileentity;
@@ -59,10 +60,12 @@ public class BarrelContainer extends Container {
         for (IContainerListener listener : this.listeners) {
             if (this.fluidAmount != this.tileentity.getField(0)) listener.sendWindowProperty(this, 0, this.tileentity.getField(0));
             if (this.drainingMode != (this.tileentity.getField(1) != 0)) listener.sendWindowProperty(this, 1, this.tileentity.getField(1));
+            if (this.timeFermented != this.tileentity.getField(2)) listener.sendWindowProperty(this, 2, this.tileentity.getField(2));
         }
 
         this.fluidAmount = this.tileentity.getField(0);
         this.drainingMode = this.tileentity.getField(1) != 0;
+        this.timeFermented = this.tileentity.getField(2);
     }
 
     @Override
