@@ -27,7 +27,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import javax.annotation.Nullable;
 
 public class TileEntityBarrel extends TileEntity implements ITickable, ISidedInventory {
-    public static final int CAPACITY = 8000;
+    public static final int CAPACITY = 16000;
     public static final int FLUID_IO_SLOT = 0;
     public static final int SLOT_COUNT = 1;
 

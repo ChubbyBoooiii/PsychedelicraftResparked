@@ -74,6 +74,14 @@ public class ClientProxy extends CommonProxy {
     public void onTextureStitch(TextureStitchEvent.Pre event) {
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/clear_still"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/beer_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/beer_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/slurry_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/slurry_flow"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_bubble"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_splash"));
     }

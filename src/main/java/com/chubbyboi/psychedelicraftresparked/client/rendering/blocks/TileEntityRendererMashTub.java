@@ -40,7 +40,7 @@ public class TileEntityRendererMashTub extends TileEntitySpecialRenderer<TileEnt
         ResourceLocation stillLocation = fluid.getFluid().getStill(fluid);
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(stillLocation.toString());
 
-        int color = FluidHelper.getDisplayColor(fluid);
+        int color = FluidHelper.getWorldRenderColor(fluid);
         float a = ((color >> 24) & 0xFF) / 255.0F;
 
         // The texture is already transparent, leave it full alpha

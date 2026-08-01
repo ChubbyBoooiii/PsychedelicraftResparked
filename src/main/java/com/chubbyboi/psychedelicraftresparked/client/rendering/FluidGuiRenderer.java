@@ -20,7 +20,7 @@ public class FluidGuiRenderer {
         Minecraft mc = Minecraft.getMinecraft();
         TextureAtlasSprite sprite = mc.getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
 
-        int color = FluidHelper.getDisplayColor(fluid);
+        int color = FluidHelper.getWorldRenderColor(fluid);
         float a = ((color >> 24) & 0xFF) / 255.0F;
         if (a <= 0.0F) {
             a = 1.0F;

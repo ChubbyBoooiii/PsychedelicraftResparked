@@ -130,6 +130,7 @@ psychedelicraftresparked.tooltip.fluid.empty=Empty
 #FLUIDS
 fluid.coffee=Coffee
 fluid.cocaine_fluid=Cocaine
+fluid.slurry=Slurry
 
 # Alcohol - Wheat
 fluid.wheat=Wheat Wort
@@ -137,5 +138,5 @@ fluid.wheat.ferment_1=Wheat Half Wash
 fluid.wheat.ferment_2=Wheat Wash
 fluid.wheat.mature=Wheat Wash (%d DM)
 fluid.wheat.distill=Wheat Vodka (%d TD)
-fluid.wheat.dmature=Wheat Whisky (%d DM)
+fluid.wheat.dmature=Wheat Whisky (%d DM, %d TD)
 fluid.wheat.vinegar=Wheat Vinegar

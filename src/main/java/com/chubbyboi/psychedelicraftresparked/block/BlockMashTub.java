@@ -165,7 +165,7 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
         if (tileEntity instanceof TileEntityMashTub) {
             FluidStack fluid = ((TileEntityMashTub) tileEntity).getTank().getFluid();
             if (fluid != null) {
-                return FluidHelper.getDisplayColor(fluid);
+                return FluidHelper.getWorldRenderColor(fluid);
             }
         }
         return 0xFFFFFFFF;

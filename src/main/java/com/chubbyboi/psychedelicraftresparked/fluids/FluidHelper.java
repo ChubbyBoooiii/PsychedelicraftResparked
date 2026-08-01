@@ -76,4 +76,11 @@ public class FluidHelper {
         }
         return color;
     }
+
+    public static int getWorldRenderColor(FluidStack fluidStack) {
+        if (fluidStack != null && fluidStack.getFluid() instanceof UntintedFluid) {
+            return 0xFFFFFFFF;
+        }
+        return getDisplayColor(fluidStack);
+    }
 }
