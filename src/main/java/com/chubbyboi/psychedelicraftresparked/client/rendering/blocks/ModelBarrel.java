@@ -102,7 +102,7 @@ public class ModelBarrel extends ModelBase {
         tap3.mirror = true;
     }
 
-    public void render(float scale, float tapRotation) {
+    public void render(float scale, float tapRotation, boolean hasTap) {
         tap3.rotateAngleY = tapRotation;
 
         base.render(scale);
