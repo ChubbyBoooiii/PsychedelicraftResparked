@@ -10,17 +10,16 @@ import net.minecraft.item.ItemStack;
 
 public class BarrelContainer extends Container {
 
-    public static final int TOGGLE_DIRECTION_BUTTON_ID = 0;
+    public static final int SEAL_BUTTON_ID = 0;
 
     private final TileEntityBarrel tileentity;
     private int fluidAmount;
-    private boolean drainingMode;
+    private boolean sealed;
     private int timeFermented;
+    private boolean hasTap;
 
     public BarrelContainer(InventoryPlayer player, TileEntityBarrel tileentity) {
         this.tileentity = tileentity;
-
-        this.addSlotToContainer(new Slot(tileentity, TileEntityBarrel.FLUID_IO_SLOT, 25, 40));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -40,8 +39,8 @@ public class BarrelContainer extends Container {
 
     @Override
     public boolean enchantItem(EntityPlayer playerIn, int id) {
-        if (id == TOGGLE_DIRECTION_BUTTON_ID) {
-            tileentity.toggleDrainingMode();
+        if (id == SEAL_BUTTON_ID) {
+            tileentity.toggleSealed();
             return true;
         }
         return false;
@@ -50,7 +49,9 @@ public class BarrelContainer extends Container {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendAllWindowProperties(this, this.tileentity);
+        for (int i = 0; i < TileEntityBarrel.FIELD_COUNT; i++) {
+            listener.sendWindowProperty(this, i, tileentity.getField(i));
+        }
     }
 
     @Override
@@ -59,13 +60,15 @@ public class BarrelContainer extends Container {
 
         for (IContainerListener listener : this.listeners) {
             if (this.fluidAmount != this.tileentity.getField(0)) listener.sendWindowProperty(this, 0, this.tileentity.getField(0));
-            if (this.drainingMode != (this.tileentity.getField(1) != 0)) listener.sendWindowProperty(this, 1, this.tileentity.getField(1));
+            if (this.sealed != (this.tileentity.getField(1) != 0)) listener.sendWindowProperty(this, 1, this.tileentity.getField(1));
             if (this.timeFermented != this.tileentity.getField(2)) listener.sendWindowProperty(this, 2, this.tileentity.getField(2));
+            if (this.hasTap != (this.tileentity.getField(3) != 0)) listener.sendWindowProperty(this, 3, this.tileentity.getField(3));
         }
 
         this.fluidAmount = this.tileentity.getField(0);
-        this.drainingMode = this.tileentity.getField(1) != 0;
+        this.sealed = this.tileentity.getField(1) != 0;
         this.timeFermented = this.tileentity.getField(2);
+        this.hasTap = this.tileentity.getField(3) != 0;
     }
 
     @Override
@@ -87,17 +90,12 @@ public class BarrelContainer extends Container {
             ItemStack itemStack1 = slot.getStack();
             itemStack = itemStack1.copy();
 
-            // Slot layout: 0 fluid IO, 1-27 player inventory, 28-36 hotbar.
-            if (index == 0) {
-                if (!this.mergeItemStack(itemStack1, 1, 37, false)) {
+            // Slot layout: 0-26 player inventory, 27-35 hotbar (no fluid IO slot in this redesign).
+            if (index < 27) {
+                if (!this.mergeItemStack(itemStack1, 27, 36, false)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onSlotChange(itemStack1, itemStack);
-            } else if (index < 28) {
-                if (!this.mergeItemStack(itemStack1, 28, 37, false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.mergeItemStack(itemStack1, 1, 28, false)) {
+            } else if (!this.mergeItemStack(itemStack1, 0, 27, false)) {
                 return ItemStack.EMPTY;
             }
 

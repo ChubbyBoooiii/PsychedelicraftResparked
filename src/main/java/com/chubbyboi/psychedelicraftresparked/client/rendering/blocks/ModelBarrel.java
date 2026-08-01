@@ -102,9 +102,6 @@ public class ModelBarrel extends ModelBase {
         tap3.mirror = true;
     }
 
-    // tapRotation drives the tap's swing-open animation - not wired to any real interaction yet,
-    // but the renderer already threads a live value through so the tap mechanic can be built later
-    // without touching this class.
     public void render(float scale, float tapRotation) {
         tap3.rotateAngleY = tapRotation;
 
@@ -120,8 +117,10 @@ public class ModelBarrel extends ModelBase {
         rack1.render(scale);
         rack2.render(scale);
         rack3.render(scale);
-        tap1.render(scale);
-        tap2.render(scale);
-        tap3.render(scale);
+        if (hasTap) {
+            tap1.render(scale);
+            tap2.render(scale);
+            tap3.render(scale);
+        }
     }
 }

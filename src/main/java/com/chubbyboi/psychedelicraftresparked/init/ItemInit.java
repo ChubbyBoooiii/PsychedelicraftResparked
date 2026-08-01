@@ -33,6 +33,7 @@ public class ItemInit {
     public static final ItemBarrel BARREL_ITEM = new ItemBarrel(BlockInit.BARREL);
     public static final ItemDistillery DISTILLERY_ITEM = new ItemDistillery(BlockInit.DISTILLERY);
     public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
+    public static final Item TAP = new PsychItem("tap");
 
 
 

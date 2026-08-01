@@ -104,12 +104,19 @@ container.mash_tub.drain=Drain
 # Barrel
 tile.barrel.name=Barrel
 tile.barrel.full.name=Barrel of %s
+tile.barrel.sealed.name=Sealed Barrel
+tile.barrel.sealed_full.name=Sealed Barrel of %s
+item.tap.name=Tap
 container.barrel=Barrel
 container.barrel.empty=Empty
-container.barrel.fill=Fill
-container.barrel.drain=Drain
+container.barrel.seal=Seal
+container.barrel.unseal=Unseal
 container.barrel.maturing=Maturing: %s%%
 container.barrel.time_left=Time left: %s
+container.barrel.needs_sealing=Needs to be sealed to mature
+container.barrel.tapped_paused=Maturation stopped - barrel is tapped
+psychedelicraftresparked.tooltip.barrel.tapped=Tapped
+psychedelicraftresparked.tooltip.barrel.untapped=Untapped
 
 # Distillery
 tile.distillery.name=Distillery

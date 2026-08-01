@@ -52,6 +52,30 @@ public class ItemBarrel extends ItemBlock {
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt) {
         return new FluidHandlerItemStack(stack, TileEntityBarrel.CAPACITY) {
             @Override
+            public int fill(FluidStack resource, boolean doFill) {
+                if (isSealed(container)) {
+                    return 0;
+                }
+                return super.fill(resource, doFill);
+            }
+
+            @Override
+            public FluidStack drain(FluidStack resource, boolean doDrain) {
+                if (doDrain && isSealed(container)) {
+                    return null;
+                }
+                return super.drain(resource, doDrain);
+            }
+
+            @Override
+            public FluidStack drain(int maxDrain, boolean doDrain) {
+                if (doDrain && isSealed(container)) {
+                    return null;
+                }
+                return super.drain(maxDrain, doDrain);
+            }
+
+            @Override
             protected void setContainerToEmpty() {
                 super.setContainerToEmpty();
                 NBTTagCompound tag = container.getTagCompound();
@@ -65,8 +89,13 @@ public class ItemBarrel extends ItemBlock {
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         FluidStack fluidStack = getContainedFluidStack(stack);
+        boolean sealed = isSealed(stack);
         if (fluidStack != null) {
-            return I18n.translateToLocalFormatted(getTranslationKey(stack) + ".full.name", fluidStack.getFluid().getLocalizedName(fluidStack));
+            String key = getTranslationKey(stack) + (sealed ? ".sealed_full.name" : ".full.name");
+            return I18n.translateToLocalFormatted(key, fluidStack.getFluid().getLocalizedName(fluidStack));
+        }
+        if (sealed) {
+            return I18n.translateToLocal(getTranslationKey(stack) + ".sealed.name");
         }
         return super.getItemStackDisplayName(stack);
     }
@@ -81,6 +110,10 @@ public class ItemBarrel extends ItemBlock {
         } else {
             tooltip.add(TextFormatting.GRAY + fluidStack.getFluid().getLocalizedName(fluidStack) + " (" + fluidStack.amount + "mB/" + TileEntityBarrel.CAPACITY + "mB)");
         }
+
+        tooltip.add(TextFormatting.GRAY + I18n.translateToLocal(hasTap(stack)
+            ? "psychedelicraftresparked.tooltip.barrel.tapped"
+            : "psychedelicraftresparked.tooltip.barrel.untapped"));
     }
 
     @Nullable
@@ -91,5 +124,35 @@ public class ItemBarrel extends ItemBlock {
         }
         FluidStack fluidStack = handler.drain(TileEntityBarrel.CAPACITY, false);
         return fluidStack != null && fluidStack.amount > 0 ? fluidStack : null;
+    }
+
+    // ==================== Sealed / tap state, carried on the stack's own NBT ====================
+
+    public static boolean isSealed(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null && tag.getBoolean("Sealed");
+    }
+
+    public static void setSealed(ItemStack stack, boolean sealed) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            stack.setTagCompound(tag);
+        }
+        tag.setBoolean("Sealed", sealed);
+    }
+
+    public static boolean hasTap(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null && tag.getBoolean("HasTap");
+    }
+
+    public static void setHasTap(ItemStack stack, boolean hasTap) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            stack.setTagCompound(tag);
+        }
+        tag.setBoolean("HasTap", hasTap);
     }
 }

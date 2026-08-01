@@ -23,7 +23,7 @@ public class TileEntityRendererBarrel extends TileEntitySpecialRenderer<TileEnti
         GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
 
         bindTexture(TEXTURE);
-        model.render(0.0625F, tileEntity.getTapRotation());
+        model.render(0.0625F, tileEntity.getTapRotation(), tileEntity.hasTap());
 
         GlStateManager.popMatrix();
         GlStateManager.popMatrix();
