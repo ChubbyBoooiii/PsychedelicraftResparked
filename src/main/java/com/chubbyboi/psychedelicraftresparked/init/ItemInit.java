@@ -3,7 +3,9 @@ package com.chubbyboi.psychedelicraftresparked.init;
 import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluence;
 import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluenceHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemBarrel;
+import com.chubbyboi.psychedelicraftresparked.item.ItemDistillery;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
+import com.chubbyboi.psychedelicraftresparked.item.ItemFlask;
 import com.chubbyboi.psychedelicraftresparked.item.ItemHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemIngestable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemMashTub;
@@ -29,6 +31,8 @@ public class ItemInit {
     public static final Item DRYING_TABLE_ITEM = createItemBlock(BlockInit.DRYING_TABLE);
     public static final ItemMashTub MASH_TUB = new ItemMashTub("mash_tub");
     public static final ItemBarrel BARREL_ITEM = new ItemBarrel(BlockInit.BARREL);
+    public static final ItemDistillery DISTILLERY_ITEM = new ItemDistillery(BlockInit.DISTILLERY);
+    public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
 
 
 

@@ -111,6 +111,24 @@ container.barrel.drain=Drain
 container.barrel.maturing=Maturing: %s%%
 container.barrel.time_left=Time left: %s
 
+# Distillery
+tile.distillery.name=Distillery
+tile.distillery.full.name=Distillery of %s
+container.distillery=Distillery
+container.distillery.empty=Empty
+container.distillery.fill=Fill
+container.distillery.drain=Drain
+container.distillery.distilling=Distilling: %s%%
+container.distillery.time_left=Time left: %s
+
+# Flask
+tile.flask.name=Flask
+tile.flask.full.name=Flask of %s
+container.flask=Flask
+container.flask.empty=Empty
+container.flask.fill=Fill
+container.flask.drain=Drain
+
 
 
 #DEATH MESSAGES

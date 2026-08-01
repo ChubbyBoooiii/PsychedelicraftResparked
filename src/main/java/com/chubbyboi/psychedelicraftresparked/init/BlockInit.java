@@ -1,6 +1,8 @@
 package com.chubbyboi.psychedelicraftresparked.init;
 
 import com.chubbyboi.psychedelicraftresparked.block.BlockBarrel;
+import com.chubbyboi.psychedelicraftresparked.block.BlockDistillery;
+import com.chubbyboi.psychedelicraftresparked.block.BlockFlask;
 import com.chubbyboi.psychedelicraftresparked.block.BlockMashTub;
 import com.chubbyboi.psychedelicraftresparked.block.BlockMashTubCompanion;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
@@ -19,6 +21,8 @@ public class BlockInit {
     public static final BlockMashTub MASH_TUB = new BlockMashTub("mash_tub");
     public static final BlockMashTubCompanion MASH_TUB_COMPANION = new BlockMashTubCompanion("mash_tub_companion");
     public static final BlockBarrel BARREL = new BlockBarrel("barrel");
+    public static final BlockDistillery DISTILLERY = new BlockDistillery("distillery");
+    public static final BlockFlask FLASK = new BlockFlask("flask");
 
     // Crops - only pass the crop item, seed and crop drops will be set later after items initialise
     public static final BlockTallCrop CANNABIS_PLANT = new BlockTallCrop("cannabis_plant", 15, 3);
