@@ -30,6 +30,8 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     public static final int FLUID_IO_SLOT = 7;
     public static final int SLOT_COUNT = 8;
 
+    public static final String OUTPUT_ITEM_TAG = "psychedelicraftresparked_mash_tub_output";
+
     private static final int[] SLOTS = new int[SLOT_COUNT];
     static {
         for (int i = 0; i < SLOT_COUNT; i++) SLOTS[i] = i;
@@ -42,6 +44,8 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     public int fermentationProgress;
     public int totalFermentationTime;
     public boolean drainingMode;
+
+    private ItemStack solidContents = ItemStack.EMPTY;
 
     private EnumFacing primaryDirection;
 
@@ -80,7 +84,7 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
 
         boolean dirty = false;
 
-        if (processFluidIO()) {
+        if (solidContents.isEmpty() && processFluidIO()) {
             dirty = true;
         }
 
@@ -92,7 +96,9 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
             if (!isInputLocked() && collectNearbyItems()) {
                 dirty = true;
             }
-            startFermenting();
+            if (!startFermenting() && beginHardeningIfApplicable()) {
+                dirty = true;
+            }
         }
 
         if (dirty) {
@@ -102,8 +108,21 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     }
 
     public boolean isInputLocked() {
+        if (!solidContents.isEmpty()) {
+            return true;
+        }
         FluidStack fluid = tank.getFluid();
         return fluid != null && fluid.amount > 0 && fluid.getFluid() != FluidRegistry.WATER;
+    }
+
+    public ItemStack getSolidContents() {
+        return solidContents;
+    }
+
+    public void collectSolidContents() {
+        solidContents = ItemStack.EMPTY;
+        markDirty();
+        world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
     }
 
     private boolean processFluidIO() {
@@ -190,7 +209,7 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
         );
         boolean changed = false;
         for (EntityItem entityItem : world.getEntitiesWithinAABB(EntityItem.class, box)) {
-            if (!entityItem.isDead) {
+            if (!entityItem.isDead && !entityItem.getTags().contains(OUTPUT_ITEM_TAG)) {
                 ItemStack before = entityItem.getItem();
                 ItemStack remainder = insertIntoIngredientSlots(before);
                 if (remainder.getCount() != before.getCount()) {
@@ -246,6 +265,18 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
         return ((FermentableFluid) stack.getFluid()).fermentationTime(stack, true);
     }
 
+    private boolean beginHardeningIfApplicable() {
+        int needed = getFermentationTimeNeeded();
+        if (needed < 0) {
+            return false;
+        }
+
+        fermenting = true;
+        fermentationProgress = 0;
+        totalFermentationTime = needed;
+        return true;
+    }
+
     private boolean tickFermentation() {
         FluidStack stack = tank.getFluid();
         if (stack == null || !(stack.getFluid() instanceof FermentableFluid)) {
@@ -264,7 +295,12 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
         fermentationProgress++;
         if (fermentationProgress >= needed) {
             fermentationProgress = 0;
-            fermentable.fermentStep(stack, true);
+            ItemStack solid = fermentable.fermentStep(stack, true);
+            if (solid != null && !solid.isEmpty()) {
+                tank.setFluid(null);
+                solidContents = solid;
+                fermenting = false;
+            }
             return true;
         }
         return false;
@@ -288,7 +324,10 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return solidContents.isEmpty();
+        }
+        return super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
@@ -296,7 +335,7 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return (T) tank;
+            return solidContents.isEmpty() ? (T) tank : null;
         }
         return super.getCapability(capability, facing);
     }
@@ -313,6 +352,9 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
         if (primaryDirection != null) {
             compound.setInteger("PrimaryDirection", primaryDirection.getHorizontalIndex());
         }
+        if (!solidContents.isEmpty()) {
+            compound.setTag("SolidContents", solidContents.writeToNBT(new NBTTagCompound()));
+        }
         ItemStackHelper.saveAllItems(compound, items);
         return compound;
     }
@@ -327,6 +369,9 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
         if (compound.hasKey("PrimaryDirection")) {
             primaryDirection = EnumFacing.byHorizontalIndex(compound.getInteger("PrimaryDirection"));
         }
+        solidContents = compound.hasKey("SolidContents")
+            ? new ItemStack(compound.getCompoundTag("SolidContents"))
+            : ItemStack.EMPTY;
         items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, items);
     }

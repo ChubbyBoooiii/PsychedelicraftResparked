@@ -15,6 +15,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -228,6 +229,15 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
             }
         }
 
+        ItemStack solidContents = mashTub.getSolidContents();
+        if (!solidContents.isEmpty()) {
+            if (!world.isRemote) {
+                dropOutputItem(world, pos, solidContents.copy());
+                mashTub.collectSolidContents();
+            }
+            return true;
+        }
+
         if (!world.isRemote) {
             player.openGui(PsychedelicraftResparked.instance, GuiHandler.MASH_TUB_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
@@ -240,6 +250,11 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
         if (tileEntity instanceof TileEntityMashTub) {
             TileEntityMashTub mashTub = (TileEntityMashTub) tileEntity;
             InventoryHelper.dropInventoryItems(world, pos, mashTub);
+
+            ItemStack solidContents = mashTub.getSolidContents();
+            if (!solidContents.isEmpty()) {
+                dropOutputItem(world, pos, solidContents.copy());
+            }
 
             FluidStack fluid = mashTub.getTank().getFluid();
             if (fluid != null && fluid.amount > 0) {
@@ -262,5 +277,12 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
             }
         }
         super.breakBlock(world, pos, state);
+    }
+
+    private static void dropOutputItem(World world, BlockPos pos, ItemStack stack) {
+        EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+        entityItem.setDefaultPickupDelay();
+        entityItem.addTag(TileEntityMashTub.OUTPUT_ITEM_TAG);
+        world.spawnEntity(entityItem);
     }
 }

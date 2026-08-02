@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.gui;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.FluidGuiRenderer;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
+import com.chubbyboi.psychedelicraftresparked.fluids.FluidSlurry;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
 import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
 import net.minecraft.client.gui.GuiButton;
@@ -81,8 +82,11 @@ public class MashTubGui extends GuiContainer {
                 int total = this.tileentity.totalFermentationTime;
                 int percent = Math.min(100, (int) (progress * 100.0 / total));
                 int ticksLeft = Math.max(0, total - progress);
+                String labelKey = isSpoiling() ? "container.mash_tub.spoiling"
+                    : isHardening() ? "container.mash_tub.hardening"
+                    : "container.mash_tub.fermenting";
                 this.drawHoveringText(Arrays.asList(
-                    I18n.format(isSpoiling() ? "container.mash_tub.spoiling" : "container.mash_tub.fermenting", percent),
+                    I18n.format(labelKey, percent),
                     I18n.format("container.mash_tub.time_left", TimeHelper.formatTicksAsTime(ticksLeft))
                 ), mouseX, mouseY);
             } else {
@@ -108,6 +112,11 @@ public class MashTubGui extends GuiContainer {
         }
         FluidAlcohol alcohol = (FluidAlcohol) fluid.getFluid();
         return !alcohol.isVinegar(fluid) && alcohol.getFermentation(fluid) >= FluidAlcohol.FERMENTATION_STEPS;
+    }
+
+    private boolean isHardening() {
+        FluidStack fluid = this.tileentity.getTank().getFluid();
+        return fluid != null && fluid.getFluid() instanceof FluidSlurry;
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.chubbyboi.psychedelicraftresparked.client.rendering.blocks;
 import com.chubbyboi.psychedelicraftresparked.block.BlockMashTub;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,6 +13,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -23,7 +27,11 @@ public class TileEntityRendererMashTub extends TileEntitySpecialRenderer<TileEnt
         GlStateManager.rotate(TileEntityMashTub.rotationFor(tileEntity.getPrimaryDirection()), 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(-0.5D, 0.0D, -0.5D);
 
-        renderFluid(tileEntity);
+        if (!tileEntity.getSolidContents().isEmpty()) {
+            renderSolidContents(tileEntity);
+        } else {
+            renderFluid(tileEntity);
+        }
 
         GlStateManager.popMatrix();
     }
@@ -58,6 +66,31 @@ public class TileEntityRendererMashTub extends TileEntitySpecialRenderer<TileEnt
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);
 
+        drawTopQuad(sprite, topY);
+
+        GlStateManager.depthMask(true);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.disableBlend();
+    }
+
+    private void renderSolidContents(TileEntityMashTub tileEntity) {
+        ItemStack solid = tileEntity.getSolidContents();
+        Block block = Block.getBlockFromItem(solid.getItem());
+        if (block == Blocks.AIR) {
+            return;
+        }
+
+        IBlockState state = block.getStateFromMeta(solid.getMetadata());
+        TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+
+        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.disableLighting();
+
+        drawTopQuad(sprite, BlockMashTub.BASIN_RIM_Y);
+    }
+
+    private void drawTopQuad(TextureAtlasSprite sprite, float topY) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -66,9 +99,5 @@ public class TileEntityRendererMashTub extends TileEntitySpecialRenderer<TileEnt
         buffer.pos(BlockMashTub.BASIN_MAX_XZ, topY, BlockMashTub.BASIN_MAX_XZ).tex(sprite.getMaxU(), sprite.getMaxV()).endVertex();
         buffer.pos(BlockMashTub.BASIN_MAX_XZ, topY, BlockMashTub.BASIN_MIN_XZ).tex(sprite.getMaxU(), sprite.getMinV()).endVertex();
         tessellator.draw();
-
-        GlStateManager.depthMask(true);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.disableBlend();
     }
 }

@@ -2,6 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.fluids;
 
 import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluence;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
@@ -215,7 +216,7 @@ public class FluidAlcohol extends FluidDrug implements FermentableFluid, Distill
     }
 
     @Override
-    public void fermentStep(FluidStack stack, boolean openContainer) {
+    public ItemStack fermentStep(FluidStack stack, boolean openContainer) {
         int fermentation = getFermentation(stack);
         if (openContainer) {
             if (fermentation < FERMENTATION_STEPS) {
@@ -226,6 +227,7 @@ public class FluidAlcohol extends FluidDrug implements FermentableFluid, Distill
         } else {
             setMaturation(stack, getMaturation(stack) + 1);
         }
+        return null;
     }
 
     // ==================== Distillation (Distillery) ====================
