@@ -98,30 +98,33 @@ public class BlockBarrel extends Block implements ITileEntityProvider {
     }
 
     private boolean tryPour(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, TileEntityBarrel barrel, ItemStack heldItem) {
-        if (heldItem.isEmpty()) {
+        if (heldItem.isEmpty() || heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) == null) {
             return false;
         }
 
-        boolean filledAny;
-        if (heldItem.getCount() > 1) {
-            filledAny = pourIntoStack(world, player, barrel, heldItem);
-        } else {
-            IFluidHandlerItem handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-            filledAny = handler != null && pourIntoSingle(barrel, handler);
-            if (filledAny) {
-                player.setHeldItem(hand, heldItem);
+        boolean split = heldItem.getCount() > 1;
+        ItemStack stack = split ? heldItem.splitStack(1) : heldItem;
+
+        IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        boolean filled = handler != null && pourIntoSingle(barrel, handler);
+
+        if (split) {
+            if (!player.inventory.addItemStackToInventory(stack)) {
+                world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, stack));
             }
+        } else {
+            player.setHeldItem(hand, stack);
         }
 
-        if (filledAny) {
+        if (filled) {
             barrel.openTap();
             world.notifyBlockUpdate(pos, state, state, 3);
         }
-        return filledAny;
+        return filled;
     }
 
     private boolean pourIntoSingle(TileEntityBarrel barrel, IFluidHandlerItem handler) {
-        FluidStack simulated = barrel.getTank().drain(FluidHelper.FLUID_IO_SPEED_PER_TICK, false);
+        FluidStack simulated = barrel.getTank().drain(FluidHelper.BUCKET_VOLUME, false);
         if (simulated == null || simulated.amount <= 0) {
             return false;
         }
@@ -131,42 +134,6 @@ public class BlockBarrel extends Block implements ITileEntityProvider {
         }
         FluidStack drained = barrel.getTank().drain(accepted, true);
         handler.fill(drained, true);
-        return true;
-    }
-
-    private boolean pourIntoStack(World world, EntityPlayer player, TileEntityBarrel barrel, ItemStack heldStack) {
-        FluidStack tankFluid = barrel.getTank().getFluid();
-        if (tankFluid == null || tankFluid.amount <= 0) {
-            return false;
-        }
-
-        ItemStack sample = heldStack.copy();
-        sample.setCount(1);
-        IFluidHandlerItem sampleHandler = sample.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-        if (sampleHandler == null) {
-            return false;
-        }
-        int perItemCapacity = sampleHandler.fill(new FluidStack(tankFluid, Integer.MAX_VALUE), false);
-        if (perItemCapacity <= 0) {
-            return false;
-        }
-
-        int fillable = Math.min(heldStack.getCount(), tankFluid.amount / perItemCapacity);
-        if (fillable <= 0) {
-            return false;
-        }
-
-        for (int i = 0; i < fillable; i++) {
-            ItemStack single = heldStack.splitStack(1);
-            IFluidHandlerItem singleHandler = single.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-            FluidStack drained = barrel.getTank().drain(perItemCapacity, true);
-            if (singleHandler != null && drained != null) {
-                singleHandler.fill(drained, true);
-            }
-            if (!player.inventory.addItemStackToInventory(single)) {
-                world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, single));
-            }
-        }
         return true;
     }
 
