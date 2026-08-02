@@ -10,8 +10,7 @@ import net.minecraft.item.ItemStack;
 
 public class MashTubContainer extends Container {
 
-    public static final int START_FERMENTING_BUTTON_ID = 0;
-    public static final int TOGGLE_DIRECTION_BUTTON_ID = 1;
+    public static final int TOGGLE_DIRECTION_BUTTON_ID = 0;
 
     private final TileEntityMashTub tileentity;
     private boolean fermenting;
@@ -23,26 +22,26 @@ public class MashTubContainer extends Container {
     public MashTubContainer(InventoryPlayer player, TileEntityMashTub tileentity) {
         this.tileentity = tileentity;
 
-        int[] row1X = {78, 96, 114, 132};
+        int[] row1X = {79, 97, 115, 133};
         for (int i = 0; i < row1X.length; i++) {
-            this.addSlotToContainer(new MashTubInputSlot(tileentity, i, row1X[i], 20));
+            this.addSlotToContainer(new MashTubInputSlot(tileentity, i, row1X[i], 25));
         }
-        int[] row2X = {87, 105, 123};
+        int[] row2X = {88, 106, 124};
         for (int i = 0; i < row2X.length; i++) {
-            this.addSlotToContainer(new MashTubInputSlot(tileentity, row1X.length + i, row2X[i], 40));
+            this.addSlotToContainer(new MashTubInputSlot(tileentity, row1X.length + i, row2X[i], 45));
         }
 
         this.addSlotToContainer(new Slot(tileentity, TileEntityMashTub.FLUID_IO_SLOT, 25, 40));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 101 + i * 18));
+                this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
         // Hotbar slots
         for (int k = 0; k < 9; ++k) {
-            this.addSlotToContainer(new Slot(player, k, 8 + k * 18, 159));
+            this.addSlotToContainer(new Slot(player, k, 8 + k * 18, 142));
         }
     }
 
@@ -52,9 +51,6 @@ public class MashTubContainer extends Container {
 
     @Override
     public boolean enchantItem(EntityPlayer playerIn, int id) {
-        if (id == START_FERMENTING_BUTTON_ID) {
-            return tileentity.startFermenting();
-        }
         if (id == TOGGLE_DIRECTION_BUTTON_ID) {
             tileentity.toggleDrainingMode();
             return true;

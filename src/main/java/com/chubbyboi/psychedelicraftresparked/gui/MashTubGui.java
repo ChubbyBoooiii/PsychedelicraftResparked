@@ -23,14 +23,13 @@ public class MashTubGui extends GuiContainer {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Tags.MOD_ID + ":textures/gui/gui_mash_tub.png");
 
     private final TileEntityMashTub tileentity;
-    private GuiButton startFermentingButton;
     private GuiButton transferDirectionButton;
 
     public MashTubGui(InventoryPlayer player, TileEntityMashTub tileentity) {
         super(new MashTubContainer(player, tileentity));
         this.tileentity = tileentity;
         this.xSize = 176;
-        this.ySize = 183;
+        this.ySize = 166;
     }
 
     @Override
@@ -41,11 +40,6 @@ public class MashTubGui extends GuiContainer {
         this.transferDirectionButton = new GuiButton(MashTubContainer.TOGGLE_DIRECTION_BUTTON_ID, this.guiLeft + 7, this.guiTop + 60, 50, 20, "");
         this.buttonList.add(this.transferDirectionButton);
         updateTransferButtonTitle();
-
-        this.startFermentingButton = new GuiButton(MashTubContainer.START_FERMENTING_BUTTON_ID,
-            this.guiLeft + 66, this.guiTop + 76, 96, 20, I18n.format("container.mash_tub.start_fermenting")
-        );
-        this.buttonList.add(this.startFermentingButton);
     }
 
     private void updateTransferButtonTitle() {
@@ -54,9 +48,7 @@ public class MashTubGui extends GuiContainer {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if (button.id == MashTubContainer.START_FERMENTING_BUTTON_ID) {
-            this.mc.playerController.sendEnchantPacket(this.inventorySlots.windowId, button.id);
-        } else if (button.id == MashTubContainer.TOGGLE_DIRECTION_BUTTON_ID) {
+        if (button.id == MashTubContainer.TOGGLE_DIRECTION_BUTTON_ID) {
             this.mc.playerController.sendEnchantPacket(this.inventorySlots.windowId, button.id);
             this.tileentity.drainingMode = !this.tileentity.drainingMode;
             updateTransferButtonTitle();
@@ -65,8 +57,6 @@ public class MashTubGui extends GuiContainer {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.startFermentingButton.enabled = !this.tileentity.fermenting && this.tileentity.hasMatchingRecipe();
-
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
@@ -83,10 +73,10 @@ public class MashTubGui extends GuiContainer {
             ), mouseX, mouseY);
         }
 
-        if (this.tileentity.fermenting && this.tileentity.totalFermentationTime > 0) {
-            int arrowX = this.guiLeft + 23;
-            int arrowY = this.guiTop + 14;
-            if (mouseX >= arrowX && mouseX < arrowX + 24 && mouseY >= arrowY && mouseY < arrowY + 17) {
+        int arrowX = this.guiLeft + 23;
+        int arrowY = this.guiTop + 14;
+        if (mouseX >= arrowX && mouseX < arrowX + 24 && mouseY >= arrowY && mouseY < arrowY + 17) {
+            if (this.tileentity.fermenting && this.tileentity.totalFermentationTime > 0) {
                 int progress = this.tileentity.fermentationProgress;
                 int total = this.tileentity.totalFermentationTime;
                 int percent = Math.min(100, (int) (progress * 100.0 / total));
@@ -95,6 +85,8 @@ public class MashTubGui extends GuiContainer {
                     I18n.format(isSpoiling() ? "container.mash_tub.spoiling" : "container.mash_tub.fermenting", percent),
                     I18n.format("container.mash_tub.time_left", TimeHelper.formatTicksAsTime(ticksLeft))
                 ), mouseX, mouseY);
+            } else {
+                this.drawHoveringText(Collections.singletonList(I18n.format("container.mash_tub.no_recipe")), mouseX, mouseY);
             }
         }
     }
@@ -121,7 +113,6 @@ public class MashTubGui extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         this.fontRenderer.drawString(I18n.format("container.mash_tub"), 8, 6, 4210752);
-        this.fontRenderer.drawString(I18n.format("container.inventory"), 8, 91, 4210752);
     }
 
     @Override

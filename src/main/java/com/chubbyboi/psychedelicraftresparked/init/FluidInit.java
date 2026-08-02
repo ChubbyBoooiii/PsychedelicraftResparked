@@ -46,7 +46,7 @@ public class FluidInit {
         new ResourceLocation("psychedelicraftresparked:blocks/beer_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/beer_flow"),
         0.25, 1.7, 0.1,
-        FluidAlcohol.TickInfo.ofMinutes(40, 40, 30, 30)
+        new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
     );
 
     static {

@@ -7,7 +7,9 @@
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
 		"MixinEntityLivingBase",
-		"MixinEntity"
+		"MixinEntity",
+		"MixinEntityItem",
+		"EntityAccessor"
 	],
 	"server": [],
 	"client": [

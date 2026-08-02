@@ -88,8 +88,11 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
             if (tickFermentation()) {
                 dirty = true;
             }
-        } else if (!isInputLocked() && collectNearbyItems()) {
-            dirty = true;
+        } else {
+            if (!isInputLocked() && collectNearbyItems()) {
+                dirty = true;
+            }
+            startFermenting();
         }
 
         if (dirty) {
@@ -181,10 +184,13 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
     }
 
     private boolean collectNearbyItems() {
-        AxisAlignedBB box = new AxisAlignedBB(pos).grow(1.0, 0.5, 1.0);
+        AxisAlignedBB box = new AxisAlignedBB(
+            pos.getX() - 1.0, pos.getY() - 0.1, pos.getZ() - 1.0,
+            pos.getX() + 2.0, pos.getY() + 0.4, pos.getZ() + 2.0
+        );
         boolean changed = false;
         for (EntityItem entityItem : world.getEntitiesWithinAABB(EntityItem.class, box)) {
-            if (!entityItem.isDead && !entityItem.cannotPickup()) {
+            if (!entityItem.isDead) {
                 ItemStack before = entityItem.getItem();
                 ItemStack remainder = insertIntoIngredientSlots(before);
                 if (remainder.getCount() != before.getCount()) {
@@ -208,10 +214,6 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
             }
         }
         return stack;
-    }
-
-    public boolean hasMatchingRecipe() {
-        return MashTubRecipes.getInstance().findMatch(tank, items) != null;
     }
 
     public boolean startFermenting() {

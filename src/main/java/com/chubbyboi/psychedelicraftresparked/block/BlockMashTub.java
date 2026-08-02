@@ -17,6 +17,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -165,7 +167,7 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
         if (tileEntity instanceof TileEntityMashTub) {
             FluidStack fluid = ((TileEntityMashTub) tileEntity).getTank().getFluid();
             if (fluid != null) {
-                return FluidHelper.getWorldRenderColor(fluid);
+                return FluidHelper.getDisplayColor(fluid);
             }
         }
         return 0xFFFFFFFF;
@@ -219,6 +221,7 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
                     if (!player.capabilities.isCreativeMode) {
                         player.setHeldItem(hand, new ItemStack(Items.BUCKET));
                     }
+                    world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     world.notifyBlockUpdate(pos, state, state, 3);
                 }
                 return true;
