@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "stage=0": { "model": "psychedelicraftresparked:juniper_sapling" },
+    "stage=1": { "model": "psychedelicraftresparked:juniper_sapling" }
+  }
+}

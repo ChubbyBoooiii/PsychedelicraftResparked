@@ -89,6 +89,9 @@ item.juniper_berries.name=Juniper Berries
 # BLOCKS
 tile.peyote.name=Peyote
 tile.lattice.name=Lattice
+tile.juniper_sapling.name=Juniper Sapling
+tile.juniper_log.name=Juniper Log
+tile.juniper_leaves.name=Juniper Leaves
 
 
 

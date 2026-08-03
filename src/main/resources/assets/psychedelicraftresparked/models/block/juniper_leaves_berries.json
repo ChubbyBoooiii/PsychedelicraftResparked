@@ -1,0 +1,6 @@
+{
+  "parent": "block/leaves",
+  "textures": {
+    "all": "psychedelicraftresparked:blocks/juniper_leaves_berries"
+  }
+}

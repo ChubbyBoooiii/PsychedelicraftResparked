@@ -35,6 +35,14 @@ public class ItemInit {
     public static final ItemBarrel BARREL_ITEM = new ItemBarrel(BlockInit.BARREL);
     public static final ItemDistillery DISTILLERY_ITEM = new ItemDistillery(BlockInit.DISTILLERY);
     public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
+    public static final Item LATTICE_ITEM = createItemBlock(BlockInit.LATTICE);
+
+
+
+    // ==================== OTHER BLOCKS ====================
+    public static final Item JUNIPER_SAPLING_ITEM = createItemBlock(BlockInit.JUNIPER_SAPLING);
+    public static final Item JUNIPER_LOG_ITEM = createItemBlock(BlockInit.JUNIPER_LOG);
+    public static final Item JUNIPER_LEAVES_ITEM = createItemBlock(BlockInit.JUNIPER_LEAVES);
 
 
 
@@ -130,34 +138,6 @@ public class ItemInit {
 
 
 
-    // ==================== HARMONIUM ITEMS ====================
-    public static final ItemHarmonium HARMONIUM = new ItemHarmonium("harmonium");
-
-    // Harmonium Drug
-    static {
-        for (EnumDyeColor color : EnumDyeColor.values()) {
-            PIPE.addConsumable(new ItemSmokingTool.Consumable(
-                new ItemStack(HARMONIUM, 1, color.getMetadata()),
-                new DrugInfluence[]{
-                    new DrugInfluenceHarmonium("harmonium", 0, 0.04, 0.01, 0.65, color.getColorComponentValues()),
-                    new DrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
-                },
-                color.getColorComponentValues()
-            ));
-
-            PIPE_OF_SMOKE_MONSTERS.addConsumable(new ItemSmokingTool.Consumable(
-                new ItemStack(HARMONIUM, 1, color.getMetadata()),
-                new DrugInfluence[]{
-                    new DrugInfluenceHarmonium("harmonium", 0, 0.04, 0.01, 0.65, color.getColorComponentValues()),
-                    new DrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
-                },
-                color.getColorComponentValues())
-            );
-        }
-    }
-
-
-
     // ==================== SHROOMS ITEMS ====================
     public static final Item BROWN_SHROOMS = new ItemIngestable("brown_magic_mushrooms", 3, 0.1F)
         .setDrugInfluence("brownshrooms", 15, 0.005, 0.003, 0.5)
@@ -198,12 +178,39 @@ public class ItemInit {
 
     // ==================== GRAPES ITEMS ====================
     public static final Item GRAPES = new ItemGrapes("grapes", 1, 0.5F);
-    public static final Item LATTICE_ITEM = createItemBlock(BlockInit.LATTICE);
 
 
 
     // ==================== JUNIPER ITEMS ====================
     public static final Item JUNIPER_BERRIES = new PsychFoodItem("juniper_berries", 1, 0.5F);
+
+
+
+    // ==================== HARMONIUM ITEMS ====================
+    public static final ItemHarmonium HARMONIUM = new ItemHarmonium("harmonium");
+
+    // Harmonium Drug
+    static {
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            PIPE.addConsumable(new ItemSmokingTool.Consumable(
+                    new ItemStack(HARMONIUM, 1, color.getMetadata()),
+                    new DrugInfluence[]{
+                            new DrugInfluenceHarmonium("harmonium", 0, 0.04, 0.01, 0.65, color.getColorComponentValues()),
+                            new DrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
+                    },
+                    color.getColorComponentValues()
+            ));
+
+            PIPE_OF_SMOKE_MONSTERS.addConsumable(new ItemSmokingTool.Consumable(
+                    new ItemStack(HARMONIUM, 1, color.getMetadata()),
+                    new DrugInfluence[]{
+                            new DrugInfluenceHarmonium("harmonium", 0, 0.04, 0.01, 0.65, color.getColorComponentValues()),
+                            new DrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
+                    },
+                    color.getColorComponentValues())
+            );
+        }
+    }
 
 
 
