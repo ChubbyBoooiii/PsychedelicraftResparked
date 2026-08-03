@@ -89,6 +89,8 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/slurry_flow"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_still"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/tea_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/tea_flow"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_bubble"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_splash"));
     }

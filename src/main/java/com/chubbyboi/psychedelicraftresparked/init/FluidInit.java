@@ -29,6 +29,11 @@ public class FluidInit {
         new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
     );
 
+    public static final FluidDrug CANNABIS_TEA = new FluidDrug("cannabis_tea",
+        new ResourceLocation("psychedelicraftresparked:blocks/tea_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/tea_flow")
+    );
+
     public static final FluidDrug COCAINE_FLUID = new FluidDrug("cocaine_fluid",
             new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
             new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
@@ -69,6 +74,10 @@ public class FluidInit {
         COFFEE.setColor(0xffa77d55);
         COFFEE.addDrugInfluencePerBucket("caffeine", 20, 0.002, 0.001, 0.25);
 
+        CANNABIS_TEA.setDrinkable(true);
+        CANNABIS_TEA.setColor(0xff6d6f3c);
+        CANNABIS_TEA.addDrugInfluencePerBucket("cannabis", 60, 0.005, 0.002, 0.25);
+
         COCAINE_FLUID.setInjectable(true);
         COCAINE_FLUID.setColor(0x44e8f4f8);
         COCAINE_FLUID.addDrugInfluencePerBucket("cocaine", 0, 0.005, 0.01, 50.0);
@@ -89,11 +98,12 @@ public class FluidInit {
 
     // Register
     public static void registerFluids() {
+        FluidRegistry.registerFluid(MILK);
+        FluidRegistry.registerFluid(SLURRY);
         FluidRegistry.registerFluid(COFFEE);
+        FluidRegistry.registerFluid(CANNABIS_TEA);
         FluidRegistry.registerFluid(COCAINE_FLUID);
         FluidRegistry.registerFluid(WHEAT);
-        FluidRegistry.registerFluid(SLURRY);
-        FluidRegistry.registerFluid(MILK);
         FluidRegistry.registerFluid(MILK_ALCOHOL);
     }
 }
