@@ -4,7 +4,7 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.FluidGuiRenderer;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidSlurry;
-import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -19,15 +19,15 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class MashTubGui extends GuiContainer {
+public class VatGui extends GuiContainer {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Tags.MOD_ID + ":textures/gui/gui_mash_tub.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Tags.MOD_ID + ":textures/gui/gui_vat.png");
 
-    private final TileEntityMashTub tileentity;
+    private final TileEntityVat tileentity;
     private GuiButton transferDirectionButton;
 
-    public MashTubGui(InventoryPlayer player, TileEntityMashTub tileentity) {
-        super(new MashTubContainer(player, tileentity));
+    public VatGui(InventoryPlayer player, TileEntityVat tileentity) {
+        super(new VatContainer(player, tileentity));
         this.tileentity = tileentity;
         this.xSize = 176;
         this.ySize = 166;
@@ -38,18 +38,18 @@ public class MashTubGui extends GuiContainer {
         super.initGui();
         this.buttonList.clear();
 
-        this.transferDirectionButton = new GuiButton(MashTubContainer.TOGGLE_DIRECTION_BUTTON_ID, this.guiLeft + 7, this.guiTop + 60, 50, 20, "");
+        this.transferDirectionButton = new GuiButton(VatContainer.TOGGLE_DIRECTION_BUTTON_ID, this.guiLeft + 7, this.guiTop + 60, 50, 20, "");
         this.buttonList.add(this.transferDirectionButton);
         updateTransferButtonTitle();
     }
 
     private void updateTransferButtonTitle() {
-        this.transferDirectionButton.displayString = I18n.format(this.tileentity.drainingMode ? "container.mash_tub.drain" : "container.mash_tub.fill");
+        this.transferDirectionButton.displayString = I18n.format(this.tileentity.drainingMode ? "container.vat.drain" : "container.vat.fill");
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if (button.id == MashTubContainer.TOGGLE_DIRECTION_BUTTON_ID) {
+        if (button.id == VatContainer.TOGGLE_DIRECTION_BUTTON_ID) {
             this.mc.playerController.sendEnchantPacket(this.inventorySlots.windowId, button.id);
             this.tileentity.drainingMode = !this.tileentity.drainingMode;
             updateTransferButtonTitle();
@@ -67,10 +67,10 @@ public class MashTubGui extends GuiContainer {
         if (mouseX >= tankX && mouseX < tankX + 108 && mouseY >= tankY && mouseY < tankY + 57
                 && !isMouseOverVisibleIngredientSlot(mouseX, mouseY)) {
             FluidStack fluid = this.tileentity.getTank().getFluid();
-            String name = fluid != null ? fluid.getLocalizedName() : I18n.format("container.mash_tub.empty");
+            String name = fluid != null ? fluid.getLocalizedName() : I18n.format("container.vat.empty");
             int amount = fluid != null ? fluid.amount : 0;
             this.drawHoveringText(Collections.singletonList(
-                name + " (" + amount + "mB / " + TileEntityMashTub.CAPACITY + "mB)"
+                name + " (" + amount + "mB / " + TileEntityVat.CAPACITY + "mB)"
             ), mouseX, mouseY);
         }
 
@@ -82,21 +82,21 @@ public class MashTubGui extends GuiContainer {
                 int total = this.tileentity.totalFermentationTime;
                 int percent = Math.min(100, (int) (progress * 100.0 / total));
                 int ticksLeft = Math.max(0, total - progress);
-                String labelKey = isSpoiling() ? "container.mash_tub.spoiling"
-                    : isHardening() ? "container.mash_tub.hardening"
-                    : "container.mash_tub.fermenting";
+                String labelKey = isSpoiling() ? "container.vat.spoiling"
+                    : isHardening() ? "container.vat.hardening"
+                    : "container.vat.fermenting";
                 this.drawHoveringText(Arrays.asList(
                     I18n.format(labelKey, percent),
-                    I18n.format("container.mash_tub.time_left", TimeHelper.formatTicksAsTime(ticksLeft))
+                    I18n.format("container.vat.time_left", TimeHelper.formatTicksAsTime(ticksLeft))
                 ), mouseX, mouseY);
             } else {
-                this.drawHoveringText(Collections.singletonList(I18n.format("container.mash_tub.no_recipe")), mouseX, mouseY);
+                this.drawHoveringText(Collections.singletonList(I18n.format("container.vat.no_recipe")), mouseX, mouseY);
             }
         }
     }
 
     private boolean isMouseOverVisibleIngredientSlot(int mouseX, int mouseY) {
-        for (int i = 0; i < TileEntityMashTub.INGREDIENT_SLOTS; i++) {
+        for (int i = 0; i < TileEntityVat.INGREDIENT_SLOTS; i++) {
             Slot slot = this.inventorySlots.inventorySlots.get(i);
             if (slot.isEnabled() && isPointInRegion(slot.xPos, slot.yPos, 16, 16, mouseX, mouseY)) {
                 return true;
@@ -121,7 +121,7 @@ public class MashTubGui extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString(I18n.format("container.mash_tub"), 8, 6, 4210752);
+        this.fontRenderer.drawString(I18n.format("container.vat"), 8, 6, 4210752);
     }
 
     @Override
@@ -143,8 +143,8 @@ public class MashTubGui extends GuiContainer {
         int tankWidth = 108;
         int tankHeight = 57;
         FluidStack fluid = this.tileentity.getTank().getFluid();
-        int fillHeight = TileEntityMashTub.CAPACITY > 0
-            ? (tankHeight * this.tileentity.getTank().getFluidAmount()) / TileEntityMashTub.CAPACITY
+        int fillHeight = TileEntityVat.CAPACITY > 0
+            ? (tankHeight * this.tileentity.getTank().getFluidAmount()) / TileEntityVat.CAPACITY
             : 0;
         if (fluid != null && fillHeight > 0) {
             FluidGuiRenderer.drawTiledFluidRect(fluid, tankX, tankY + tankHeight - fillHeight, tankWidth, fillHeight);

@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "psychedelicraftresparked:mash_tub_companion"
+    "model": "psychedelicraftresparked:vat_companion"
   },
   "variants": {
     "normal": [

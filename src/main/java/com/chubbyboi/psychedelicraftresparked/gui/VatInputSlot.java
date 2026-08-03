@@ -1,14 +1,14 @@
 package com.chubbyboi.psychedelicraftresparked.gui;
 
-import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class MashTubInputSlot extends Slot {
+public class VatInputSlot extends Slot {
 
-    private final TileEntityMashTub tileentity;
+    private final TileEntityVat tileentity;
 
-    public MashTubInputSlot(TileEntityMashTub tileentity, int index, int x, int y) {
+    public VatInputSlot(TileEntityVat tileentity, int index, int x, int y) {
         super(tileentity, index, x, y);
         this.tileentity = tileentity;
     }

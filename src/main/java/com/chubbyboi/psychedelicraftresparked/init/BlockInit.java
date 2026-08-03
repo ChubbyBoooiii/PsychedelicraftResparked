@@ -3,8 +3,8 @@ package com.chubbyboi.psychedelicraftresparked.init;
 import com.chubbyboi.psychedelicraftresparked.block.BlockBarrel;
 import com.chubbyboi.psychedelicraftresparked.block.BlockDistillery;
 import com.chubbyboi.psychedelicraftresparked.block.BlockFlask;
-import com.chubbyboi.psychedelicraftresparked.block.BlockMashTub;
-import com.chubbyboi.psychedelicraftresparked.block.BlockMashTubCompanion;
+import com.chubbyboi.psychedelicraftresparked.block.BlockVat;
+import com.chubbyboi.psychedelicraftresparked.block.BlockVatCompanion;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
 import com.chubbyboi.psychedelicraftresparked.block.BlockTallCrop;
 import com.chubbyboi.psychedelicraftresparked.block.PsychBlockDryingTable;
@@ -18,8 +18,8 @@ public class BlockInit {
 
     // Functional Blocks
     public static final Block DRYING_TABLE = new PsychBlockDryingTable("drying_table");
-    public static final BlockMashTub MASH_TUB = new BlockMashTub("mash_tub");
-    public static final BlockMashTubCompanion MASH_TUB_COMPANION = new BlockMashTubCompanion("mash_tub_companion");
+    public static final BlockVat VAT = new BlockVat("vat");
+    public static final BlockVatCompanion VAT_COMPANION = new BlockVatCompanion("vat_companion");
     public static final BlockBarrel BARREL = new BlockBarrel("barrel");
     public static final BlockDistillery DISTILLERY = new BlockDistillery("distillery");
     public static final BlockFlask FLASK = new BlockFlask("flask");

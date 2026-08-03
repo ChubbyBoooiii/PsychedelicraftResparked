@@ -5,7 +5,7 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
-import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.util.GuiHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -40,13 +40,13 @@ import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class BlockMashTub extends Block implements ITileEntityProvider, FluidFilled {
+public class BlockVat extends Block implements ITileEntityProvider, FluidFilled {
     public static final float BASIN_MIN_XZ = 0.044194F;
     public static final float BASIN_MAX_XZ = 1.955806F;
     public static final float BASIN_FLOOR_Y = 0.09F;
     public static final float BASIN_RIM_Y = 0.95F;
 
-    public BlockMashTub(String name) {
+    public BlockVat(String name) {
         super(Material.WOOD);
         setTranslationKey(name);
         setRegistryName(Tags.MOD_ID, name);
@@ -70,7 +70,7 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        EnumFacing primary = tileEntity instanceof TileEntityMashTub ? ((TileEntityMashTub) tileEntity).getPrimaryDirection() : null;
+        EnumFacing primary = tileEntity instanceof TileEntityVat ? ((TileEntityVat) tileEntity).getPrimaryDirection() : null;
         return state.withProperty(FACING, primary != null ? primary : EnumFacing.EAST);
     }
 
@@ -86,12 +86,12 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
 
     @Override
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
-        addMashTubCollisionBoxes(worldIn, pos, entityBox, collidingBoxes);
+        addVatCollisionBoxes(worldIn, pos, entityBox, collidingBoxes);
     }
 
-    public static void addMashTubCollisionBoxes(World world, BlockPos masterPos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes) {
+    public static void addVatCollisionBoxes(World world, BlockPos masterPos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes) {
         TileEntity tileEntity = world.getTileEntity(masterPos);
-        EnumFacing primary = tileEntity instanceof TileEntityMashTub ? ((TileEntityMashTub) tileEntity).getPrimaryDirection() : null;
+        EnumFacing primary = tileEntity instanceof TileEntityVat ? ((TileEntityVat) tileEntity).getPrimaryDirection() : null;
 
         float border = 0.0442F;
         float floorHeight = 0.0625F;
@@ -114,7 +114,7 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
     }
 
     private static AxisAlignedBB rotateLocalBox(BlockPos masterPos, EnumFacing primary, float x0, float y0, float z0, float x1, float y1, float z1) {
-        double angle = Math.toRadians(TileEntityMashTub.rotationFor(primary));
+        double angle = Math.toRadians(TileEntityVat.rotationFor(primary));
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
 
@@ -137,36 +137,36 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
     @Override
     @Nullable
     public AxisAlignedBB getFluidBoundingBox(World world, BlockPos pos) {
-        return getMashTubFluidBoundingBox(world, pos);
+        return getVatFluidBoundingBox(world, pos);
     }
 
     @Nullable
-    public static AxisAlignedBB getMashTubFluidBoundingBox(World world, BlockPos masterPos) {
+    public static AxisAlignedBB getVatFluidBoundingBox(World world, BlockPos masterPos) {
         TileEntity tileEntity = world.getTileEntity(masterPos);
-        if (!(tileEntity instanceof TileEntityMashTub)) {
+        if (!(tileEntity instanceof TileEntityVat)) {
             return null;
         }
-        TileEntityMashTub mashTub = (TileEntityMashTub) tileEntity;
-        FluidStack fluid = mashTub.getTank().getFluid();
+        TileEntityVat vat = (TileEntityVat) tileEntity;
+        FluidStack fluid = vat.getTank().getFluid();
         if (fluid == null || fluid.amount <= 0) {
             return null;
         }
 
-        float fillFraction = Math.min(1.0F, (float) fluid.amount / TileEntityMashTub.CAPACITY);
+        float fillFraction = Math.min(1.0F, (float) fluid.amount / TileEntityVat.CAPACITY);
         float topY = BASIN_FLOOR_Y + fillFraction * (BASIN_RIM_Y - BASIN_FLOOR_Y);
 
-        return rotateLocalBox(masterPos, mashTub.getPrimaryDirection(), BASIN_MIN_XZ, BASIN_FLOOR_Y, BASIN_MIN_XZ, BASIN_MAX_XZ, topY, BASIN_MAX_XZ);
+        return rotateLocalBox(masterPos, vat.getPrimaryDirection(), BASIN_MIN_XZ, BASIN_FLOOR_Y, BASIN_MIN_XZ, BASIN_MAX_XZ, topY, BASIN_MAX_XZ);
     }
 
     @Override
     public int getFluidTintColor(World world, BlockPos pos) {
-        return getMashTubFluidTintColor(world, pos);
+        return getVatFluidTintColor(world, pos);
     }
 
-    public static int getMashTubFluidTintColor(World world, BlockPos masterPos) {
+    public static int getVatFluidTintColor(World world, BlockPos masterPos) {
         TileEntity tileEntity = world.getTileEntity(masterPos);
-        if (tileEntity instanceof TileEntityMashTub) {
-            FluidStack fluid = ((TileEntityMashTub) tileEntity).getTank().getFluid();
+        if (tileEntity instanceof TileEntityVat) {
+            FluidStack fluid = ((TileEntityVat) tileEntity).getTank().getFluid();
             if (fluid != null) {
                 return FluidHelper.getDisplayColor(fluid);
             }
@@ -191,34 +191,34 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileEntityMashTub();
+        return new TileEntityVat();
     }
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return new ItemStack(ItemInit.MASH_TUB);
+        return new ItemStack(ItemInit.VAT);
     }
 
     @Nullable
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return ItemInit.MASH_TUB;
+        return ItemInit.VAT;
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        if (!(tileEntity instanceof TileEntityMashTub)) {
+        if (!(tileEntity instanceof TileEntityVat)) {
             return false;
         }
-        TileEntityMashTub mashTub = (TileEntityMashTub) tileEntity;
+        TileEntityVat vat = (TileEntityVat) tileEntity;
 
         ItemStack held = player.getHeldItem(hand);
         if (held.getItem() == Items.WATER_BUCKET) {
             FluidStack water = new FluidStack(FluidRegistry.WATER, 1000);
-            if (mashTub.getTank().fill(water, false) >= water.amount) {
+            if (vat.getTank().fill(water, false) >= water.amount) {
                 if (!world.isRemote) {
-                    mashTub.getTank().fill(water, true);
+                    vat.getTank().fill(water, true);
                     if (!player.capabilities.isCreativeMode) {
                         player.setHeldItem(hand, new ItemStack(Items.BUCKET));
                     }
@@ -229,17 +229,17 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
             }
         }
 
-        ItemStack solidContents = mashTub.getSolidContents();
+        ItemStack solidContents = vat.getSolidContents();
         if (!solidContents.isEmpty()) {
             if (!world.isRemote) {
                 dropOutputItem(world, pos, solidContents.copy());
-                mashTub.collectSolidContents();
+                vat.collectSolidContents();
             }
             return true;
         }
 
         if (!world.isRemote) {
-            player.openGui(PsychedelicraftResparked.instance, GuiHandler.MASH_TUB_ID, world, pos.getX(), pos.getY(), pos.getZ());
+            player.openGui(PsychedelicraftResparked.instance, GuiHandler.VAT_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }
@@ -247,30 +247,30 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        if (tileEntity instanceof TileEntityMashTub) {
-            TileEntityMashTub mashTub = (TileEntityMashTub) tileEntity;
-            InventoryHelper.dropInventoryItems(world, pos, mashTub);
+        if (tileEntity instanceof TileEntityVat) {
+            TileEntityVat vat = (TileEntityVat) tileEntity;
+            InventoryHelper.dropInventoryItems(world, pos, vat);
 
-            ItemStack solidContents = mashTub.getSolidContents();
+            ItemStack solidContents = vat.getSolidContents();
             if (!solidContents.isEmpty()) {
                 dropOutputItem(world, pos, solidContents.copy());
             }
 
-            FluidStack fluid = mashTub.getTank().getFluid();
+            FluidStack fluid = vat.getTank().getFluid();
             if (fluid != null && fluid.amount > 0) {
                 // Fluid itself isn't a droppable item - just lost on break.
                 // TODO - Look into dropping with fluid still in, making barrel could add the plumbing
             }
 
-            EnumFacing primary = mashTub.getPrimaryDirection();
-            EnumFacing secondary = mashTub.getSecondaryDirection();
+            EnumFacing primary = vat.getPrimaryDirection();
+            EnumFacing secondary = vat.getSecondaryDirection();
             if (primary != null && secondary != null) {
                 for (BlockPos companionPos : new BlockPos[] {
                         pos.offset(primary),
                         pos.offset(secondary),
                         pos.offset(primary).offset(secondary)
                 }) {
-                    if (world.getBlockState(companionPos).getBlock() == BlockInit.MASH_TUB_COMPANION) {
+                    if (world.getBlockState(companionPos).getBlock() == BlockInit.VAT_COMPANION) {
                         world.setBlockToAir(companionPos);
                     }
                 }
@@ -282,7 +282,7 @@ public class BlockMashTub extends Block implements ITileEntityProvider, FluidFil
     private static void dropOutputItem(World world, BlockPos pos, ItemStack stack) {
         EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         entityItem.setDefaultPickupDelay();
-        entityItem.addTag(TileEntityMashTub.OUTPUT_ITEM_TAG);
+        entityItem.addTag(TileEntityVat.OUTPUT_ITEM_TAG);
         world.spawnEntity(entityItem);
     }
 }

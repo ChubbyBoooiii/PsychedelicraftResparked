@@ -2,7 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.tileentities;
 
 import com.chubbyboi.psychedelicraftresparked.fluids.FermentableFluid;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
-import com.chubbyboi.psychedelicraftresparked.recipes.MashTubRecipes;
+import com.chubbyboi.psychedelicraftresparked.recipes.VatRecipes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -24,13 +24,13 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nullable;
 
-public class TileEntityMashTub extends TileEntity implements ITickable, ISidedInventory {
+public class TileEntityVat extends TileEntity implements ITickable, ISidedInventory {
     public static final int CAPACITY = 16000;
     public static final int INGREDIENT_SLOTS = 7;
     public static final int FLUID_IO_SLOT = 7;
     public static final int SLOT_COUNT = 8;
 
-    public static final String OUTPUT_ITEM_TAG = "psychedelicraftresparked_mash_tub_output";
+    public static final String OUTPUT_ITEM_TAG = "psychedelicraftresparked_vat_output";
 
     private static final int[] SLOTS = new int[SLOT_COUNT];
     static {
@@ -240,7 +240,7 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
             return false;
         }
 
-        MashTubRecipes.Recipe recipe = MashTubRecipes.getInstance().findMatch(tank, items);
+        VatRecipes.Recipe recipe = VatRecipes.getInstance().findMatch(tank, items);
         if (recipe == null) {
             return false;
         }
@@ -488,7 +488,7 @@ public class TileEntityMashTub extends TileEntity implements ITickable, ISidedIn
 
     @Override
     public String getName() {
-        return "container.mash_tub";
+        return "container.vat";
     }
 
     @Override

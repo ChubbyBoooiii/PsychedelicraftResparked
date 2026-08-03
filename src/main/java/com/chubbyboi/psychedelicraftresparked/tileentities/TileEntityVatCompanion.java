@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
 
-public class TileEntityMashTubCompanion extends TileEntity {
+public class TileEntityVatCompanion extends TileEntity {
     @Nullable
     private BlockPos masterPos;
 

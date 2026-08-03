@@ -1,6 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.gui;
 
-import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,30 +8,30 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class MashTubContainer extends Container {
+public class VatContainer extends Container {
 
     public static final int TOGGLE_DIRECTION_BUTTON_ID = 0;
 
-    private final TileEntityMashTub tileentity;
+    private final TileEntityVat tileentity;
     private boolean fermenting;
     private int fermentationProgress;
     private int totalFermentationTime;
     private int fluidAmount;
     private boolean drainingMode;
 
-    public MashTubContainer(InventoryPlayer player, TileEntityMashTub tileentity) {
+    public VatContainer(InventoryPlayer player, TileEntityVat tileentity) {
         this.tileentity = tileentity;
 
         int[] row1X = {79, 97, 115, 133};
         for (int i = 0; i < row1X.length; i++) {
-            this.addSlotToContainer(new MashTubInputSlot(tileentity, i, row1X[i], 25));
+            this.addSlotToContainer(new VatInputSlot(tileentity, i, row1X[i], 25));
         }
         int[] row2X = {88, 106, 124};
         for (int i = 0; i < row2X.length; i++) {
-            this.addSlotToContainer(new MashTubInputSlot(tileentity, row1X.length + i, row2X[i], 45));
+            this.addSlotToContainer(new VatInputSlot(tileentity, row1X.length + i, row2X[i], 45));
         }
 
-        this.addSlotToContainer(new Slot(tileentity, TileEntityMashTub.FLUID_IO_SLOT, 25, 40));
+        this.addSlotToContainer(new Slot(tileentity, TileEntityVat.FLUID_IO_SLOT, 25, 40));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -45,7 +45,7 @@ public class MashTubContainer extends Container {
         }
     }
 
-    public TileEntityMashTub getTileEntity() {
+    public TileEntityVat getTileEntity() {
         return tileentity;
     }
 

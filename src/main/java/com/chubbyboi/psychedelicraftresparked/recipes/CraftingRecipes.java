@@ -20,8 +20,8 @@ public class CraftingRecipes {
         // Drying Table
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "drying_table"), null, new ItemStack(ItemInit.DRYING_TABLE_ITEM, 1), "WWW", "WRW", 'R', "dustRedstone", 'W', "plankWood");
 
-        // Mash Tub
-        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "mash_tub"), null, new ItemStack(ItemInit.MASH_TUB, 1), "W W", "I I", "WWW", 'I', "ingotIron", 'W', "plankWood");
+        // Vat
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "vat"), null, new ItemStack(ItemInit.VAT, 1), "W W", "I I", "WWW", 'I', "ingotIron", 'W', "plankWood");
 
 
 

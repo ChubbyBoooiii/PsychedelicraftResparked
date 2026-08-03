@@ -1,8 +1,8 @@
 package com.chubbyboi.psychedelicraftresparked.client.rendering.blocks;
 
-import com.chubbyboi.psychedelicraftresparked.block.BlockMashTub;
+import com.chubbyboi.psychedelicraftresparked.block.BlockVat;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
-import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -18,13 +18,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityRendererMashTub extends TileEntitySpecialRenderer<TileEntityMashTub> {
+public class TileEntityRendererVat extends TileEntitySpecialRenderer<TileEntityVat> {
 
     @Override
-    public void render(TileEntityMashTub tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TileEntityVat tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.5D, y, z + 0.5D);
-        GlStateManager.rotate(TileEntityMashTub.rotationFor(tileEntity.getPrimaryDirection()), 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(TileEntityVat.rotationFor(tileEntity.getPrimaryDirection()), 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(-0.5D, 0.0D, -0.5D);
 
         if (!tileEntity.getSolidContents().isEmpty()) {
@@ -36,14 +36,14 @@ public class TileEntityRendererMashTub extends TileEntitySpecialRenderer<TileEnt
         GlStateManager.popMatrix();
     }
 
-    private void renderFluid(TileEntityMashTub tileEntity) {
+    private void renderFluid(TileEntityVat tileEntity) {
         FluidStack fluid = tileEntity.getTank().getFluid();
         if (fluid == null || fluid.amount <= 0) {
             return;
         }
 
-        float fillFraction = Math.min(1.0F, (float) fluid.amount / TileEntityMashTub.CAPACITY);
-        float topY = BlockMashTub.BASIN_FLOOR_Y + fillFraction * (BlockMashTub.BASIN_RIM_Y - BlockMashTub.BASIN_FLOOR_Y);
+        float fillFraction = Math.min(1.0F, (float) fluid.amount / TileEntityVat.CAPACITY);
+        float topY = BlockVat.BASIN_FLOOR_Y + fillFraction * (BlockVat.BASIN_RIM_Y - BlockVat.BASIN_FLOOR_Y);
 
         ResourceLocation stillLocation = fluid.getFluid().getStill(fluid);
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(stillLocation.toString());
@@ -73,7 +73,7 @@ public class TileEntityRendererMashTub extends TileEntitySpecialRenderer<TileEnt
         GlStateManager.disableBlend();
     }
 
-    private void renderSolidContents(TileEntityMashTub tileEntity) {
+    private void renderSolidContents(TileEntityVat tileEntity) {
         ItemStack solid = tileEntity.getSolidContents();
         Block block = Block.getBlockFromItem(solid.getItem());
         if (block == Blocks.AIR) {
@@ -87,17 +87,17 @@ public class TileEntityRendererMashTub extends TileEntitySpecialRenderer<TileEnt
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableLighting();
 
-        drawTopQuad(sprite, BlockMashTub.BASIN_RIM_Y);
+        drawTopQuad(sprite, BlockVat.BASIN_RIM_Y);
     }
 
     private void drawTopQuad(TextureAtlasSprite sprite, float topY) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(BlockMashTub.BASIN_MIN_XZ, topY, BlockMashTub.BASIN_MIN_XZ).tex(sprite.getMinU(), sprite.getMinV()).endVertex();
-        buffer.pos(BlockMashTub.BASIN_MIN_XZ, topY, BlockMashTub.BASIN_MAX_XZ).tex(sprite.getMinU(), sprite.getMaxV()).endVertex();
-        buffer.pos(BlockMashTub.BASIN_MAX_XZ, topY, BlockMashTub.BASIN_MAX_XZ).tex(sprite.getMaxU(), sprite.getMaxV()).endVertex();
-        buffer.pos(BlockMashTub.BASIN_MAX_XZ, topY, BlockMashTub.BASIN_MIN_XZ).tex(sprite.getMaxU(), sprite.getMinV()).endVertex();
+        buffer.pos(BlockVat.BASIN_MIN_XZ, topY, BlockVat.BASIN_MIN_XZ).tex(sprite.getMinU(), sprite.getMinV()).endVertex();
+        buffer.pos(BlockVat.BASIN_MIN_XZ, topY, BlockVat.BASIN_MAX_XZ).tex(sprite.getMinU(), sprite.getMaxV()).endVertex();
+        buffer.pos(BlockVat.BASIN_MAX_XZ, topY, BlockVat.BASIN_MAX_XZ).tex(sprite.getMaxU(), sprite.getMaxV()).endVertex();
+        buffer.pos(BlockVat.BASIN_MAX_XZ, topY, BlockVat.BASIN_MIN_XZ).tex(sprite.getMaxU(), sprite.getMinV()).endVertex();
         tessellator.draw();
     }
 }

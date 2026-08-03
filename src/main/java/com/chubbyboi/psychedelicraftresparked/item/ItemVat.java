@@ -4,8 +4,8 @@ import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
-import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
-import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTubCompanion;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVatCompanion;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -15,9 +15,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemMashTub extends Item {
+public class ItemVat extends Item {
 
-    public ItemMashTub(String name) {
+    public ItemVat(String name) {
         setTranslationKey(name);
         setRegistryName(Tags.MOD_ID, name);
         setCreativeTab(PsychedelicraftResparked.PSYCHTAB);
@@ -42,21 +42,21 @@ public class ItemMashTub extends Item {
         }
 
         if (!world.isRemote) {
-            world.setBlockState(masterPos, BlockInit.MASH_TUB.getDefaultState());
-            world.setBlockState(primaryPos, BlockInit.MASH_TUB_COMPANION.getDefaultState());
-            world.setBlockState(secondaryPos, BlockInit.MASH_TUB_COMPANION.getDefaultState());
-            world.setBlockState(diagonalPos, BlockInit.MASH_TUB_COMPANION.getDefaultState());
+            world.setBlockState(masterPos, BlockInit.VAT.getDefaultState());
+            world.setBlockState(primaryPos, BlockInit.VAT_COMPANION.getDefaultState());
+            world.setBlockState(secondaryPos, BlockInit.VAT_COMPANION.getDefaultState());
+            world.setBlockState(diagonalPos, BlockInit.VAT_COMPANION.getDefaultState());
 
             TileEntity tileEntity = world.getTileEntity(masterPos);
-            if (tileEntity instanceof TileEntityMashTub) {
-                ((TileEntityMashTub) tileEntity).setPrimaryDirection(primary);
+            if (tileEntity instanceof TileEntityVat) {
+                ((TileEntityVat) tileEntity).setPrimaryDirection(primary);
                 world.notifyBlockUpdate(masterPos, world.getBlockState(masterPos), world.getBlockState(masterPos), 3);
             }
 
             for (BlockPos companionPos : new BlockPos[] {primaryPos, secondaryPos, diagonalPos}) {
                 TileEntity companionTe = world.getTileEntity(companionPos);
-                if (companionTe instanceof TileEntityMashTubCompanion) {
-                    ((TileEntityMashTubCompanion) companionTe).setMasterPos(masterPos);
+                if (companionTe instanceof TileEntityVatCompanion) {
+                    ((TileEntityVatCompanion) companionTe).setMasterPos(masterPos);
                     world.notifyBlockUpdate(companionPos, world.getBlockState(companionPos), world.getBlockState(companionPos), 3);
                 }
             }

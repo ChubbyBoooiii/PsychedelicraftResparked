@@ -98,8 +98,6 @@ public class BarrelGui extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         this.fontRenderer.drawString(I18n.format("container.barrel"), 8, 6, 4210752);
-        // Barrel's own player-inventory slots start at y=84 (BarrelContainer), not 101 like Mash
-        // Tub's taller GUI - 10px above that, matching the same gap Mash Tub uses above its own.
         this.fontRenderer.drawString(I18n.format("container.inventory"), 8, 74, 4210752);
     }
 

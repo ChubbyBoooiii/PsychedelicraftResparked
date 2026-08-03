@@ -202,7 +202,7 @@ public class FluidAlcohol extends FluidDrug implements FermentableFluid, Distill
         return value < min ? min : Math.min(value, max);
     }
 
-    // ==================== Fermentation (Mash Tub, open) / Maturation (Barrel, closed) ====================
+    // ==================== Fermentation (Vat, open) / Maturation (Barrel, closed) ====================
 
     @Override
     public int fermentationTime(FluidStack stack, boolean openContainer) {

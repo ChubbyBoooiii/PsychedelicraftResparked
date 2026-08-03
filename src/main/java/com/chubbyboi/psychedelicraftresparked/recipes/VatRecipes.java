@@ -15,11 +15,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MashTubRecipes {
+public class VatRecipes {
 
-    private static final MashTubRecipes INSTANCE = new MashTubRecipes();
+    private static final VatRecipes INSTANCE = new VatRecipes();
 
-    public static MashTubRecipes getInstance() {
+    public static VatRecipes getInstance() {
         return INSTANCE;
     }
 
@@ -81,7 +81,7 @@ public class MashTubRecipes {
 
     private final List<Recipe> recipes = new ArrayList<>();
 
-    private MashTubRecipes() {
+    private VatRecipes() {
         addRecipe(new Recipe(FluidInit.WHEAT).addIngredient(Items.WHEAT, 7));
     }
 

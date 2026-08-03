@@ -1,5 +1,5 @@
 {
-  "parent": "psychedelicraftresparked:block/mash_tub",
+  "parent": "psychedelicraftresparked:block/vat",
   "display": {
     "thirdperson_righthand": {
       "rotation": [0, 0, 0],

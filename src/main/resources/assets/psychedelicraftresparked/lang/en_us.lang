@@ -93,19 +93,19 @@ container.drying_table.rain_warning=§c§lCannot dry in rain!
 container.drying_table.progress=Progress: %d%%
 container.drying_table.time_left=Time left: %s
 
-# Mash Tub
-item.mash_tub.name=Mash Tub
-tile.mash_tub.name=Mash Tub
-tile.mash_tub_companion.name=Mash Tub
-container.mash_tub=Mash Tub
-container.mash_tub.fermenting=Fermenting: %s%%
-container.mash_tub.spoiling=Spoiling: %s%%
-container.mash_tub.hardening=Hardening: %s%%
-container.mash_tub.time_left=Time left: %s
-container.mash_tub.no_recipe=No valid recipe
-container.mash_tub.empty=Empty
-container.mash_tub.fill=Fill
-container.mash_tub.drain=Drain
+# Vat
+item.vat.name=Vat
+tile.vat.name=Vat
+tile.vat_companion.name=Vat
+container.vat=Vat
+container.vat.fermenting=Fermenting: %s%%
+container.vat.spoiling=Spoiling: %s%%
+container.vat.hardening=Hardening: %s%%
+container.vat.time_left=Time left: %s
+container.vat.no_recipe=No valid recipe
+container.vat.empty=Empty
+container.vat.fill=Fill
+container.vat.drain=Drain
 
 # Barrel
 tile.barrel.name=Barrel

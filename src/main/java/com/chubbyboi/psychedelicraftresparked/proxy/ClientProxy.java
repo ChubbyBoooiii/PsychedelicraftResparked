@@ -9,7 +9,7 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntity
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererDistillery;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererFlask;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererFlask;
-import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererMashTub;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererVat;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
@@ -20,7 +20,7 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDistillery;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
-import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityMashTub;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
@@ -45,7 +45,7 @@ public class ClientProxy extends CommonProxy {
     public void registerRenderers() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDryingTable.class, new TileEntityRendererDryingTable());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPeyote.class, new TileEntityRendererPeyote());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMashTub.class, new TileEntityRendererMashTub());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVat.class, new TileEntityRendererVat());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new TileEntityRendererBarrel());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDistillery.class, new TileEntityRendererDistillery());
         ItemInit.DISTILLERY_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererDistillery());

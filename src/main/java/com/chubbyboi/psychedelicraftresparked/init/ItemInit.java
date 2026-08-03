@@ -8,7 +8,7 @@ import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemFlask;
 import com.chubbyboi.psychedelicraftresparked.item.ItemHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemIngestable;
-import com.chubbyboi.psychedelicraftresparked.item.ItemMashTub;
+import com.chubbyboi.psychedelicraftresparked.item.ItemVat;
 import com.chubbyboi.psychedelicraftresparked.item.ItemPipeOfSmokeMonsters;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokingTool;
@@ -29,7 +29,7 @@ public class ItemInit {
 
     // ==================== FUNCTIONAL BLOCKS ====================
     public static final Item DRYING_TABLE_ITEM = createItemBlock(BlockInit.DRYING_TABLE);
-    public static final ItemMashTub MASH_TUB = new ItemMashTub("mash_tub");
+    public static final ItemVat VAT = new ItemVat("vat");
     public static final ItemBarrel BARREL_ITEM = new ItemBarrel(BlockInit.BARREL);
     public static final ItemDistillery DISTILLERY_ITEM = new ItemDistillery(BlockInit.DISTILLERY);
     public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
