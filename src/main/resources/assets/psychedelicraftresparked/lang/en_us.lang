@@ -78,10 +78,17 @@ item.peyote_joint.name=Peyote Joint
 item.hop_seeds.name=Hop Seeds
 item.hop_cones.name=Hop Cones
 
+# Grapes
+item.grapes.name=Grapes
+
+# Juniper
+item.juniper_berries.name=Juniper Berries
+
 
 
 # BLOCKS
 tile.peyote.name=Peyote
+tile.lattice.name=Lattice
 
 
 
@@ -202,6 +209,24 @@ fluid.potato.mature=Potato Beer (%d DM)
 fluid.potato.distill=Potato Vodka (%d TD)
 fluid.potato.dmature=Poteen (%d DM, %d TD)
 fluid.potato.vinegar=Potato Vinegar
+
+# Alcoholic - Grapes
+fluid.grapes=Grape Juice
+fluid.grapes.ferment_1=Wine Half Wash
+fluid.grapes.ferment_2=Wine Wash
+fluid.grapes.mature=Wine (%d DM)
+fluid.grapes.distill=Wine Brandy (%d TD)
+fluid.grapes.dmature=Wine Brandy (%d DM, %d TD)
+fluid.grapes.vinegar=Wine Vinegar
+
+# Alcoholic - Juniper
+fluid.juniper=Juniper Wort
+fluid.juniper.ferment_1=Juniper Half Wash
+fluid.juniper.ferment_2=Juniper Wash
+fluid.juniper.mature=Juniper Wash (%d DM)
+fluid.juniper.distill=Gin (%d TD)
+fluid.juniper.dmature=Gin (%d DM, %d TD)
+fluid.juniper.vinegar=Juniper Vinegar
 
 # Alcoholic - Sugar Cane
 fluid.sugar_cane=Sugarcane Wort

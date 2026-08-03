@@ -26,6 +26,8 @@ public class PsychedelicraftResparkedDrinksTab extends CreativeTabs {
         FluidInit.WHEAT_HOP,
         FluidInit.WHEAT,
         FluidInit.POTATO,
+        FluidInit.GRAPES,
+        FluidInit.JUNIPER,
         FluidInit.SUGAR_CANE,
         FluidInit.APPLE,
         FluidInit.MILK_ALCOHOL,

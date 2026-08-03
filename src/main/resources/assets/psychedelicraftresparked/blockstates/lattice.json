@@ -1,0 +1,14 @@
+{
+  "variants": {
+    "axis_x=true,growth=0":  { "model": "psychedelicraftresparked:lattice_0" },
+    "axis_x=false,growth=0": { "model": "psychedelicraftresparked:lattice_0", "y": 90 },
+    "axis_x=true,growth=1":  { "model": "psychedelicraftresparked:lattice_1" },
+    "axis_x=false,growth=1": { "model": "psychedelicraftresparked:lattice_1", "y": 90 },
+    "axis_x=true,growth=2":  { "model": "psychedelicraftresparked:lattice_2" },
+    "axis_x=false,growth=2": { "model": "psychedelicraftresparked:lattice_2", "y": 90 },
+    "axis_x=true,growth=3":  { "model": "psychedelicraftresparked:lattice_3" },
+    "axis_x=false,growth=3": { "model": "psychedelicraftresparked:lattice_3", "y": 90 },
+    "axis_x=true,growth=4":  { "model": "psychedelicraftresparked:lattice_4" },
+    "axis_x=false,growth=4": { "model": "psychedelicraftresparked:lattice_4", "y": 90 }
+  }
+}

@@ -23,6 +23,9 @@ public class CraftingRecipes {
         // Vat
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "vat"), null, new ItemStack(ItemInit.VAT, 1), "W W", "I I", "WWW", 'I', "ingotIron", 'W', "plankWood");
 
+        // Grape Lattice
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "lattice"), null, new ItemStack(ItemInit.LATTICE_ITEM, 1), "III", "IWI", "WIW", 'I', "stickWood", 'W', "plankWood");
+
 
 
         // ==================== ITEMS ====================

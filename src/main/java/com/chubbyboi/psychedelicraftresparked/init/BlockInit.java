@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.init;
 import com.chubbyboi.psychedelicraftresparked.block.BlockBarrel;
 import com.chubbyboi.psychedelicraftresparked.block.BlockDistillery;
 import com.chubbyboi.psychedelicraftresparked.block.BlockFlask;
+import com.chubbyboi.psychedelicraftresparked.block.BlockLattice;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVat;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVatCompanion;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
@@ -32,6 +33,8 @@ public class BlockInit {
     public static final BlockTallCrop HOPS_PLANT = new BlockTallCrop("hops_plant", 15, 3);
 
     public static final BlockPeyote PEYOTE_PLANT = new BlockPeyote("peyote");
+
+    public static final BlockLattice LATTICE = new BlockLattice("lattice");
 
     // Call after init so the seeds and crops exist
     public static void setCropDropsAndSeeds() {

@@ -81,6 +81,22 @@ public class FluidInit {
         new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
     );
 
+    public static final FluidAlcohol GRAPES = new FluidAlcohol(
+        "grapes",
+        new ResourceLocation("psychedelicraftresparked:blocks/wine_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/wine_flow"),
+        0.55, 1.7, 0.2,
+        new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
+    );
+
+    public static final FluidAlcohol JUNIPER = new FluidAlcohol(
+        "juniper",
+        new ResourceLocation("psychedelicraftresparked:blocks/slurry_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/slurry_flow"),
+        0.4, 1.7, 0.1,
+        new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
+    );
+
     public static final FluidAlcohol SUGAR_CANE = new FluidAlcohol(
         "sugar_cane",
         new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
@@ -159,6 +175,15 @@ public class FluidInit {
         POTATO.addIcon(4, 13, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
         POTATO.addIcon(14, -1, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_flow"));
 
+        GRAPES.setColor(0xee3f0822);
+        GRAPES.setDistilledColor(0x993f0822);
+        GRAPES.setMatureColor(0xee3f0822);
+
+        JUNIPER.setColor(0xcc704e21);
+        JUNIPER.addIcon(0, 3, 2, -1, new ResourceLocation("psychedelicraftresparked:blocks/clear_still"), new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
+        JUNIPER.addIcon(4, 13, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
+        JUNIPER.addIcon(14, -1, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_flow"));
+
         SUGAR_CANE.setColor(0xcc704e21);
         SUGAR_CANE.addIcon(0, 3, 2, -1, new ResourceLocation("psychedelicraftresparked:blocks/clear_still"), new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
         SUGAR_CANE.addIcon(4, 13, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
@@ -187,6 +212,8 @@ public class FluidInit {
         FluidRegistry.registerFluid(WHEAT_HOP);
         FluidRegistry.registerFluid(WHEAT);
         FluidRegistry.registerFluid(POTATO);
+        FluidRegistry.registerFluid(GRAPES);
+        FluidRegistry.registerFluid(JUNIPER);
         FluidRegistry.registerFluid(SUGAR_CANE);
         FluidRegistry.registerFluid(APPLE);
         FluidRegistry.registerFluid(MILK_ALCOHOL);

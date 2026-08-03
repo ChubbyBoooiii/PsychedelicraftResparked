@@ -12,6 +12,8 @@ import com.chubbyboi.psychedelicraftresparked.item.ItemVat;
 import com.chubbyboi.psychedelicraftresparked.item.ItemPipeOfSmokeMonsters;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokingTool;
+import com.chubbyboi.psychedelicraftresparked.item.ItemGrapes;
+import com.chubbyboi.psychedelicraftresparked.item.PsychFoodItem;
 import com.chubbyboi.psychedelicraftresparked.item.PsychItem;
 import com.chubbyboi.psychedelicraftresparked.item.PsychSeeds;
 import net.minecraft.init.SoundEvents;
@@ -191,6 +193,17 @@ public class ItemInit {
     // ==================== HOPS ITEMS ====================
     public static final PsychSeeds HOP_SEEDS = new PsychSeeds("hop_seeds");
     public static final Item HOP_CONES = new PsychItem("hop_cones");
+
+
+
+    // ==================== GRAPES ITEMS ====================
+    public static final Item GRAPES = new ItemGrapes("grapes", 1, 0.5F);
+    public static final Item LATTICE_ITEM = createItemBlock(BlockInit.LATTICE);
+
+
+
+    // ==================== JUNIPER ITEMS ====================
+    public static final Item JUNIPER_BERRIES = new PsychFoodItem("juniper_berries", 1, 0.5F);
 
 
 

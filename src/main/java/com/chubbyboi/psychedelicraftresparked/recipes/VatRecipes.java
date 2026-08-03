@@ -103,6 +103,8 @@ public class VatRecipes {
         addRecipe(new Recipe(FluidInit.WHEAT_HOP, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.WHEAT, 5).addIngredient(ItemInit.HOP_CONES, 2));
         addRecipe(new Recipe(FluidInit.WHEAT, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.WHEAT, 7));
         addRecipe(new Recipe(FluidInit.POTATO, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.POTATO, 7));
+        addRecipe(new Recipe(FluidInit.GRAPES, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(ItemInit.GRAPES, 7));
+        addRecipe(new Recipe(FluidInit.JUNIPER, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(ItemInit.JUNIPER_BERRIES, 3).addIngredient(Items.SUGAR, 1).addIngredient(ItemInit.GRAPES, 2).addIngredient(Items.WHEAT, 1));
         addRecipe(new Recipe(FluidInit.SUGAR_CANE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.REEDS, 7));
         addRecipe(new Recipe(FluidInit.APPLE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.APPLE, 7));
         addRecipe(new Recipe(FluidInit.MILK_ALCOHOL, FluidInit.MILK, TileEntityVat.CAPACITY));
