@@ -6,12 +6,15 @@ import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVatCompanion;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -46,6 +49,10 @@ public class ItemVat extends Item {
             world.setBlockState(primaryPos, BlockInit.VAT_COMPANION.getDefaultState());
             world.setBlockState(secondaryPos, BlockInit.VAT_COMPANION.getDefaultState());
             world.setBlockState(diagonalPos, BlockInit.VAT_COMPANION.getDefaultState());
+
+            IBlockState placedState = world.getBlockState(masterPos);
+            SoundType soundType = placedState.getBlock().getSoundType(placedState, world, masterPos, player);
+            world.playSound(null, masterPos, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 
             TileEntity tileEntity = world.getTileEntity(masterPos);
             if (tileEntity instanceof TileEntityVat) {

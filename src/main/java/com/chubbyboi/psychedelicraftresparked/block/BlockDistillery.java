@@ -8,6 +8,7 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDistillery;
 import com.chubbyboi.psychedelicraftresparked.util.GuiHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,6 +41,7 @@ public class BlockDistillery extends Block implements ITileEntityProvider {
         setRegistryName(Tags.MOD_ID, name);
         setCreativeTab(PsychedelicraftResparked.PSYCHTAB);
         setHardness(0.3F);
+        setSoundType(SoundType.GLASS);
         BlockInit.BLOCKS.add(this);
     }
 

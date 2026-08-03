@@ -7,6 +7,7 @@ import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVatCompanion;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -35,6 +36,7 @@ public class BlockVatCompanion extends Block implements ITileEntityProvider, Flu
         setRegistryName(Tags.MOD_ID, name);
         setCreativeTab(PsychedelicraftResparked.PSYCHTAB);
         setHardness(2.0F);
+        setSoundType(SoundType.WOOD);
         BlockInit.BLOCKS.add(this);
     }
 

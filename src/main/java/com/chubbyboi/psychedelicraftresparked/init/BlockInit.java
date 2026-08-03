@@ -7,7 +7,7 @@ import com.chubbyboi.psychedelicraftresparked.block.BlockVat;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVatCompanion;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
 import com.chubbyboi.psychedelicraftresparked.block.BlockTallCrop;
-import com.chubbyboi.psychedelicraftresparked.block.PsychBlockDryingTable;
+import com.chubbyboi.psychedelicraftresparked.block.BlockDryingTable;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class BlockInit {
     public static final List<Block> BLOCKS = new ArrayList<>();
 
     // Functional Blocks
-    public static final Block DRYING_TABLE = new PsychBlockDryingTable("drying_table");
+    public static final Block DRYING_TABLE = new BlockDryingTable("drying_table");
     public static final BlockVat VAT = new BlockVat("vat");
     public static final BlockVatCompanion VAT_COMPANION = new BlockVatCompanion("vat_companion");
     public static final BlockBarrel BARREL = new BlockBarrel("barrel");

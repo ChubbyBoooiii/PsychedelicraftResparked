@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -52,6 +53,7 @@ public class BlockVat extends Block implements ITileEntityProvider, FluidFilled 
         setRegistryName(Tags.MOD_ID, name);
         setCreativeTab(PsychedelicraftResparked.PSYCHTAB);
         setHardness(2.0F);
+        setSoundType(SoundType.WOOD);
         BlockInit.BLOCKS.add(this);
     }
 

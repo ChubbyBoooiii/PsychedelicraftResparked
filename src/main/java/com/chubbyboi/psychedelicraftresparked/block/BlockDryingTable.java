@@ -21,9 +21,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 @SuppressWarnings("deprecation")
-public class PsychBlockDryingTable extends Block implements ITileEntityProvider {
+public class BlockDryingTable extends Block implements ITileEntityProvider {
 
-    public PsychBlockDryingTable(String name) {
+    public BlockDryingTable(String name) {
         super(Material.WOOD);
 
         setTranslationKey(name);
