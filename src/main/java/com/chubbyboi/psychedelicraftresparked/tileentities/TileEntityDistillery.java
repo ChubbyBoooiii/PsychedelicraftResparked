@@ -153,7 +153,7 @@ public class TileEntityDistillery extends TileEntity implements ITickable, ISide
 
     private boolean processFluidIO() {
         ItemStack stack = items.get(FLUID_IO_SLOT);
-        if (stack.isEmpty()) {
+        if (stack.isEmpty() || stack.getCount() != 1) {
             return false;
         }
 

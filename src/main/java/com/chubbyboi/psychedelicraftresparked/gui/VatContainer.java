@@ -18,6 +18,9 @@ public class VatContainer extends Container {
     private int totalFermentationTime;
     private int fluidAmount;
     private boolean drainingMode;
+    private boolean mixing;
+    private int mixingProgress;
+    private int totalMixingTime;
 
     public VatContainer(InventoryPlayer player, TileEntityVat tileentity) {
         this.tileentity = tileentity;
@@ -74,6 +77,9 @@ public class VatContainer extends Container {
             if (this.totalFermentationTime != this.tileentity.getField(2)) listener.sendWindowProperty(this, 2, this.tileentity.getField(2));
             if (this.fluidAmount != this.tileentity.getField(3)) listener.sendWindowProperty(this, 3, this.tileentity.getField(3));
             if (this.drainingMode != (this.tileentity.getField(4) != 0)) listener.sendWindowProperty(this, 4, this.tileentity.getField(4));
+            if (this.mixing != (this.tileentity.getField(5) != 0)) listener.sendWindowProperty(this, 5, this.tileentity.getField(5));
+            if (this.mixingProgress != this.tileentity.getField(6)) listener.sendWindowProperty(this, 6, this.tileentity.getField(6));
+            if (this.totalMixingTime != this.tileentity.getField(7)) listener.sendWindowProperty(this, 7, this.tileentity.getField(7));
         }
 
         this.fermenting = this.tileentity.getField(0) != 0;
@@ -81,6 +87,9 @@ public class VatContainer extends Container {
         this.totalFermentationTime = this.tileentity.getField(2);
         this.fluidAmount = this.tileentity.getField(3);
         this.drainingMode = this.tileentity.getField(4) != 0;
+        this.mixing = this.tileentity.getField(5) != 0;
+        this.mixingProgress = this.tileentity.getField(6);
+        this.totalMixingTime = this.tileentity.getField(7);
     }
 
     @Override

@@ -229,6 +229,19 @@ public class BlockVat extends Block implements ITileEntityProvider, FluidFilled 
                 }
                 return true;
             }
+        } else if (held.getItem() == Items.BUCKET) {
+            FluidStack tankFluid = vat.getTank().getFluid();
+            if (tankFluid != null && tankFluid.getFluid() == FluidRegistry.WATER && tankFluid.amount >= 1000) {
+                if (!world.isRemote) {
+                    vat.getTank().drain(1000, true);
+                    if (!player.capabilities.isCreativeMode) {
+                        player.setHeldItem(hand, new ItemStack(Items.WATER_BUCKET));
+                    }
+                    world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.notifyBlockUpdate(pos, state, state, 3);
+                }
+                return true;
+            }
         }
 
         ItemStack solidContents = vat.getSolidContents();

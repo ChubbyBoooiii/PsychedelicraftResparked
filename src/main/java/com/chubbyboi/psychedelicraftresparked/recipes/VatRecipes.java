@@ -1,6 +1,8 @@
 package com.chubbyboi.psychedelicraftresparked.recipes;
 
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
+import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,10 +27,14 @@ public class VatRecipes {
 
     public static class Recipe {
         private final Fluid output;
+        private final Fluid requiredFluid;
+        private final int requiredAmount;
         private final Map<Item, Integer> ingredients = new LinkedHashMap<>();
 
-        public Recipe(Fluid output) {
+        public Recipe(Fluid output, Fluid requiredFluid, int requiredAmount) {
             this.output = output;
+            this.requiredFluid = requiredFluid;
+            this.requiredAmount = requiredAmount;
         }
 
         public Recipe addIngredient(Item item, int count) {
@@ -40,12 +46,20 @@ public class VatRecipes {
             return output;
         }
 
+        public Fluid getRequiredFluid() {
+            return requiredFluid;
+        }
+
+        public int getRequiredAmount() {
+            return requiredAmount;
+        }
+
         public Map<Item, Integer> getIngredients() {
             return ingredients;
         }
 
         public boolean matches(FluidTank tank, NonNullList<ItemStack> slots) {
-            if (tank.getFluid() == null || tank.getFluid().getFluid() != FluidRegistry.WATER || tank.getFluidAmount() < tank.getCapacity()) {
+            if (tank.getFluid() == null || tank.getFluid().getFluid() != requiredFluid || tank.getFluidAmount() != requiredAmount) {
                 return false;
             }
 
@@ -82,7 +96,8 @@ public class VatRecipes {
     private final List<Recipe> recipes = new ArrayList<>();
 
     private VatRecipes() {
-        addRecipe(new Recipe(FluidInit.WHEAT).addIngredient(Items.WHEAT, 7));
+        addRecipe(new Recipe(FluidInit.WHEAT, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.WHEAT, 7));
+        addRecipe(new Recipe(FluidInit.COFFEE, FluidRegistry.WATER, 4000).addIngredient(ItemInit.COFFEE_BEANS, 7));
     }
 
     public void addRecipe(Recipe recipe) {
@@ -96,5 +111,14 @@ public class VatRecipes {
             }
         }
         return null;
+    }
+
+    public boolean isRawInput(Fluid fluid) {
+        for (Recipe recipe : recipes) {
+            if (recipe.getRequiredFluid() == fluid) {
+                return true;
+            }
+        }
+        return false;
     }
 }

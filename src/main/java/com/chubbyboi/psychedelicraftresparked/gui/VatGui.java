@@ -77,7 +77,16 @@ public class VatGui extends GuiContainer {
         int arrowX = this.guiLeft + 23;
         int arrowY = this.guiTop + 14;
         if (mouseX >= arrowX && mouseX < arrowX + 24 && mouseY >= arrowY && mouseY < arrowY + 17) {
-            if (this.tileentity.fermenting && this.tileentity.totalFermentationTime > 0) {
+            if (this.tileentity.mixing && this.tileentity.totalMixingTime > 0) {
+                int progress = this.tileentity.mixingProgress;
+                int total = this.tileentity.totalMixingTime;
+                int percent = Math.min(100, (int) (progress * 100.0 / total));
+                int ticksLeft = Math.max(0, total - progress);
+                this.drawHoveringText(Arrays.asList(
+                    I18n.format("container.vat.mixing", percent),
+                    I18n.format("container.vat.time_left", TimeHelper.formatTicksAsTime(ticksLeft))
+                ), mouseX, mouseY);
+            } else if (this.tileentity.fermenting && this.tileentity.totalFermentationTime > 0) {
                 int progress = this.tileentity.fermentationProgress;
                 int total = this.tileentity.totalFermentationTime;
                 int percent = Math.min(100, (int) (progress * 100.0 / total));
@@ -130,7 +139,13 @@ public class VatGui extends GuiContainer {
         this.mc.getTextureManager().bindTexture(TEXTURE);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
-        if (this.tileentity.fermenting && this.tileentity.totalFermentationTime > 0) {
+        if (this.tileentity.mixing && this.tileentity.totalMixingTime > 0) {
+            int filled = (int) (24 * (long) this.tileentity.mixingProgress / this.tileentity.totalMixingTime);
+            filled = Math.max(0, Math.min(24, filled));
+            if (filled > 0) {
+                this.drawTexturedModalRect(this.guiLeft + 23, this.guiTop + 14, 176, 0, filled, 17);
+            }
+        } else if (this.tileentity.fermenting && this.tileentity.totalFermentationTime > 0) {
             int filled = (int) (24 * (long) this.tileentity.fermentationProgress / this.tileentity.totalFermentationTime);
             filled = Math.max(0, Math.min(24, filled));
             if (filled > 0) {

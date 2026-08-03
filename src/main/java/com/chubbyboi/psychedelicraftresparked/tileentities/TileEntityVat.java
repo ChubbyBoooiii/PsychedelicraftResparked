@@ -16,6 +16,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -32,6 +33,8 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
 
     public static final String OUTPUT_ITEM_TAG = "psychedelicraftresparked_vat_output";
 
+    public static final int MIXING_TIME = 100; // 5 seconds
+
     private static final int[] SLOTS = new int[SLOT_COUNT];
     static {
         for (int i = 0; i < SLOT_COUNT; i++) SLOTS[i] = i;
@@ -39,6 +42,11 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
 
     private final FluidTank tank = new FluidTank(CAPACITY);
     private NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
+
+    public boolean mixing;
+    public int mixingProgress;
+    public int totalMixingTime;
+    private Fluid pendingOutput;
 
     public boolean fermenting;
     public int fermentationProgress;
@@ -88,7 +96,11 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             dirty = true;
         }
 
-        if (fermenting) {
+        if (mixing) {
+            if (tickMixing()) {
+                dirty = true;
+            }
+        } else if (fermenting) {
             if (tickFermentation()) {
                 dirty = true;
             }
@@ -96,7 +108,7 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             if (!isInputLocked() && collectNearbyItems()) {
                 dirty = true;
             }
-            if (!startFermenting() && beginHardeningIfApplicable()) {
+            if (!beginMixing() && beginHardeningIfApplicable()) {
                 dirty = true;
             }
         }
@@ -108,11 +120,11 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
     }
 
     public boolean isInputLocked() {
-        if (!solidContents.isEmpty()) {
+        if (!solidContents.isEmpty() || mixing) {
             return true;
         }
         FluidStack fluid = tank.getFluid();
-        return fluid != null && fluid.amount > 0 && fluid.getFluid() != FluidRegistry.WATER;
+        return fluid != null && fluid.amount > 0 && !VatRecipes.getInstance().isRawInput(fluid.getFluid());
     }
 
     public ItemStack getSolidContents() {
@@ -127,7 +139,7 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
 
     private boolean processFluidIO() {
         ItemStack stack = items.get(FLUID_IO_SLOT);
-        if (stack.isEmpty()) {
+        if (stack.isEmpty() || stack.getCount() != 1) {
             return false;
         }
 
@@ -235,8 +247,8 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
         return stack;
     }
 
-    public boolean startFermenting() {
-        if (fermenting || world.isRemote) {
+    private boolean beginMixing() {
+        if (mixing || world.isRemote) {
             return false;
         }
 
@@ -246,14 +258,28 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
         }
 
         recipe.consumeIngredients(items);
-        tank.setFluid(new FluidStack(recipe.getOutput(), tank.getFluidAmount()));
+        pendingOutput = recipe.getOutput();
 
-        fermenting = true;
-        fermentationProgress = 0;
-        totalFermentationTime = getFermentationTimeNeeded();
+        mixing = true;
+        mixingProgress = 0;
+        totalMixingTime = MIXING_TIME;
 
         markDirty();
         world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+        return true;
+    }
+
+    private boolean tickMixing() {
+        mixingProgress++;
+        if (mixingProgress >= totalMixingTime) {
+            tank.setFluid(new FluidStack(pendingOutput, tank.getFluidAmount()));
+            pendingOutput = null;
+            mixing = false;
+
+            fermenting = true;
+            fermentationProgress = 0;
+            totalFermentationTime = getFermentationTimeNeeded();
+        }
         return true;
     }
 
@@ -346,6 +372,12 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setTag("Tank", tank.writeToNBT(new NBTTagCompound()));
+        compound.setBoolean("Mixing", mixing);
+        compound.setInteger("MixingProgress", mixingProgress);
+        compound.setInteger("TotalMixingTime", totalMixingTime);
+        if (pendingOutput != null) {
+            compound.setString("PendingOutput", FluidRegistry.getFluidName(pendingOutput));
+        }
         compound.setBoolean("Fermenting", fermenting);
         compound.setInteger("FermentationProgress", fermentationProgress);
         compound.setInteger("TotalFermentationTime", totalFermentationTime);
@@ -363,6 +395,10 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         tank.readFromNBT(compound.getCompoundTag("Tank"));
+        mixing = compound.getBoolean("Mixing");
+        mixingProgress = compound.getInteger("MixingProgress");
+        totalMixingTime = compound.getInteger("TotalMixingTime");
+        pendingOutput = compound.hasKey("PendingOutput") ? FluidRegistry.getFluid(compound.getString("PendingOutput")) : null;
         fermenting = compound.getBoolean("Fermenting");
         fermentationProgress = compound.getInteger("FermentationProgress");
         totalFermentationTime = compound.getInteger("TotalFermentationTime");
@@ -509,6 +545,9 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             case 2: return totalFermentationTime;
             case 3: return tank.getFluidAmount();
             case 4: return drainingMode ? 1 : 0;
+            case 5: return mixing ? 1 : 0;
+            case 6: return mixingProgress;
+            case 7: return totalMixingTime;
             default: return 0;
         }
     }
@@ -520,13 +559,16 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             case 1: fermentationProgress = value; break;
             case 2: totalFermentationTime = value; break;
             case 4: drainingMode = value != 0; break;
+            case 5: mixing = value != 0; break;
+            case 6: mixingProgress = value; break;
+            case 7: totalMixingTime = value; break;
             default: break;
         }
     }
 
     @Override
     public int getFieldCount() {
-        return 5;
+        return 8;
     }
 
     @Override

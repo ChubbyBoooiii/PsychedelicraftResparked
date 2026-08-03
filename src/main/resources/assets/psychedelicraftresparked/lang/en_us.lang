@@ -66,7 +66,7 @@ item.brown_magic_mushrooms.name=Brown Magic Mushrooms
 item.red_magic_mushrooms.name=Red Magic Mushrooms
 
 # Coffee
-item.coffea_cherries.name=Coffee Cherries
+item.coffea_cherries.name=Coffea Cherries
 item.coffee_beans.name=Coffee Beans
 
 # Peyote
@@ -98,6 +98,7 @@ item.vat.name=Vat
 tile.vat.name=Vat
 tile.vat_companion.name=Vat
 container.vat=Vat
+container.vat.mixing=Mixing: %s%%
 container.vat.fermenting=Fermenting: %s%%
 container.vat.spoiling=Spoiling: %s%%
 container.vat.hardening=Hardening: %s%%
@@ -159,6 +160,7 @@ psychedelicraftresparked.tooltip.fluid.empty=Empty
 
 
 #FLUIDS
+# None Alcohol
 fluid.coffee=Coffee
 fluid.cocaine_fluid=Cocaine
 fluid.slurry=Slurry

@@ -53,7 +53,7 @@ public class TileEntityFlask extends TileEntity implements ITickable, ISidedInve
 
     private boolean processFluidIO() {
         ItemStack stack = items.get(FLUID_IO_SLOT);
-        if (stack.isEmpty()) {
+        if (stack.isEmpty() || stack.getCount() != 1) {
             return false;
         }
 
