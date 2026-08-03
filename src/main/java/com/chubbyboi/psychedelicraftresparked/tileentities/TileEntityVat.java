@@ -1,11 +1,15 @@
 package com.chubbyboi.psychedelicraftresparked.tileentities;
 
+import com.chubbyboi.psychedelicraftresparked.block.BlockVat;
 import com.chubbyboi.psychedelicraftresparked.fluids.FermentableFluid;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
+import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
+import com.chubbyboi.psychedelicraftresparked.network.PacketSpawnFluidSplash;
 import com.chubbyboi.psychedelicraftresparked.recipes.VatRecipes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -14,14 +18,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import javax.annotation.Nullable;
 
@@ -46,7 +51,6 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
     public boolean mixing;
     public int mixingProgress;
     public int totalMixingTime;
-    private Fluid pendingOutput;
 
     public boolean fermenting;
     public int fermentationProgress;
@@ -257,9 +261,6 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             return false;
         }
 
-        recipe.consumeIngredients(items);
-        pendingOutput = recipe.getOutput();
-
         mixing = true;
         mixingProgress = 0;
         totalMixingTime = MIXING_TIME;
@@ -271,16 +272,57 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
 
     private boolean tickMixing() {
         mixingProgress++;
+
+        // Do a little bubble and splash, not at the end cause the water bubbles dont match the booze colour
+        if (mixingProgress % 15 == 0 && mixingProgress < totalMixingTime - 15) {
+            spawnMixingBubbles();
+        }
+
         if (mixingProgress >= totalMixingTime) {
-            tank.setFluid(new FluidStack(pendingOutput, tank.getFluidAmount()));
-            pendingOutput = null;
             mixing = false;
 
-            fermenting = true;
-            fermentationProgress = 0;
-            totalFermentationTime = getFermentationTimeNeeded();
+            VatRecipes.Recipe recipe = VatRecipes.getInstance().findMatch(tank, items);
+            if (recipe != null) {
+                recipe.consumeIngredients(items);
+                tank.setFluid(new FluidStack(recipe.getOutput(), tank.getFluidAmount()));
+
+                fermenting = true;
+                fermentationProgress = 0;
+                totalFermentationTime = getFermentationTimeNeeded();
+            }
         }
         return true;
+    }
+
+    private void spawnMixingBubbles() {
+        FluidStack fluidStack = tank.getFluid();
+        if (fluidStack == null || fluidStack.amount <= 0) {
+            return;
+        }
+
+        AxisAlignedBB fluidBox = BlockVat.getVatFluidBoundingBox(world, pos);
+        if (fluidBox == null) {
+            return;
+        }
+
+        // Inset from the fluid box's edges so bubbles dont clip through
+        double marginX = (fluidBox.maxX - fluidBox.minX) * 0.25D;
+        double marginZ = (fluidBox.maxZ - fluidBox.minZ) * 0.25D;
+        double spawnX = (fluidBox.minX + marginX) + world.rand.nextDouble() * ((fluidBox.maxX - marginX) - (fluidBox.minX + marginX));
+        double spawnZ = (fluidBox.minZ + marginZ) + world.rand.nextDouble() * ((fluidBox.maxZ - marginZ) - (fluidBox.minZ + marginZ));
+        double spawnY = fluidBox.maxY;
+
+        int color = FluidHelper.getDisplayColor(fluidStack);
+        float r = ((color >> 16) & 0xFF) / 255.0F;
+        float g = ((color >> 8) & 0xFF) / 255.0F;
+        float b = (color & 0xFF) / 255.0F;
+
+        PacketSpawnFluidSplash packet = new PacketSpawnFluidSplash(spawnX, spawnY, spawnZ, 0.0D, 0.02D, 0.0D, 0.4F, r, g, b);
+        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 32.0D);
+        NetworkHandler.INSTANCE.sendToAllAround(packet, point);
+
+        world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.4F,
+            1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F);
     }
 
     private int getFermentationTimeNeeded() {
@@ -375,9 +417,6 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
         compound.setBoolean("Mixing", mixing);
         compound.setInteger("MixingProgress", mixingProgress);
         compound.setInteger("TotalMixingTime", totalMixingTime);
-        if (pendingOutput != null) {
-            compound.setString("PendingOutput", FluidRegistry.getFluidName(pendingOutput));
-        }
         compound.setBoolean("Fermenting", fermenting);
         compound.setInteger("FermentationProgress", fermentationProgress);
         compound.setInteger("TotalFermentationTime", totalFermentationTime);
@@ -398,7 +437,6 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
         mixing = compound.getBoolean("Mixing");
         mixingProgress = compound.getInteger("MixingProgress");
         totalMixingTime = compound.getInteger("TotalMixingTime");
-        pendingOutput = compound.hasKey("PendingOutput") ? FluidRegistry.getFluid(compound.getString("PendingOutput")) : null;
         fermenting = compound.getBoolean("Fermenting");
         fermentationProgress = compound.getInteger("FermentationProgress");
         totalFermentationTime = compound.getInteger("TotalFermentationTime");

@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityRendererVat extends TileEntitySpecialRenderer<TileEntityVat> {
@@ -30,6 +32,7 @@ public class TileEntityRendererVat extends TileEntitySpecialRenderer<TileEntityV
         if (!tileEntity.getSolidContents().isEmpty()) {
             renderSolidContents(tileEntity);
         } else {
+            renderIngredients(tileEntity, partialTicks);
             renderFluid(tileEntity);
         }
 
@@ -71,6 +74,78 @@ public class TileEntityRendererVat extends TileEntitySpecialRenderer<TileEntityV
         GlStateManager.depthMask(true);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableBlend();
+    }
+
+    private static final float[][] INGREDIENT_SLOT_POSITIONS = {
+        {1.550F, 1.000F},
+        {1.275F, 1.476F},
+        {0.725F, 1.476F},
+        {0.450F, 1.000F},
+        {0.725F, 0.524F},
+        {1.275F, 0.524F},
+        {1.000F, 1.000F},
+    };
+
+    private void renderIngredients(TileEntityVat tileEntity, float partialTicks) {
+        FluidStack fluid = tileEntity.getTank().getFluid();
+        boolean hasFluid = fluid != null && fluid.amount > 0;
+        float fillFraction = hasFluid ? Math.min(1.0F, (float) fluid.amount / TileEntityVat.CAPACITY) : 0.0F;
+        float topY = BlockVat.BASIN_FLOOR_Y + fillFraction * (BlockVat.BASIN_RIM_Y - BlockVat.BASIN_FLOOR_Y);
+
+        float ticks = tileEntity.getWorld().getTotalWorldTime() + partialTicks;
+
+        Minecraft mc = Minecraft.getMinecraft();
+
+        GlStateManager.enableLighting();
+        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+        for (int i = 0; i < TileEntityVat.INGREDIENT_SLOTS; i++) {
+            ItemStack stack = tileEntity.getStackInSlot(i);
+            if (stack.isEmpty()) {
+                continue;
+            }
+
+            float slotX = INGREDIENT_SLOT_POSITIONS[i][0];
+            float slotZ = INGREDIENT_SLOT_POSITIONS[i][1];
+            float phase = i * 137.0F;
+
+            for (int c = 0; c < stack.getCount(); c++) {
+                double angle = c * 2.4;
+                float posX = slotX + (float) (Math.cos(angle) * 0.06 * c);
+                float posZ = slotZ + (float) (Math.sin(angle) * 0.06 * c);
+                float baseRotation = (i * 47 + c * 91) % 360;
+
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(posX, 0.0D, posZ);
+
+                if (hasFluid) {
+                    float wave = MathHelper.sin((ticks + phase) / 8.0F);
+                    float bob = -0.03F + (wave - 1.0F) * 0.025F;
+                    GlStateManager.translate(0.0F, topY + bob, 0.0F);
+                    GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+                    GlStateManager.rotate((ticks + baseRotation) % 360.0F, 0.0F, 0.0F, 1.0F);
+                    GlStateManager.scale(0.35F, 0.35F, 0.35F);
+                } else {
+                    // Not enough liquid to float in yet - just lie flat on the basin floor.
+                    GlStateManager.translate(0.0F, BlockVat.BASIN_FLOOR_Y + 0.001F, 0.0F);
+                    GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+                    GlStateManager.rotate(baseRotation, 0.0F, 0.0F, 1.0F);
+                    GlStateManager.scale(0.4F, 0.4F, 0.4F);
+                }
+
+                mc.getRenderItem().renderItem(stack, mc.getRenderItem().getItemModelWithOverrides(stack, null, null));
+
+                GlStateManager.popMatrix();
+            }
+        }
+
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.disableBlend();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     private void renderSolidContents(TileEntityVat tileEntity) {
