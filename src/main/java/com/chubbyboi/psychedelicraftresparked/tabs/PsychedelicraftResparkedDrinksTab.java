@@ -30,6 +30,8 @@ public class PsychedelicraftResparkedDrinksTab extends CreativeTabs {
     private static final Fluid[] SIMPLE_DRINKS = {
         FluidInit.COFFEE,
         FluidInit.CANNABIS_TEA,
+        FluidInit.COCA_TEA,
+        FluidInit.PEYOTE_JUICE,
     };
 
     private static final int[][] ALCOHOL_STAGES = {

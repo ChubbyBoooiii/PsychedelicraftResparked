@@ -40,6 +40,8 @@ public class ItemInit {
     public static final ItemSmokingTool PIPE = new ItemSmokingTool("pipe", 50, 25);
     public static final ItemSmokingTool BONG = new ItemSmokingTool("bong", 128, 30).setBubblingSound(true);
     public static final ItemPipeOfSmokeMonsters PIPE_OF_SMOKE_MONSTERS = new ItemPipeOfSmokeMonsters("pipe_of_smoke_monsters", 50, 25);
+    public static final ItemDrinkable SYRINGE = new ItemDrinkable("syringe", 10, 10, 25, ItemDrinkable.ConsumptionType.INJECT)
+        .setFinishSound(SoundEvents.ENTITY_PLAYER_HURT);
 
 
 
@@ -93,9 +95,6 @@ public class ItemInit {
         .setDrugInfluence("cocaine", 0, 0.002, 0.003, 0.35)
         .setUseAction(EnumAction.BOW)
         .setFinishSound(SoundEvents.ENTITY_LEASHKNOT_PLACE) ; // Leash kinda sounds snorty
-
-    public static final ItemDrinkable SYRINGE = new ItemDrinkable("syringe", 10, 10, 25, ItemDrinkable.ConsumptionType.INJECT)
-        .setFinishSound(SoundEvents.ENTITY_PLAYER_HURT);
 
 
 

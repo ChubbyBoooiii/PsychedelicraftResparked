@@ -167,7 +167,10 @@ fluid.milk=Milk
 # Fluid Drugs
 fluid.coffee=Coffee
 fluid.cannabis_tea=Cannabis Tea
+fluid.coca_tea=Coca Tea
+fluid.peyote_juice=Peyote Juice
 fluid.cocaine_fluid=Cocaine
+fluid.caffeine_fluid=Caffeine
 
 # Alcoholic - Wheat
 fluid.wheat=Wheat Wort

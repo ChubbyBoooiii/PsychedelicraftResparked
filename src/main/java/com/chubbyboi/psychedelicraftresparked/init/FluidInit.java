@@ -34,9 +34,24 @@ public class FluidInit {
         new ResourceLocation("psychedelicraftresparked:blocks/tea_flow")
     );
 
+    public static final FluidDrug COCA_TEA = new FluidDrug("coca_tea",
+        new ResourceLocation("psychedelicraftresparked:blocks/tea_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/tea_flow")
+    );
+
+    public static final FluidDrug PEYOTE_JUICE = new FluidDrug("peyote_juice",
+        new ResourceLocation("psychedelicraftresparked:blocks/tea_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/tea_flow")
+    );
+
     public static final FluidDrug COCAINE_FLUID = new FluidDrug("cocaine_fluid",
             new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
             new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
+    );
+
+    public static final FluidDrug CAFFEINE_FLUID = new FluidDrug("caffeine_fluid",
+        new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
     );
 
 
@@ -78,9 +93,21 @@ public class FluidInit {
         CANNABIS_TEA.setColor(0xff6d6f3c);
         CANNABIS_TEA.addDrugInfluencePerBucket("cannabis", 60, 0.005, 0.002, 0.25);
 
+        COCA_TEA.setDrinkable(true);
+        COCA_TEA.setColor(0xff787a36);
+        COCA_TEA.addDrugInfluencePerBucket("cocaine", 60, 0.005, 0.002, 0.2);
+
+        PEYOTE_JUICE.setDrinkable(true);
+        PEYOTE_JUICE.setColor(0xff9bab62);
+        PEYOTE_JUICE.addDrugInfluencePerBucket("peyote", 15, 0.005, 0.003, 2.0);
+
         COCAINE_FLUID.setInjectable(true);
         COCAINE_FLUID.setColor(0x44e8f4f8);
         COCAINE_FLUID.addDrugInfluencePerBucket("cocaine", 0, 0.005, 0.01, 50.0);
+
+        CAFFEINE_FLUID.setInjectable(true);
+        CAFFEINE_FLUID.setColor(0x66eee2d3);
+        CAFFEINE_FLUID.addDrugInfluencePerBucket("caffeine", 0, 0.005, 0.01, 85.0);
 
 
 
@@ -102,7 +129,10 @@ public class FluidInit {
         FluidRegistry.registerFluid(SLURRY);
         FluidRegistry.registerFluid(COFFEE);
         FluidRegistry.registerFluid(CANNABIS_TEA);
+        FluidRegistry.registerFluid(COCA_TEA);
+        FluidRegistry.registerFluid(PEYOTE_JUICE);
         FluidRegistry.registerFluid(COCAINE_FLUID);
+        FluidRegistry.registerFluid(CAFFEINE_FLUID);
         FluidRegistry.registerFluid(WHEAT);
         FluidRegistry.registerFluid(MILK_ALCOHOL);
     }

@@ -98,6 +98,8 @@ public class VatRecipes {
     private VatRecipes() {
         addRecipe(new Recipe(FluidInit.COFFEE, FluidRegistry.WATER, 4000).addIngredient(ItemInit.COFFEE_BEANS, 7));
         addRecipe(new Recipe(FluidInit.CANNABIS_TEA, FluidRegistry.WATER, 4000).addIngredient(ItemInit.CANNABIS_LEAF, 7));
+        addRecipe(new Recipe(FluidInit.COCA_TEA, FluidRegistry.WATER, 4000).addIngredient(ItemInit.COCA_LEAF, 7));
+        addRecipe(new Recipe(FluidInit.PEYOTE_JUICE, FluidRegistry.WATER, 4000).addIngredient(ItemInit.DRIED_PEYOTE, 7));
         addRecipe(new Recipe(FluidInit.WHEAT, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.WHEAT, 7));
         addRecipe(new Recipe(FluidInit.MILK_ALCOHOL, FluidInit.MILK, TileEntityVat.CAPACITY));
     }
