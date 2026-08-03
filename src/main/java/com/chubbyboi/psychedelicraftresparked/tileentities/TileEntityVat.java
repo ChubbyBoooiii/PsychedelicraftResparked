@@ -12,6 +12,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -21,6 +22,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -147,8 +149,8 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             return false;
         }
 
-        if (stack.getItem() == Items.WATER_BUCKET || stack.getItem() == Items.BUCKET) {
-            return processWaterBucket(stack);
+        if (stack.getItem() == Items.WATER_BUCKET || stack.getItem() == Items.MILK_BUCKET || stack.getItem() == Items.BUCKET) {
+            return processBucket(stack);
         }
 
         IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
@@ -192,16 +194,18 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
         return true;
     }
 
-    private boolean processWaterBucket(ItemStack stack) {
+    private boolean processBucket(ItemStack stack) {
         if (drainingMode) {
-            if (stack.getItem() != Items.WATER_BUCKET) {
+            // Drain: a full bucket's worth of fluid moves from the held bucket into the tank.
+            Fluid bucketFluid = FluidHelper.getBucketFluid(stack.getItem());
+            if (bucketFluid == null) {
                 return false;
             }
-            FluidStack water = new FluidStack(FluidRegistry.WATER, FluidHelper.BUCKET_VOLUME);
-            if (tank.fill(water, false) < water.amount) {
+            FluidStack fluidStack = new FluidStack(bucketFluid, FluidHelper.BUCKET_VOLUME);
+            if (tank.fill(fluidStack, false) < fluidStack.amount) {
                 return false;
             }
-            tank.fill(water, true);
+            tank.fill(fluidStack, true);
             items.set(FLUID_IO_SLOT, new ItemStack(Items.BUCKET));
             return true;
         }
@@ -210,11 +214,15 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             return false;
         }
         FluidStack tankFluid = tank.getFluid();
-        if (tankFluid == null || tankFluid.getFluid() != FluidRegistry.WATER || tankFluid.amount < FluidHelper.BUCKET_VOLUME) {
+        if (tankFluid == null || tankFluid.amount < FluidHelper.BUCKET_VOLUME) {
+            return false;
+        }
+        Item filledBucket = FluidHelper.getFilledBucket(tankFluid.getFluid());
+        if (filledBucket == null) {
             return false;
         }
         tank.drain(FluidHelper.BUCKET_VOLUME, true);
-        items.set(FLUID_IO_SLOT, new ItemStack(Items.WATER_BUCKET));
+        items.set(FLUID_IO_SLOT, new ItemStack(filledBucket));
         return true;
     }
 

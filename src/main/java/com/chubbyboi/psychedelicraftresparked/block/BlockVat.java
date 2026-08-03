@@ -33,7 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -216,11 +216,12 @@ public class BlockVat extends Block implements ITileEntityProvider, FluidFilled 
         TileEntityVat vat = (TileEntityVat) tileEntity;
 
         ItemStack held = player.getHeldItem(hand);
-        if (held.getItem() == Items.WATER_BUCKET) {
-            FluidStack water = new FluidStack(FluidRegistry.WATER, 1000);
-            if (vat.getTank().fill(water, false) >= water.amount) {
+        Fluid heldBucketFluid = FluidHelper.getBucketFluid(held.getItem());
+        if (heldBucketFluid != null) {
+            FluidStack fluidStack = new FluidStack(heldBucketFluid, 1000);
+            if (vat.getTank().fill(fluidStack, false) >= fluidStack.amount) {
                 if (!world.isRemote) {
-                    vat.getTank().fill(water, true);
+                    vat.getTank().fill(fluidStack, true);
                     if (!player.capabilities.isCreativeMode) {
                         player.setHeldItem(hand, new ItemStack(Items.BUCKET));
                     }
@@ -231,11 +232,12 @@ public class BlockVat extends Block implements ITileEntityProvider, FluidFilled 
             }
         } else if (held.getItem() == Items.BUCKET) {
             FluidStack tankFluid = vat.getTank().getFluid();
-            if (tankFluid != null && tankFluid.getFluid() == FluidRegistry.WATER && tankFluid.amount >= 1000) {
+            Item filledBucket = tankFluid != null ? FluidHelper.getFilledBucket(tankFluid.getFluid()) : null;
+            if (filledBucket != null && tankFluid.amount >= 1000) {
                 if (!world.isRemote) {
                     vat.getTank().drain(1000, true);
                     if (!player.capabilities.isCreativeMode) {
-                        player.setHeldItem(hand, new ItemStack(Items.WATER_BUCKET));
+                        player.setHeldItem(hand, new ItemStack(filledBucket));
                     }
                     world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     world.notifyBlockUpdate(pos, state, state, 3);

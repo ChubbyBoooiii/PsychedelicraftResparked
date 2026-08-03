@@ -160,12 +160,15 @@ psychedelicraftresparked.tooltip.fluid.empty=Empty
 
 
 #FLUIDS
-# None Alcohol
+# Base Fluids
+fluid.slurry=Slurry
+fluid.milk=Milk
+
+# Fluid Drugs
 fluid.coffee=Coffee
 fluid.cocaine_fluid=Cocaine
-fluid.slurry=Slurry
 
-# Alcohol - Wheat
+# Alcoholic - Wheat
 fluid.wheat=Wheat Wort
 fluid.wheat.ferment_1=Wheat Half Wash
 fluid.wheat.ferment_2=Wheat Wash
@@ -173,3 +176,12 @@ fluid.wheat.mature=Wheat Wash (%d DM)
 fluid.wheat.distill=Wheat Vodka (%d TD)
 fluid.wheat.dmature=Wheat Whisky (%d DM, %d TD)
 fluid.wheat.vinegar=Wheat Vinegar
+
+# Alcoholic - Milk
+fluid.milk_alcohol=Milk Wort
+fluid.milk_alcohol.ferment_1=Milk Half Wash
+fluid.milk_alcohol.ferment_2=Blaand
+fluid.milk_alcohol.mature=Blaand (%d DM)
+fluid.milk_alcohol.distill=Arkhi (%d TD)
+fluid.milk_alcohol.dmature=Arkhi (%d DM, %d TD)
+fluid.milk_alcohol.vinegar=Spoiled Milk
