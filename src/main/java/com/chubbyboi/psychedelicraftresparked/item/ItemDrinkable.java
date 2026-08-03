@@ -7,7 +7,6 @@ import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.fluids.InjectableFluid;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -16,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -25,7 +23,6 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -119,29 +116,6 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        super.getSubItems(tab, items);
-        if (!isInCreativeTab(tab)) {
-            return;
-        }
-
-        for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-            boolean compatible = consumptionType == ConsumptionType.DRINK
-                ? fluid instanceof DrinkableFluid && ((DrinkableFluid) fluid).canDrink(new FluidStack(fluid, capacity), null)
-                : fluid instanceof InjectableFluid && ((InjectableFluid) fluid).canInject(new FluidStack(fluid, capacity), null);
-
-            if (compatible) {
-                ItemStack stack = new ItemStack(this);
-                IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                if (handler != null) {
-                    handler.fill(new FluidStack(fluid, capacity), true);
-                }
-                items.add(stack);
-            }
-        }
-    }
-
-    @Override
     public String getItemStackDisplayName(ItemStack stack) {
         FluidStack fluidStack = getContainedFluidStack(stack);
         if (fluidStack != null) {
@@ -158,7 +132,7 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
         if (fluidStack == null) {
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("psychedelicraftresparked.tooltip.fluid.empty"));
         } else {
-            tooltip.add(TextFormatting.GRAY + fluidStack.getFluid().getLocalizedName(fluidStack) + " (" + fluidStack.amount + "mB/" + capacity + "mB)");
+            tooltip.add(TextFormatting.GRAY + "" + fluidStack.amount + "mB/" + capacity + "mB");
         }
     }
 

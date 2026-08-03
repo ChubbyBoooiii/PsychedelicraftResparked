@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/wooden_mug",
+    "layer1": "psychedelicraftresparked:items/wooden_mug_fluid"
+  }
+}

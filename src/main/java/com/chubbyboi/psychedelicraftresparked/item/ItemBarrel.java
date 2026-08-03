@@ -108,7 +108,7 @@ public class ItemBarrel extends ItemBlock {
         if (fluidStack == null) {
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("psychedelicraftresparked.tooltip.fluid.empty"));
         } else {
-            tooltip.add(TextFormatting.GRAY + fluidStack.getFluid().getLocalizedName(fluidStack) + " (" + fluidStack.amount + "mB/" + TileEntityBarrel.CAPACITY + "mB)");
+            tooltip.add(TextFormatting.GRAY + "" + fluidStack.amount + "mB/" + TileEntityBarrel.CAPACITY + "mB");
         }
 
         tooltip.add(TextFormatting.GRAY + I18n.translateToLocal(hasTap(stack)

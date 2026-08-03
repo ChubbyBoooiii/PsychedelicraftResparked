@@ -33,7 +33,6 @@ public class ItemInit {
     public static final ItemBarrel BARREL_ITEM = new ItemBarrel(BlockInit.BARREL);
     public static final ItemDistillery DISTILLERY_ITEM = new ItemDistillery(BlockInit.DISTILLERY);
     public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
-    public static final Item TAP = new PsychItem("tap");
 
 
 
@@ -192,7 +191,10 @@ public class ItemInit {
 
 
     // ==================== FLUID RELATED ====================
-    public static final ItemDrinkable MUG = new ItemDrinkable("mug", 500, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
+    public static final Item TAP = new PsychItem("tap");
+    public static final ItemDrinkable WOODEN_MUG = new ItemDrinkable("wooden_mug", 500, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
+    public static final ItemDrinkable GLASS_CHALICE = new ItemDrinkable("glass_chalice", 250, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
+    public static final ItemDrinkable SHOT_GLASS = new ItemDrinkable("shot_glass", 40, 250, 8, ItemDrinkable.ConsumptionType.DRINK);
 
 
 

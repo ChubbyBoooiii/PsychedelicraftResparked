@@ -71,12 +71,7 @@ public class ClientProxy extends CommonProxy {
 
         event.getItemColors().registerItemColorHandler(
             (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
-            ItemInit.MUG
-        );
-
-        event.getItemColors().registerItemColorHandler(
-            (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
-            ItemInit.SYRINGE
+            ItemInit.WOODEN_MUG, ItemInit.GLASS_CHALICE, ItemInit.SHOT_GLASS, ItemInit.SYRINGE
         );
     }
 

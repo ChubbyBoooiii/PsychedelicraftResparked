@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/glass_chalice",
+    "layer1": "psychedelicraftresparked:items/glass_chalice_fluid"
+  }
+}

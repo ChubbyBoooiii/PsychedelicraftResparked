@@ -1,5 +1,6 @@
 # Creative Tabs
 itemGroup.psychedelicrafResparkedTab=Psychedelicraft Resparked
+itemGroup.psychedelicraftresparkeddrinkstab=Psychedelicraft Resparked Drinks
 
 
 
@@ -28,8 +29,12 @@ item.syringe.name=Syringe
 item.syringe.full.name=%s Syringe
 
 # Fluid Items
-item.mug.name=Mug
-item.mug.full.name=Mug of %s
+item.wooden_mug.name=Wooden Mug
+item.wooden_mug.full.name=Wooden Mug of %s
+item.glass_chalice.name=Glass Chalice
+item.glass_chalice.full.name=Glass Chalice of %s
+item.shot_glass.name=Shot Glass
+item.shot_glass.full.name=Shot Glass of %s
 
 # Tobacco
 item.tobacco_seeds.name=Tobacco Seeds

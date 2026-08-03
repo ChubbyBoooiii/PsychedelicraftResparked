@@ -79,7 +79,7 @@ public class ItemFlask extends ItemBlock {
         if (fluidStack == null) {
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("psychedelicraftresparked.tooltip.fluid.empty"));
         } else {
-            tooltip.add(TextFormatting.GRAY + fluidStack.getFluid().getLocalizedName(fluidStack) + " (" + fluidStack.amount + "mB/" + TileEntityFlask.CAPACITY + "mB)");
+            tooltip.add(TextFormatting.GRAY + "" + fluidStack.amount + "mB/" + TileEntityFlask.CAPACITY + "mB");
         }
     }
 
