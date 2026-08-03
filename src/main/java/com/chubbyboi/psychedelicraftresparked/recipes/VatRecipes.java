@@ -101,6 +101,9 @@ public class VatRecipes {
         addRecipe(new Recipe(FluidInit.COCA_TEA, FluidRegistry.WATER, 4000).addIngredient(ItemInit.COCA_LEAF, 7));
         addRecipe(new Recipe(FluidInit.PEYOTE_JUICE, FluidRegistry.WATER, 4000).addIngredient(ItemInit.DRIED_PEYOTE, 7));
         addRecipe(new Recipe(FluidInit.WHEAT, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.WHEAT, 7));
+        addRecipe(new Recipe(FluidInit.POTATO, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.POTATO, 7));
+        addRecipe(new Recipe(FluidInit.SUGAR_CANE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.REEDS, 7));
+        addRecipe(new Recipe(FluidInit.APPLE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.APPLE, 7));
         addRecipe(new Recipe(FluidInit.MILK_ALCOHOL, FluidInit.MILK, TileEntityVat.CAPACITY));
     }
 

@@ -24,6 +24,9 @@ public class PsychedelicraftResparkedDrinksTab extends CreativeTabs {
 
     private static final FluidAlcohol[] ALCOHOLIC_DRINKS = {
         FluidInit.WHEAT,
+        FluidInit.POTATO,
+        FluidInit.SUGAR_CANE,
+        FluidInit.APPLE,
         FluidInit.MILK_ALCOHOL,
     };
 

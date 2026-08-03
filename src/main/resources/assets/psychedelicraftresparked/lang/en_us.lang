@@ -181,6 +181,33 @@ fluid.wheat.distill=Wheat Vodka (%d TD)
 fluid.wheat.dmature=Wheat Whisky (%d DM, %d TD)
 fluid.wheat.vinegar=Wheat Vinegar
 
+# Alcoholic - Potato
+fluid.potato=Potato Wort
+fluid.potato.ferment_1=Potato Half Wash
+fluid.potato.ferment_2=Potato Beer
+fluid.potato.mature=Potato Beer (%d DM)
+fluid.potato.distill=Potato Vodka (%d TD)
+fluid.potato.dmature=Poteen (%d DM, %d TD)
+fluid.potato.vinegar=Potato Vinegar
+
+# Alcoholic - Sugar Cane
+fluid.sugar_cane=Sugarcane Wort
+fluid.sugar_cane.ferment_1=Sugarcane Half Wash
+fluid.sugar_cane.ferment_2=Young Basi
+fluid.sugar_cane.mature=Basi (%d DM)
+fluid.sugar_cane.distill=Young Rum (%d TD)
+fluid.sugar_cane.dmature=Rum (%d DM, %d TD)
+fluid.sugar_cane.vinegar=Cane Vinegar
+
+# Alcoholic - Apple
+fluid.apple=Sweet Cider
+fluid.apple.ferment_1=Half Sweet Cider
+fluid.apple.ferment_2=Hard Cider
+fluid.apple.mature=Hard Cider (%d DM)
+fluid.apple.distill=Apple Brandy (%d TD)
+fluid.apple.dmature=Apple Brandy (%d DM, %d TD)
+fluid.apple.vinegar=Apple Vinegar
+
 # Alcoholic - Milk
 fluid.milk_alcohol=Milk Wort
 fluid.milk_alcohol.ferment_1=Milk Half Wash
