@@ -43,5 +43,13 @@ public class NetworkHandler {
             packetId++,
             Side.CLIENT
         );
+
+        // Tinted custom-fluid splash particles (server -> client)
+        INSTANCE.registerMessage(
+            PacketSpawnFluidSplash.Handler.class,
+            PacketSpawnFluidSplash.class,
+            packetId++,
+            Side.CLIENT
+        );
     }
 }

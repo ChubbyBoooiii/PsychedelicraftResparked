@@ -1,5 +1,6 @@
 # Creative Tabs
 itemGroup.psychedelicrafResparkedTab=Psychedelicraft Resparked
+itemGroup.psychedelicraftresparkeddrinkstab=Psychedelicraft Resparked Drinks
 
 
 
@@ -28,8 +29,12 @@ item.syringe.name=Syringe
 item.syringe.full.name=%s Syringe
 
 # Fluid Items
-item.mug.name=Mug
-item.mug.full.name=Mug of %s
+item.wooden_mug.name=Wooden Mug
+item.wooden_mug.full.name=Wooden Mug of %s
+item.glass_chalice.name=Glass Chalice
+item.glass_chalice.full.name=Glass Chalice of %s
+item.shot_glass.name=Shot Glass
+item.shot_glass.full.name=Shot Glass of %s
 
 # Tobacco
 item.tobacco_seeds.name=Tobacco Seeds
@@ -61,7 +66,7 @@ item.brown_magic_mushrooms.name=Brown Magic Mushrooms
 item.red_magic_mushrooms.name=Red Magic Mushrooms
 
 # Coffee
-item.coffea_cherries.name=Coffee Cherries
+item.coffea_cherries.name=Coffea Cherries
 item.coffee_beans.name=Coffee Beans
 
 # Peyote
@@ -72,12 +77,13 @@ item.peyote_joint.name=Peyote Joint
 
 
 # BLOCKS
-tile.drying_table.name=Drying Table
 tile.peyote.name=Peyote
 
 
 
 # TILE ENTITIES
+# Drying Table
+tile.drying_table.name=Drying Table
 container.drying_table=Drying Table
 container.drying_table.drying_efficiency=§lDrying Efficiency
 container.drying_table.light_percent=Light: %.1f%%
@@ -85,6 +91,57 @@ container.drying_table.temp_percent=Biome Temperature: %d%%
 container.drying_table.total_speed=Total Speed: %.1f%%
 container.drying_table.rain_warning=§c§lCannot dry in rain!
 container.drying_table.progress=Progress: %d%%
+container.drying_table.time_left=Time left: %s
+
+# Vat
+item.vat.name=Vat
+tile.vat.name=Vat
+tile.vat_companion.name=Vat
+container.vat=Vat
+container.vat.mixing=Mixing: %s%%
+container.vat.fermenting=Fermenting: %s%%
+container.vat.spoiling=Spoiling: %s%%
+container.vat.hardening=Hardening: %s%%
+container.vat.time_left=Time left: %s
+container.vat.no_recipe=No valid recipe
+container.vat.empty=Empty
+container.vat.fill=Fill
+container.vat.drain=Drain
+
+# Barrel
+tile.barrel.name=Barrel
+tile.barrel.full.name=Barrel of %s
+tile.barrel.sealed.name=Sealed Barrel
+tile.barrel.sealed_full.name=Sealed Barrel of %s
+item.tap.name=Tap
+container.barrel=Barrel
+container.barrel.empty=Empty
+container.barrel.seal=Seal
+container.barrel.unseal=Unseal
+container.barrel.maturing=Maturing: %s%%
+container.barrel.time_left=Time left: %s
+container.barrel.needs_sealing=Needs to be sealed to mature
+container.barrel.tapped_paused=Maturation stopped - barrel is tapped
+psychedelicraftresparked.tooltip.barrel.tapped=Tapped
+psychedelicraftresparked.tooltip.barrel.untapped=Untapped
+
+# Distillery
+tile.distillery.name=Distillery
+tile.distillery.full.name=Distillery of %s
+container.distillery=Distillery
+container.distillery.empty=Empty
+container.distillery.fill=Fill
+container.distillery.drain=Drain
+container.distillery.distilling=Distilling: %s%%
+container.distillery.time_left=Time left: %s
+
+# Flask
+tile.flask.name=Flask
+tile.flask.full.name=Flask of %s
+container.flask=Flask
+container.flask.empty=Empty
+container.flask.fill=Fill
+container.flask.drain=Drain
 
 
 
@@ -103,5 +160,28 @@ psychedelicraftresparked.tooltip.fluid.empty=Empty
 
 
 #FLUIDS
+# Base Fluids
+fluid.slurry=Slurry
+fluid.milk=Milk
+
+# Fluid Drugs
 fluid.coffee=Coffee
 fluid.cocaine_fluid=Cocaine
+
+# Alcoholic - Wheat
+fluid.wheat=Wheat Wort
+fluid.wheat.ferment_1=Wheat Half Wash
+fluid.wheat.ferment_2=Wheat Wash
+fluid.wheat.mature=Wheat Wash (%d DM)
+fluid.wheat.distill=Wheat Vodka (%d TD)
+fluid.wheat.dmature=Wheat Whisky (%d DM, %d TD)
+fluid.wheat.vinegar=Wheat Vinegar
+
+# Alcoholic - Milk
+fluid.milk_alcohol=Milk Wort
+fluid.milk_alcohol.ferment_1=Milk Half Wash
+fluid.milk_alcohol.ferment_2=Blaand
+fluid.milk_alcohol.mature=Blaand (%d DM)
+fluid.milk_alcohol.distill=Arkhi (%d TD)
+fluid.milk_alcohol.dmature=Arkhi (%d DM, %d TD)
+fluid.milk_alcohol.vinegar=Spoiled Milk

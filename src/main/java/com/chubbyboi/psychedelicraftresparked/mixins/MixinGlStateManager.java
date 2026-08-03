@@ -19,4 +19,14 @@ public class MixinGlStateManager {
     private static void onEnableTexture2D(CallbackInfo ci) {
         WorldShaderEffect.getInstance().resumeAfterUntexturedDraw();
     }
+
+    @Inject(method = "disableLighting", at = @At("HEAD"))
+    private static void onDisableLighting(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setLightingEnabled(false);
+    }
+
+    @Inject(method = "enableLighting", at = @At("HEAD"))
+    private static void onEnableLighting(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setLightingEnabled(true);
+    }
 }

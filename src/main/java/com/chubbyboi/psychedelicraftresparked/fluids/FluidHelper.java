@@ -1,8 +1,12 @@
 package com.chubbyboi.psychedelicraftresparked.fluids;
 
+import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -10,6 +14,27 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 public class FluidHelper {
 
     public static final int BUCKET_VOLUME = 1000;
+    public static final int FLUID_IO_SPEED_PER_TICK = 100;
+
+    public static Fluid getBucketFluid(Item bucketItem) {
+        if (bucketItem == Items.WATER_BUCKET) {
+            return FluidRegistry.WATER;
+        }
+        if (bucketItem == Items.MILK_BUCKET) {
+            return FluidInit.MILK;
+        }
+        return null;
+    }
+
+    public static Item getFilledBucket(Fluid fluid) {
+        if (fluid == FluidRegistry.WATER) {
+            return Items.WATER_BUCKET;
+        }
+        if (fluid == FluidInit.MILK) {
+            return Items.MILK_BUCKET;
+        }
+        return null;
+    }
 
     public static FluidStack drink(ItemStack stack, EntityLivingBase entity, int maxDrunk, boolean doDrink) {
         IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
@@ -58,9 +83,27 @@ public class FluidHelper {
         if (handler != null) {
             FluidStack fluidStack = handler.drain(Integer.MAX_VALUE, false);
             if (fluidStack != null) {
-                return fluidStack.getFluid().getColor(fluidStack);
+                return getDisplayColor(fluidStack);
             }
         }
         return 0xFFFFFF;
+    }
+
+    public static int getDisplayColor(FluidStack fluidStack) {
+        if (fluidStack == null) {
+            return 0xFFFFFFFF;
+        }
+        int color = fluidStack.getFluid().getColor(fluidStack);
+        if (color == 0xFFFFFFFF && fluidStack.getFluid() == FluidRegistry.WATER) {
+            return 0xFF3F76E4;
+        }
+        return color;
+    }
+
+    public static int getWorldRenderColor(FluidStack fluidStack) {
+        if (fluidStack != null && fluidStack.getFluid() instanceof UntintedFluid) {
+            return 0xFFFFFFFF;
+        }
+        return getDisplayColor(fluidStack);
     }
 }

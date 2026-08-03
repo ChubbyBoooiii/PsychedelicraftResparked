@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "psychedelicraftresparked:items/mug",
-    "layer1": "psychedelicraftresparked:items/mug_fluid"
-  }
-}

@@ -1,0 +1,56 @@
+{
+  "textures": {
+    "outer": "psychedelicraftresparked:blocks/wooden_vat",
+    "particle": "psychedelicraftresparked:blocks/wooden_vat"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [32, 1, 32],
+      "faces": {
+        "up":   { "uv": [0, 0, 8, 8], "texture": "#outer" },
+        "down": { "uv": [8, 0, 16, 8], "texture": "#outer" }
+      }
+    },
+    {
+      "from": [0, 0, 0],
+      "to": [1, 16, 32],
+      "faces": {
+        "north": { "uv": [7.75, 8, 8, 12], "texture": "#outer" },
+        "east": { "uv": [0, 12, 8, 16], "texture": "#outer" },
+        "south": { "uv": [0, 8, 0.25, 12], "texture": "#outer" },
+        "west": { "uv": [0, 8, 8, 12], "texture": "#outer" },
+        "up":   { "uv": [8, 8, 16, 8.25], "texture": "#outer", "rotation": 90 }
+      }
+    },
+    {
+      "from": [31, 0, 0],
+      "to": [32, 16, 32],
+      "faces": {
+        "south": { "uv": [7.75, 8, 8, 12], "texture": "#outer" },
+        "north": { "uv": [0, 8, 0.25, 12], "texture": "#outer" },
+        "east": { "uv": [0, 8, 8, 12], "texture": "#outer" },
+        "west": { "uv": [0, 12, 8, 16], "texture": "#outer" },
+        "up":   { "uv": [8, 8, 16, 8.25], "texture": "#outer", "rotation": 270 }
+      }
+    },
+    {
+      "from": [1, 0, 0],
+      "to": [31, 16, 1],
+      "faces": {
+        "north": { "uv": [0.25, 8, 7.75, 12], "texture": "#outer" },
+        "south": { "uv": [0.25, 12, 7.75, 16], "texture": "#outer" },
+        "up":   { "uv": [8.25, 8, 15.75, 8.25], "texture": "#outer", "rotation": 180 }
+      }
+    },
+    {
+      "from": [1, 0, 31],
+      "to": [31, 16, 32],
+      "faces": {
+        "south": { "uv": [0.25, 8, 7.75, 12], "texture": "#outer" },
+        "north": { "uv": [0.25, 12, 7.75, 16], "texture": "#outer" },
+        "up":   { "uv": [8.25, 8, 15.75, 8.25], "texture": "#outer" }
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/wooden_mug"
+  },
+  "overrides": [
+    {
+      "predicate": { "filled": 1 },
+      "model": "psychedelicraftresparked:item/wooden_mug_filled"
+    }
+  ]
+}

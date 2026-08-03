@@ -2,9 +2,13 @@ package com.chubbyboi.psychedelicraftresparked.init;
 
 import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluence;
 import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluenceHarmonium;
+import com.chubbyboi.psychedelicraftresparked.item.ItemBarrel;
+import com.chubbyboi.psychedelicraftresparked.item.ItemDistillery;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
+import com.chubbyboi.psychedelicraftresparked.item.ItemFlask;
 import com.chubbyboi.psychedelicraftresparked.item.ItemHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemIngestable;
+import com.chubbyboi.psychedelicraftresparked.item.ItemVat;
 import com.chubbyboi.psychedelicraftresparked.item.ItemPipeOfSmokeMonsters;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokingTool;
@@ -25,6 +29,10 @@ public class ItemInit {
 
     // ==================== FUNCTIONAL BLOCKS ====================
     public static final Item DRYING_TABLE_ITEM = createItemBlock(BlockInit.DRYING_TABLE);
+    public static final ItemVat VAT = new ItemVat("vat");
+    public static final ItemBarrel BARREL_ITEM = new ItemBarrel(BlockInit.BARREL);
+    public static final ItemDistillery DISTILLERY_ITEM = new ItemDistillery(BlockInit.DISTILLERY);
+    public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
 
 
 
@@ -181,8 +189,12 @@ public class ItemInit {
 
 
 
+
     // ==================== FLUID RELATED ====================
-    public static final ItemDrinkable MUG = new ItemDrinkable("mug", 500, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
+    public static final Item TAP = new PsychItem("tap");
+    public static final ItemDrinkable WOODEN_MUG = new ItemDrinkable("wooden_mug", 500, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
+    public static final ItemDrinkable GLASS_CHALICE = new ItemDrinkable("glass_chalice", 250, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
+    public static final ItemDrinkable SHOT_GLASS = new ItemDrinkable("shot_glass", 40, 250, 8, ItemDrinkable.ConsumptionType.DRINK);
 
 
 

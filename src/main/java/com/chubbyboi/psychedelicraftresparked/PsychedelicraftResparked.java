@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked;
 import com.chubbyboi.psychedelicraftresparked.commands.CommandDrugLevels;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.proxy.CommonProxy;
+import com.chubbyboi.psychedelicraftresparked.tabs.PsychedelicraftResparkedDrinksTab;
 import com.chubbyboi.psychedelicraftresparked.tabs.PsychedelicraftResparkedTab;
 import com.chubbyboi.psychedelicraftresparked.util.RegistryHandler;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,6 +27,7 @@ public class PsychedelicraftResparked {
     public static CommonProxy proxy;
 
     public static final CreativeTabs PSYCHTAB = new PsychedelicraftResparkedTab("psychedelicraftresparkedtab");
+    public static final CreativeTabs DRINKS_TAB = new PsychedelicraftResparkedDrinksTab("psychedelicraftresparkeddrinkstab");
 
     public static final Logger LOGGER = LogManager.getLogger(Tags.MOD_NAME);
 

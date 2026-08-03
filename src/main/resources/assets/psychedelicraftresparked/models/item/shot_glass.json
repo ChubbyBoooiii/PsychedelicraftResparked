@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/shot_glass"
+  },
+  "overrides": [
+    {
+      "predicate": { "filled": 1 },
+      "model": "psychedelicraftresparked:item/shot_glass_filled"
+    }
+  ]
+}
