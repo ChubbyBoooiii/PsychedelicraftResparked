@@ -188,6 +188,11 @@ public class ItemInit {
 
 
 
+    // ==================== HOPS ITEMS ====================
+    public static final PsychSeeds HOP_SEEDS = new PsychSeeds("hop_seeds");
+    public static final Item HOP_CONES = new PsychItem("hop_cones");
+
+
 
     // ==================== FLUID RELATED ====================
     public static final Item TAP = new PsychItem("tap");
@@ -204,6 +209,7 @@ public class ItemInit {
         TOBACCO_SEEDS.setBlockCrop(BlockInit.TOBACCO_PLANT);
         COCA_SEEDS.setBlockCrop(BlockInit.COCA_PLANT);
         COFFEA_CHERRIES.setBlockCrop(BlockInit.COFFEA_PLANT);
+        HOP_SEEDS.setBlockCrop(BlockInit.HOPS_PLANT);
     }
 
     private static Item createItemBlock(net.minecraft.block.Block block) {

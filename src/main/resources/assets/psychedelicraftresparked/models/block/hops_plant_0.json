@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures" : {
+    "cross": "psychedelicraftresparked:blocks/hops_plant_0"
+  }
+}

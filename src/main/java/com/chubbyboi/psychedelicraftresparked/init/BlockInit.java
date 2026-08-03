@@ -29,6 +29,7 @@ public class BlockInit {
     public static final BlockTallCrop TOBACCO_PLANT = new BlockTallCrop("tobacco_plant", 15, 3);
     public static final BlockTallCrop COCA_PLANT = new BlockTallCrop("coca_plant", 15, 3);
     public static final BlockTallCrop COFFEA_PLANT = new BlockTallCrop("coffea_plant", 15, 2);
+    public static final BlockTallCrop HOPS_PLANT = new BlockTallCrop("hops_plant", 15, 3);
 
     public static final BlockPeyote PEYOTE_PLANT = new BlockPeyote("peyote");
 
@@ -39,6 +40,7 @@ public class BlockInit {
         TOBACCO_PLANT.setSeedItem(ItemInit.TOBACCO_SEEDS);
         COCA_PLANT.setSeedItem(ItemInit.COCA_SEEDS);
         COFFEA_PLANT.setSeedItem(ItemInit.COFFEA_CHERRIES);
+        HOPS_PLANT.setSeedItem(ItemInit.HOP_SEEDS);
 
         // Add crop drops: item, min amount, max amount
         CANNABIS_PLANT.addCropDrop(ItemInit.CANNABIS_BUD, 0, 2);
@@ -46,5 +48,6 @@ public class BlockInit {
         TOBACCO_PLANT.addCropDrop(ItemInit.TOBACCO_LEAF, 3, 8);
         COCA_PLANT.addCropDrop(ItemInit.COCA_LEAF, 2, 6);
         COFFEA_PLANT.addCropDrop(ItemInit.COFFEA_CHERRIES, 2, 6);
+        HOPS_PLANT.addCropDrop(ItemInit.HOP_CONES, 0, 4);
     }
 }

@@ -74,6 +74,10 @@ item.peyote.name=Peyote
 item.dried_peyote.name=Dried Peyote
 item.peyote_joint.name=Peyote Joint
 
+# Hops
+item.hop_seeds.name=Hop Seeds
+item.hop_cones.name=Hop Cones
+
 
 
 # BLOCKS
@@ -171,6 +175,15 @@ fluid.coca_tea=Coca Tea
 fluid.peyote_juice=Peyote Juice
 fluid.cocaine_fluid=Cocaine
 fluid.caffeine_fluid=Caffeine
+
+# Alcoholic - Wheat Hop
+fluid.wheat_hop=Bitter Wheat Wort
+fluid.wheat_hop.ferment_1=Bitter Wheat Half Wash
+fluid.wheat_hop.ferment_2=Green Wheat Beer
+fluid.wheat_hop.mature=Wheat Beer (%d DM)
+fluid.wheat_hop.distill=Wheat Beer (%d TD)
+fluid.wheat_hop.dmature=Wheat Beer (%d DM, %d TD)
+fluid.wheat_hop.vinegar=Bitter Beer Vinegar
 
 # Alcoholic - Wheat
 fluid.wheat=Wheat Wort

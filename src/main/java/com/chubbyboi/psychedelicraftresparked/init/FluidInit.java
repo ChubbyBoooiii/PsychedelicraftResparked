@@ -57,9 +57,14 @@ public class FluidInit {
 
 
     // Alcoholic
-    // Kept in source's own registration order: Wheat Hop(not built)/Wheat/Corn(not built)/Potato/
-    // Red Grapes(not built)/Rice(not built)/Honey(not built)/Juniper(not built)/Sugar Cane/Apple/
-    // Pineapple(not built)/Banana(not built)/Milk.
+    public static final FluidAlcohol WHEAT_HOP = new FluidAlcohol(
+        "wheat_hop",
+        new ResourceLocation("psychedelicraftresparked:blocks/beer_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/beer_flow"),
+        0.25, 1.7, 0.1,
+        new FluidAlcohol.TickInfo(36000, 72000, 120000, 36000)
+    );
+
     public static final FluidAlcohol WHEAT = new FluidAlcohol(
         "wheat",
         new ResourceLocation("psychedelicraftresparked:blocks/beer_still"),
@@ -139,6 +144,11 @@ public class FluidInit {
 
 
         // Alcoholic
+        WHEAT_HOP.setColor(0xaafeaa08);
+        WHEAT_HOP.addIcon(0, 3, 2, -1, new ResourceLocation("psychedelicraftresparked:blocks/clear_still"), new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
+        WHEAT_HOP.addIcon(4, 13, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
+        WHEAT_HOP.addIcon(14, -1, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_flow"));
+
         WHEAT.setColor(0xaafeaa08);
         WHEAT.addIcon(0, 3, 2, -1, new ResourceLocation("psychedelicraftresparked:blocks/clear_still"), new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
         WHEAT.addIcon(4, 13, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
@@ -174,6 +184,7 @@ public class FluidInit {
         FluidRegistry.registerFluid(PEYOTE_JUICE);
         FluidRegistry.registerFluid(COCAINE_FLUID);
         FluidRegistry.registerFluid(CAFFEINE_FLUID);
+        FluidRegistry.registerFluid(WHEAT_HOP);
         FluidRegistry.registerFluid(WHEAT);
         FluidRegistry.registerFluid(POTATO);
         FluidRegistry.registerFluid(SUGAR_CANE);
