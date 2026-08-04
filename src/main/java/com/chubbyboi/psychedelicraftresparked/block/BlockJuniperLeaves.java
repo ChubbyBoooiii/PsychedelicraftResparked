@@ -79,7 +79,7 @@ public class BlockJuniperLeaves extends BlockLeaves implements IGrowable {
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         if (!world.isRemote && !state.getValue(BERRIES) && rand.nextFloat() < 0.01F) {
-            world.setBlockState(pos, state.withProperty(BERRIES, true), 4);
+            world.setBlockState(pos, state.withProperty(BERRIES, true), 2);
         }
         super.updateTick(world, pos, state, rand);
     }
@@ -89,7 +89,7 @@ public class BlockJuniperLeaves extends BlockLeaves implements IGrowable {
         if (state.getValue(BERRIES)) {
             if (!world.isRemote) {
                 spawnAsEntity(world, pos, new ItemStack(ItemInit.JUNIPER_BERRIES));
-                world.setBlockState(pos, state.withProperty(BERRIES, false), 4);
+                world.setBlockState(pos, state.withProperty(BERRIES, false), 2);
             }
             return true;
         }
@@ -113,6 +113,6 @@ public class BlockJuniperLeaves extends BlockLeaves implements IGrowable {
 
     @Override
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
-        world.setBlockState(pos, state.withProperty(BERRIES, true), 4);
+        world.setBlockState(pos, state.withProperty(BERRIES, true), 2);
     }
 }
