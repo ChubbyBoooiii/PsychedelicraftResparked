@@ -11,6 +11,7 @@ import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugHarmonium;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugPeyote;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugRedShrooms;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugTobacco;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.network.PacketSpawnSmokeParticles;
@@ -266,6 +267,10 @@ public class DrugProperties implements IDrugProperties {
         ticksExisted++;
 
         if (!player.world.isRemote) {
+            if (!PSConfig.drugEffectsEnabled) {
+                clearAll();
+            }
+
             if (!influences.isEmpty() && ticksExisted % 5 == 0) {
                 Iterator<DrugInfluence> iterator = influences.iterator();
                 while (iterator.hasNext()) {

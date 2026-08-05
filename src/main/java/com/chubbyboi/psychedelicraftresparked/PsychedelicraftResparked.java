@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked;
 
 import com.chubbyboi.psychedelicraftresparked.commands.CommandDrugLevels;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.proxy.CommonProxy;
 import com.chubbyboi.psychedelicraftresparked.tabs.PsychedelicraftResparkedDrinksTab;
@@ -33,6 +34,9 @@ public class PsychedelicraftResparked {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        // Load mod config first, since registries below may need to consult it
+        PSConfig.loadConfig(event.getSuggestedConfigurationFile());
+
         // Register mixin config
         Mixins.addConfiguration("mixins.psychedelicraftresparked.json");
 

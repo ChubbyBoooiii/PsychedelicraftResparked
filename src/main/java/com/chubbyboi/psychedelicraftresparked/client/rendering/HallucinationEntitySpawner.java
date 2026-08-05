@@ -5,6 +5,7 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
 import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -161,7 +162,7 @@ public class HallucinationEntitySpawner {
         ticksExisted++;
 
         HallucinationManager hallucinationManager = HallucinationManager.getInstance();
-        float entityStrength = hallucinationManager.getEntityHallucinationStrength();
+        float entityStrength = PSConfig.hallucinationEntitiesEnabled ? hallucinationManager.getEntityHallucinationStrength() : 0.0f;
 
         if (entityStrength <= 0.0f) {
             for (HallucinatedEntity hallucination : active) {
