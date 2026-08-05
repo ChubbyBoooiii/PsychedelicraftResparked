@@ -12,6 +12,8 @@ import com.chubbyboi.psychedelicraftresparked.item.ItemVat;
 import com.chubbyboi.psychedelicraftresparked.item.ItemPipeOfSmokeMonsters;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokingTool;
+import com.chubbyboi.psychedelicraftresparked.item.ItemGrapes;
+import com.chubbyboi.psychedelicraftresparked.item.PsychFoodItem;
 import com.chubbyboi.psychedelicraftresparked.item.PsychItem;
 import com.chubbyboi.psychedelicraftresparked.item.PsychSeeds;
 import net.minecraft.init.SoundEvents;
@@ -33,6 +35,14 @@ public class ItemInit {
     public static final ItemBarrel BARREL_ITEM = new ItemBarrel(BlockInit.BARREL);
     public static final ItemDistillery DISTILLERY_ITEM = new ItemDistillery(BlockInit.DISTILLERY);
     public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
+    public static final Item LATTICE_ITEM = createItemBlock(BlockInit.LATTICE);
+
+
+
+    // ==================== OTHER BLOCKS ====================
+    public static final Item JUNIPER_SAPLING_ITEM = createItemBlock(BlockInit.JUNIPER_SAPLING);
+    public static final Item JUNIPER_LOG_ITEM = createItemBlock(BlockInit.JUNIPER_LOG);
+    public static final Item JUNIPER_LEAVES_ITEM = createItemBlock(BlockInit.JUNIPER_LEAVES);
 
 
 
@@ -40,6 +50,8 @@ public class ItemInit {
     public static final ItemSmokingTool PIPE = new ItemSmokingTool("pipe", 50, 25);
     public static final ItemSmokingTool BONG = new ItemSmokingTool("bong", 128, 30).setBubblingSound(true);
     public static final ItemPipeOfSmokeMonsters PIPE_OF_SMOKE_MONSTERS = new ItemPipeOfSmokeMonsters("pipe_of_smoke_monsters", 50, 25);
+    public static final ItemDrinkable SYRINGE = new ItemDrinkable("syringe", 10, 10, 25, ItemDrinkable.ConsumptionType.INJECT)
+        .setFinishSound(SoundEvents.ENTITY_PLAYER_HURT);
 
 
 
@@ -94,9 +106,6 @@ public class ItemInit {
         .setUseAction(EnumAction.BOW)
         .setFinishSound(SoundEvents.ENTITY_LEASHKNOT_PLACE) ; // Leash kinda sounds snorty
 
-    public static final ItemDrinkable SYRINGE = new ItemDrinkable("syringe", 10, 10, 25, ItemDrinkable.ConsumptionType.INJECT)
-        .setFinishSound(SoundEvents.ENTITY_PLAYER_HURT);
-
 
 
     // ==================== TOBACCO ITEMS ====================
@@ -126,34 +135,6 @@ public class ItemInit {
         .addDrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
         .setSmokeDuration(40)
         .setUseStages(4);
-
-
-
-    // ==================== HARMONIUM ITEMS ====================
-    public static final ItemHarmonium HARMONIUM = new ItemHarmonium("harmonium");
-
-    // Harmonium Drug
-    static {
-        for (EnumDyeColor color : EnumDyeColor.values()) {
-            PIPE.addConsumable(new ItemSmokingTool.Consumable(
-                new ItemStack(HARMONIUM, 1, color.getMetadata()),
-                new DrugInfluence[]{
-                    new DrugInfluenceHarmonium("harmonium", 0, 0.04, 0.01, 0.65, color.getColorComponentValues()),
-                    new DrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
-                },
-                color.getColorComponentValues()
-            ));
-
-            PIPE_OF_SMOKE_MONSTERS.addConsumable(new ItemSmokingTool.Consumable(
-                new ItemStack(HARMONIUM, 1, color.getMetadata()),
-                new DrugInfluence[]{
-                    new DrugInfluenceHarmonium("harmonium", 0, 0.04, 0.01, 0.65, color.getColorComponentValues()),
-                    new DrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
-                },
-                color.getColorComponentValues())
-            );
-        }
-    }
 
 
 
@@ -189,6 +170,49 @@ public class ItemInit {
 
 
 
+    // ==================== HOPS ITEMS ====================
+    public static final PsychSeeds HOP_SEEDS = new PsychSeeds("hop_seeds");
+    public static final Item HOP_CONES = new PsychItem("hop_cones");
+
+
+
+    // ==================== GRAPES ITEMS ====================
+    public static final Item GRAPES = new ItemGrapes("grapes", 1, 0.5F);
+
+
+
+    // ==================== JUNIPER ITEMS ====================
+    public static final Item JUNIPER_BERRIES = new PsychFoodItem("juniper_berries", 1, 0.5F);
+
+
+
+    // ==================== HARMONIUM ITEMS ====================
+    public static final ItemHarmonium HARMONIUM = new ItemHarmonium("harmonium");
+
+    // Harmonium Drug
+    static {
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            PIPE.addConsumable(new ItemSmokingTool.Consumable(
+                    new ItemStack(HARMONIUM, 1, color.getMetadata()),
+                    new DrugInfluence[]{
+                            new DrugInfluenceHarmonium("harmonium", 0, 0.04, 0.01, 0.65, color.getColorComponentValues()),
+                            new DrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
+                    },
+                    color.getColorComponentValues()
+            ));
+
+            PIPE_OF_SMOKE_MONSTERS.addConsumable(new ItemSmokingTool.Consumable(
+                    new ItemStack(HARMONIUM, 1, color.getMetadata()),
+                    new DrugInfluence[]{
+                            new DrugInfluenceHarmonium("harmonium", 0, 0.04, 0.01, 0.65, color.getColorComponentValues()),
+                            new DrugInfluence("tobacco", 0, 0.1, 0.02, 0.7)
+                    },
+                    color.getColorComponentValues())
+            );
+        }
+    }
+
+
 
     // ==================== FLUID RELATED ====================
     public static final Item TAP = new PsychItem("tap");
@@ -205,6 +229,7 @@ public class ItemInit {
         TOBACCO_SEEDS.setBlockCrop(BlockInit.TOBACCO_PLANT);
         COCA_SEEDS.setBlockCrop(BlockInit.COCA_PLANT);
         COFFEA_CHERRIES.setBlockCrop(BlockInit.COFFEA_PLANT);
+        HOP_SEEDS.setBlockCrop(BlockInit.HOPS_PLANT);
     }
 
     private static Item createItemBlock(net.minecraft.block.Block block) {

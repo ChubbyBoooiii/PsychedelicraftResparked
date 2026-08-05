@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "berries=false,check_decay=false,decayable=false": { "model": "psychedelicraftresparked:juniper_leaves" },
+    "berries=false,check_decay=false,decayable=true":  { "model": "psychedelicraftresparked:juniper_leaves" },
+    "berries=false,check_decay=true,decayable=false":  { "model": "psychedelicraftresparked:juniper_leaves" },
+    "berries=false,check_decay=true,decayable=true":   { "model": "psychedelicraftresparked:juniper_leaves" },
+    "berries=true,check_decay=false,decayable=false":  { "model": "psychedelicraftresparked:juniper_leaves_berries" },
+    "berries=true,check_decay=false,decayable=true":   { "model": "psychedelicraftresparked:juniper_leaves_berries" },
+    "berries=true,check_decay=true,decayable=false":   { "model": "psychedelicraftresparked:juniper_leaves_berries" },
+    "berries=true,check_decay=true,decayable=true":    { "model": "psychedelicraftresparked:juniper_leaves_berries" }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "frame": "psychedelicraftresparked:blocks/lattice",
+    "leaves": "psychedelicraftresparked:blocks/grape_leaves_0",
+    "particle": "psychedelicraftresparked:blocks/lattice"
+  },
+  "elements": [
+    {
+      "from": [0.25, 0.25, 6.4],
+      "to": [15.75, 15.75, 9.6],
+      "faces": {
+        "down":  { "texture": "#frame" },
+        "up":    { "texture": "#frame" },
+        "north": { "texture": "#frame" },
+        "south": { "texture": "#frame" },
+        "west":  { "texture": "#frame" },
+        "east":  { "texture": "#frame" }
+      }
+    },
+    {
+      "from": [0, 0, 6.24],
+      "to": [16, 16, 9.76],
+      "faces": {
+        "down":  { "texture": "#leaves" },
+        "up":    { "texture": "#leaves" },
+        "north": { "texture": "#leaves" },
+        "south": { "texture": "#leaves" },
+        "west":  { "texture": "#leaves" },
+        "east":  { "texture": "#leaves" }
+      }
+    }
+  ]
+}

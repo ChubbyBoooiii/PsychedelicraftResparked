@@ -3,6 +3,10 @@ package com.chubbyboi.psychedelicraftresparked.init;
 import com.chubbyboi.psychedelicraftresparked.block.BlockBarrel;
 import com.chubbyboi.psychedelicraftresparked.block.BlockDistillery;
 import com.chubbyboi.psychedelicraftresparked.block.BlockFlask;
+import com.chubbyboi.psychedelicraftresparked.block.BlockLattice;
+import com.chubbyboi.psychedelicraftresparked.block.BlockJuniperLeaves;
+import com.chubbyboi.psychedelicraftresparked.block.BlockJuniperLog;
+import com.chubbyboi.psychedelicraftresparked.block.BlockJuniperSapling;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVat;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVatCompanion;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
@@ -23,12 +27,19 @@ public class BlockInit {
     public static final BlockBarrel BARREL = new BlockBarrel("barrel");
     public static final BlockDistillery DISTILLERY = new BlockDistillery("distillery");
     public static final BlockFlask FLASK = new BlockFlask("flask");
+    public static final BlockLattice LATTICE = new BlockLattice("lattice");
+
+    // Other Blocks
+    public static final BlockJuniperSapling JUNIPER_SAPLING = new BlockJuniperSapling("juniper_sapling");
+    public static final BlockJuniperLog JUNIPER_LOG = new BlockJuniperLog("juniper_log");
+    public static final BlockJuniperLeaves JUNIPER_LEAVES = new BlockJuniperLeaves("juniper_leaves");
 
     // Crops - only pass the crop item, seed and crop drops will be set later after items initialise
     public static final BlockTallCrop CANNABIS_PLANT = new BlockTallCrop("cannabis_plant", 15, 3);
     public static final BlockTallCrop TOBACCO_PLANT = new BlockTallCrop("tobacco_plant", 15, 3);
     public static final BlockTallCrop COCA_PLANT = new BlockTallCrop("coca_plant", 15, 3);
     public static final BlockTallCrop COFFEA_PLANT = new BlockTallCrop("coffea_plant", 15, 2);
+    public static final BlockTallCrop HOPS_PLANT = new BlockTallCrop("hops_plant", 15, 3);
 
     public static final BlockPeyote PEYOTE_PLANT = new BlockPeyote("peyote");
 
@@ -39,6 +50,7 @@ public class BlockInit {
         TOBACCO_PLANT.setSeedItem(ItemInit.TOBACCO_SEEDS);
         COCA_PLANT.setSeedItem(ItemInit.COCA_SEEDS);
         COFFEA_PLANT.setSeedItem(ItemInit.COFFEA_CHERRIES);
+        HOPS_PLANT.setSeedItem(ItemInit.HOP_SEEDS);
 
         // Add crop drops: item, min amount, max amount
         CANNABIS_PLANT.addCropDrop(ItemInit.CANNABIS_BUD, 0, 2);
@@ -46,5 +58,6 @@ public class BlockInit {
         TOBACCO_PLANT.addCropDrop(ItemInit.TOBACCO_LEAF, 3, 8);
         COCA_PLANT.addCropDrop(ItemInit.COCA_LEAF, 2, 6);
         COFFEA_PLANT.addCropDrop(ItemInit.COFFEA_CHERRIES, 2, 6);
+        HOPS_PLANT.addCropDrop(ItemInit.HOP_CONES, 0, 4);
     }
 }

@@ -15,6 +15,7 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPip
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
 import com.chubbyboi.psychedelicraftresparked.commands.CommandHallucinationDebug;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
+import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDistillery;
@@ -22,6 +23,7 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -33,8 +35,24 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ClientProxy extends CommonProxy {
+
+    private Boolean lastKnownFancyGraphics;
+
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || Minecraft.getMinecraft().world == null) {
+            return;
+        }
+
+        boolean fancy = Minecraft.getMinecraft().gameSettings.fancyGraphics;
+        if (lastKnownFancyGraphics == null || lastKnownFancyGraphics != fancy) {
+            lastKnownFancyGraphics = fancy;
+            BlockInit.JUNIPER_LEAVES.setGraphicsLevel(fancy);
+        }
+    }
 
     @Override
     public void registerItemRenderer(Item item, int meta, String id) {
@@ -89,6 +107,14 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/slurry_flow"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_still"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/tea_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/tea_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/cider_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/cider_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/wine_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/wine_flow"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/mead_still"));
+        event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/mead_flow"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_bubble"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_splash"));
     }

@@ -23,6 +23,9 @@ public class CraftingRecipes {
         // Vat
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "vat"), null, new ItemStack(ItemInit.VAT, 1), "W W", "I I", "WWW", 'I', "ingotIron", 'W', "plankWood");
 
+        // Grape Lattice
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "lattice"), null, new ItemStack(ItemInit.LATTICE_ITEM, 1), "III", "IWI", "WIW", 'I', "stickWood", 'W', "plankWood");
+
 
 
         // ==================== ITEMS ====================
@@ -67,6 +70,7 @@ public class CraftingRecipes {
 
         // ==================== FLUID FILLING ====================
         ForgeRegistries.RECIPES.register(new RecipeFillContainer(new FluidStack(FluidInit.COCAINE_FLUID, 10), Ingredient.fromItem(ItemInit.COCAINE_POWDER), Ingredient.fromItem(Items.WATER_BUCKET)).setRegistryName(Tags.MOD_ID, "fill_syringe_cocaine"));
+        ForgeRegistries.RECIPES.register(new RecipeFillContainer(new FluidStack(FluidInit.CAFFEINE_FLUID, 10), Ingredient.fromItem(ItemInit.COFFEE_BEANS), Ingredient.fromItem(ItemInit.COFFEE_BEANS), Ingredient.fromItem(Items.WATER_BUCKET)).setRegistryName(Tags.MOD_ID, "fill_syringe_caffeine"));
         ForgeRegistries.RECIPES.register(new RecipeFillContainer(new FluidStack(FluidInit.COFFEE, 500), Ingredient.fromItem(ItemInit.COFFEE_BEANS), Ingredient.fromItem(ItemInit.COFFEE_BEANS), Ingredient.fromItem(Items.WATER_BUCKET)).setRegistryName(Tags.MOD_ID, "fill_mug_coffee"));
     }
 }

@@ -1,0 +1,37 @@
+{
+  "variants": {
+    "age=0,top=false": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=1,top=false": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=2,top=false": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=3,top=false": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=4,top=false": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=5,top=false": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=6,top=false": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=7,top=false": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=8,top=false": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=9,top=false": { "model": "psychedelicraftresparked:hops_plant_2" },
+    "age=10,top=false": { "model": "psychedelicraftresparked:hops_plant_2" },
+    "age=11,top=false": { "model": "psychedelicraftresparked:hops_plant_2" },
+    "age=12,top=false": { "model": "psychedelicraftresparked:hops_plant_2" },
+    "age=13,top=false": { "model": "psychedelicraftresparked:hops_plant_2" },
+    "age=14,top=false": { "model": "psychedelicraftresparked:hops_plant_2" },
+    "age=15,top=false": { "model": "psychedelicraftresparked:hops_plant_3" },
+
+    "age=0,top=true": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=1,top=true": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=2,top=true": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=3,top=true": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=4,top=true": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=5,top=true": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=6,top=true": { "model": "psychedelicraftresparked:hops_plant_0" },
+    "age=7,top=true": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=8,top=true": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=9,top=true": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=10,top=true": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=11,top=true": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=12,top=true": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=13,top=true": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=14,top=true": { "model": "psychedelicraftresparked:hops_plant_1" },
+    "age=15,top=true": { "model": "psychedelicraftresparked:hops_plant_2" }
+  }
+}

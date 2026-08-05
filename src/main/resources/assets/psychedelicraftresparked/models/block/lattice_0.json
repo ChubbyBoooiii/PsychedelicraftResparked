@@ -1,0 +1,21 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "frame": "psychedelicraftresparked:blocks/lattice",
+    "particle": "psychedelicraftresparked:blocks/lattice"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 6.4],
+      "to": [16, 16, 9.6],
+      "faces": {
+        "down":  { "texture": "#frame" },
+        "up":    { "texture": "#frame" },
+        "north": { "texture": "#frame" },
+        "south": { "texture": "#frame" },
+        "west":  { "texture": "#frame" },
+        "east":  { "texture": "#frame" }
+      }
+    }
+  ]
+}
