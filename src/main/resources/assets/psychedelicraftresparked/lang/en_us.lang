@@ -175,85 +175,130 @@ psychedelicraftresparked.tooltip.fluid.empty=Empty
 
 #FLUIDS
 # Base Fluids
-fluid.slurry=Slurry
-fluid.milk=Milk
+fluid.psc_slurry=Slurry
+fluid.psc_milk_raw=Milk
 
 # Fluid Drugs
-fluid.coffee=Coffee
-fluid.cannabis_tea=Cannabis Tea
-fluid.coca_tea=Coca Tea
-fluid.peyote_juice=Peyote Juice
-fluid.cocaine_fluid=Cocaine
-fluid.caffeine_fluid=Caffeine
+fluid.psc_coffee=Coffee
+fluid.psc_cannabis_tea=Cannabis Tea
+fluid.psc_coca_tea=Coca Tea
+fluid.psc_peyote_juice=Peyote Juice
+fluid.psc_cocaine_fluid=Cocaine
+fluid.psc_caffeine_fluid=Caffeine
 
 # Alcoholic - Wheat Hop
-fluid.wheat_hop=Bitter Wheat Wort
-fluid.wheat_hop.ferment_1=Bitter Wheat Half Wash
-fluid.wheat_hop.ferment_2=Green Wheat Beer
-fluid.wheat_hop.mature=Wheat Beer (%d DM)
-fluid.wheat_hop.distill=Wheat Beer (%d TD)
-fluid.wheat_hop.dmature=Wheat Beer (%d DM, %d TD)
-fluid.wheat_hop.vinegar=Bitter Beer Vinegar
+fluid.psc_wheat_hop=Bitter Wheat Wort
+fluid.psc_wheat_hop.ferment_1=Bitter Wheat Half Wash
+fluid.psc_wheat_hop.ferment_2=Green Wheat Beer
+fluid.psc_wheat_hop.mature=Wheat Beer (%d DM)
+fluid.psc_wheat_hop.distill=Wheat Beer (%d TD)
+fluid.psc_wheat_hop.dmature=Wheat Beer (%d DM, %d TD)
+fluid.psc_wheat_hop.vinegar=Bitter Beer Vinegar
 
 # Alcoholic - Wheat
-fluid.wheat=Wheat Wort
-fluid.wheat.ferment_1=Wheat Half Wash
-fluid.wheat.ferment_2=Wheat Wash
-fluid.wheat.mature=Wheat Wash (%d DM)
-fluid.wheat.distill=Wheat Vodka (%d TD)
-fluid.wheat.dmature=Wheat Whisky (%d DM, %d TD)
-fluid.wheat.vinegar=Wheat Vinegar
+fluid.psc_wheat=Wheat Wort
+fluid.psc_wheat.ferment_1=Wheat Half Wash
+fluid.psc_wheat.ferment_2=Wheat Wash
+fluid.psc_wheat.mature=Wheat Wash (%d DM)
+fluid.psc_wheat.distill=Wheat Vodka (%d TD)
+fluid.psc_wheat.dmature=Wheat Whisky (%d DM, %d TD)
+fluid.psc_wheat.vinegar=Wheat Vinegar
+
+# Alcoholic - Corn
+fluid.psc_corn=Corn Wort
+fluid.psc_corn.ferment_1=Corn Half Wash
+fluid.psc_corn.ferment_2=Green Corn Beer
+fluid.psc_corn.mature=Corn Beer (%d DM)
+fluid.psc_corn.distill=Corn Vodka (%d TD)
+fluid.psc_corn.dmature=Corn Whisky (%d DM, %d TD)
+fluid.psc_corn.vinegar=Corn Vinegar
 
 # Alcoholic - Potato
-fluid.potato=Potato Wort
-fluid.potato.ferment_1=Potato Half Wash
-fluid.potato.ferment_2=Potato Beer
-fluid.potato.mature=Potato Beer (%d DM)
-fluid.potato.distill=Potato Vodka (%d TD)
-fluid.potato.dmature=Poteen (%d DM, %d TD)
-fluid.potato.vinegar=Potato Vinegar
+fluid.psc_potato=Potato Wort
+fluid.psc_potato.ferment_1=Potato Half Wash
+fluid.psc_potato.ferment_2=Potato Beer
+fluid.psc_potato.mature=Potato Beer (%d DM)
+fluid.psc_potato.distill=Potato Vodka (%d TD)
+fluid.psc_potato.dmature=Poteen (%d DM, %d TD)
+fluid.psc_potato.vinegar=Potato Vinegar
 
 # Alcoholic - Grapes
-fluid.grapes=Grape Juice
-fluid.grapes.ferment_1=Wine Half Wash
-fluid.grapes.ferment_2=Wine Wash
-fluid.grapes.mature=Wine (%d DM)
-fluid.grapes.distill=Wine Brandy (%d TD)
-fluid.grapes.dmature=Wine Brandy (%d DM, %d TD)
-fluid.grapes.vinegar=Wine Vinegar
+fluid.psc_grapes=Grape Juice
+fluid.psc_grapes.ferment_1=Wine Half Wash
+fluid.psc_grapes.ferment_2=Wine Wash
+fluid.psc_grapes.mature=Wine (%d DM)
+fluid.psc_grapes.distill=Wine Brandy (%d TD)
+fluid.psc_grapes.dmature=Wine Brandy (%d DM, %d TD)
+fluid.psc_grapes.vinegar=Wine Vinegar
+
+# Alcoholic - Rice
+fluid.psc_rice=Rice Wort
+fluid.psc_rice.ferment_1=Rice Half Wash
+fluid.psc_rice.ferment_2=Young Rice Wine
+fluid.psc_rice.mature=Rice Wine (%d DM)
+fluid.psc_rice.distill=Rice Brandy (%d TD)
+fluid.psc_rice.dmature=Rice Brandy (%d DM, %d TD)
+fluid.psc_rice.vinegar=Rice Vinegar
+
+# Alcoholic - Honey
+fluid.psc_honey=Honey Wort
+fluid.psc_honey.ferment_1=Honey Half Wash
+fluid.psc_honey.ferment_2=Young Mead
+fluid.psc_honey.mature=Mead (%d DM)
+fluid.psc_honey.distill=Honey Brandy (%d TD)
+fluid.psc_honey.dmature=Honey Brandy (%d DM, %d TD)
+fluid.psc_honey.vinegar=Honey Vinegar
 
 # Alcoholic - Juniper
-fluid.juniper=Juniper Wort
-fluid.juniper.ferment_1=Juniper Half Wash
-fluid.juniper.ferment_2=Juniper Wash
-fluid.juniper.mature=Juniper Wash (%d DM)
-fluid.juniper.distill=Gin (%d TD)
-fluid.juniper.dmature=Gin (%d DM, %d TD)
-fluid.juniper.vinegar=Juniper Vinegar
+fluid.psc_juniper=Juniper Wort
+fluid.psc_juniper.ferment_1=Juniper Half Wash
+fluid.psc_juniper.ferment_2=Juniper Wash
+fluid.psc_juniper.mature=Juniper Wash (%d DM)
+fluid.psc_juniper.distill=Gin (%d TD)
+fluid.psc_juniper.dmature=Gin (%d DM, %d TD)
+fluid.psc_juniper.vinegar=Juniper Vinegar
 
 # Alcoholic - Sugar Cane
-fluid.sugar_cane=Sugarcane Wort
-fluid.sugar_cane.ferment_1=Sugarcane Half Wash
-fluid.sugar_cane.ferment_2=Young Basi
-fluid.sugar_cane.mature=Basi (%d DM)
-fluid.sugar_cane.distill=Young Rum (%d TD)
-fluid.sugar_cane.dmature=Rum (%d DM, %d TD)
-fluid.sugar_cane.vinegar=Cane Vinegar
+fluid.psc_sugar_cane=Sugarcane Wort
+fluid.psc_sugar_cane.ferment_1=Sugarcane Half Wash
+fluid.psc_sugar_cane.ferment_2=Young Basi
+fluid.psc_sugar_cane.mature=Basi (%d DM)
+fluid.psc_sugar_cane.distill=Young Rum (%d TD)
+fluid.psc_sugar_cane.dmature=Rum (%d DM, %d TD)
+fluid.psc_sugar_cane.vinegar=Cane Vinegar
 
 # Alcoholic - Apple
-fluid.apple=Sweet Cider
-fluid.apple.ferment_1=Half Sweet Cider
-fluid.apple.ferment_2=Hard Cider
-fluid.apple.mature=Hard Cider (%d DM)
-fluid.apple.distill=Apple Brandy (%d TD)
-fluid.apple.dmature=Apple Brandy (%d DM, %d TD)
-fluid.apple.vinegar=Apple Vinegar
+fluid.psc_apple=Sweet Cider
+fluid.psc_apple.ferment_1=Half Sweet Cider
+fluid.psc_apple.ferment_2=Hard Cider
+fluid.psc_apple.mature=Hard Cider (%d DM)
+fluid.psc_apple.distill=Apple Brandy (%d TD)
+fluid.psc_apple.dmature=Apple Brandy (%d DM, %d TD)
+fluid.psc_apple.vinegar=Apple Vinegar
+
+# Alcoholic - Pineapple
+fluid.psc_pineapple=Pineapple Juice
+fluid.psc_pineapple.ferment_1=Pineapple Half Wash
+fluid.psc_pineapple.ferment_2=Young Pineapple Wine
+fluid.psc_pineapple.mature=Pineapple Wine (%d DM)
+fluid.psc_pineapple.distill=Pineapple Brandy (%d TD)
+fluid.psc_pineapple.dmature=Pineapple Brandy (%d DM, %d TD)
+fluid.psc_pineapple.vinegar=Pineapple Vinegar
+
+# Alcoholic - Banana
+fluid.psc_banana=Banana Juice
+fluid.psc_banana.ferment_1=Banana Half Wash
+fluid.psc_banana.ferment_2=Banana Beer
+fluid.psc_banana.mature=Banana Beer (%d DM)
+fluid.psc_banana.distill=Banana Brandy (%d TD)
+fluid.psc_banana.dmature=Banana Brandy (%d DM, %d TD)
+fluid.psc_banana.vinegar=Banana Vinegar
 
 # Alcoholic - Milk
-fluid.milk_alcohol=Milk Wort
-fluid.milk_alcohol.ferment_1=Milk Half Wash
-fluid.milk_alcohol.ferment_2=Blaand
-fluid.milk_alcohol.mature=Blaand (%d DM)
-fluid.milk_alcohol.distill=Arkhi (%d TD)
-fluid.milk_alcohol.dmature=Arkhi (%d DM, %d TD)
-fluid.milk_alcohol.vinegar=Spoiled Milk
+fluid.psc_milk_alcohol=Milk Wort
+fluid.psc_milk_alcohol.ferment_1=Milk Half Wash
+fluid.psc_milk_alcohol.ferment_2=Blaand
+fluid.psc_milk_alcohol.mature=Blaand (%d DM)
+fluid.psc_milk_alcohol.distill=Arkhi (%d TD)
+fluid.psc_milk_alcohol.dmature=Arkhi (%d DM, %d TD)
+fluid.psc_milk_alcohol.vinegar=Spoiled Milk

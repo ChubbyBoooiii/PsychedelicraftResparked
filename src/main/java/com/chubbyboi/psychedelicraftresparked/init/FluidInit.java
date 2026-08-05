@@ -11,12 +11,12 @@ public class FluidInit {
 
     // ==================== INIT FLUIDS ====================
     // Base Fluids
-    public static final FluidSlurry SLURRY = new FluidSlurry("slurry",
+    public static final FluidSlurry SLURRY = new FluidSlurry("psc_slurry",
         new ResourceLocation("psychedelicraftresparked:blocks/slurry_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/slurry_flow")
     );
 
-    public static final Fluid MILK = new Fluid("milk",
+    public static final Fluid MILK = new Fluid("psc_milk_raw",
         new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
     );
@@ -24,32 +24,32 @@ public class FluidInit {
 
 
     // Fluid Drugs
-    public static final FluidDrug COFFEE = new FluidDrug("coffee",
+    public static final FluidDrug COFFEE = new FluidDrug("psc_coffee",
         new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
     );
 
-    public static final FluidDrug CANNABIS_TEA = new FluidDrug("cannabis_tea",
+    public static final FluidDrug CANNABIS_TEA = new FluidDrug("psc_cannabis_tea",
         new ResourceLocation("psychedelicraftresparked:blocks/tea_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/tea_flow")
     );
 
-    public static final FluidDrug COCA_TEA = new FluidDrug("coca_tea",
+    public static final FluidDrug COCA_TEA = new FluidDrug("psc_coca_tea",
         new ResourceLocation("psychedelicraftresparked:blocks/tea_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/tea_flow")
     );
 
-    public static final FluidDrug PEYOTE_JUICE = new FluidDrug("peyote_juice",
+    public static final FluidDrug PEYOTE_JUICE = new FluidDrug("psc_peyote_juice",
         new ResourceLocation("psychedelicraftresparked:blocks/tea_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/tea_flow")
     );
 
-    public static final FluidDrug COCAINE_FLUID = new FluidDrug("cocaine_fluid",
+    public static final FluidDrug COCAINE_FLUID = new FluidDrug("psc_cocaine_fluid",
             new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
             new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
     );
 
-    public static final FluidDrug CAFFEINE_FLUID = new FluidDrug("caffeine_fluid",
+    public static final FluidDrug CAFFEINE_FLUID = new FluidDrug("psc_caffeine_fluid",
         new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
     );
@@ -58,7 +58,7 @@ public class FluidInit {
 
     // Alcoholic
     public static final FluidAlcohol WHEAT_HOP = new FluidAlcohol(
-        "wheat_hop",
+        "psc_wheat_hop",
         new ResourceLocation("psychedelicraftresparked:blocks/beer_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/beer_flow"),
         0.25, 1.7, 0.1,
@@ -66,7 +66,15 @@ public class FluidInit {
     );
 
     public static final FluidAlcohol WHEAT = new FluidAlcohol(
-        "wheat",
+        "psc_wheat",
+        new ResourceLocation("psychedelicraftresparked:blocks/beer_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/beer_flow"),
+        0.25, 1.7, 0.1,
+        new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
+    );
+
+    public static final FluidAlcohol CORN = new FluidAlcohol(
+        "psc_corn",
         new ResourceLocation("psychedelicraftresparked:blocks/beer_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/beer_flow"),
         0.25, 1.7, 0.1,
@@ -74,7 +82,7 @@ public class FluidInit {
     );
 
     public static final FluidAlcohol POTATO = new FluidAlcohol(
-        "potato",
+        "psc_potato",
         new ResourceLocation("psychedelicraftresparked:blocks/beer_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/beer_flow"),
         0.45, 1.9, 0.15,
@@ -82,15 +90,31 @@ public class FluidInit {
     );
 
     public static final FluidAlcohol GRAPES = new FluidAlcohol(
-        "grapes",
+        "psc_grapes",
         new ResourceLocation("psychedelicraftresparked:blocks/wine_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/wine_flow"),
         0.55, 1.7, 0.2,
         new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
     );
 
+    public static final FluidAlcohol RICE = new FluidAlcohol(
+        "psc_rice",
+        new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_flow"),
+        0.25, 1.7, 0.1,
+        new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
+    );
+
+    public static final FluidAlcohol HONEY = new FluidAlcohol(
+        "psc_honey",
+        new ResourceLocation("psychedelicraftresparked:blocks/mead_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/mead_flow"),
+        0.35, 1.7, 0.1,
+        new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
+    );
+
     public static final FluidAlcohol JUNIPER = new FluidAlcohol(
-        "juniper",
+        "psc_juniper",
         new ResourceLocation("psychedelicraftresparked:blocks/slurry_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/slurry_flow"),
         0.4, 1.7, 0.1,
@@ -98,7 +122,7 @@ public class FluidInit {
     );
 
     public static final FluidAlcohol SUGAR_CANE = new FluidAlcohol(
-        "sugar_cane",
+        "psc_sugar_cane",
         new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"),
         0.35, 1.7, 0.1,
@@ -106,15 +130,31 @@ public class FluidInit {
     );
 
     public static final FluidAlcohol APPLE = new FluidAlcohol(
-        "apple",
+        "psc_apple",
         new ResourceLocation("psychedelicraftresparked:blocks/cider_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/cider_flow"),
         0.35, 1.7, 0.1,
         new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
     );
 
+    public static final FluidAlcohol PINEAPPLE = new FluidAlcohol(
+        "psc_pineapple",
+        new ResourceLocation("psychedelicraftresparked:blocks/cider_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/cider_flow"),
+        0.35, 1.7, 0.1,
+        new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
+    );
+
+    public static final FluidAlcohol BANANA = new FluidAlcohol(
+        "psc_banana",
+        new ResourceLocation("psychedelicraftresparked:blocks/mead_still"),
+        new ResourceLocation("psychedelicraftresparked:blocks/mead_flow"),
+        0.35, 1.7, 0.1,
+        new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
+    );
+
     public static final FluidAlcohol MILK_ALCOHOL = new FluidAlcohol(
-        "milk_alcohol",
+        "psc_milk_alcohol",
         new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_flow"),
         0.35, 1.7, 0.1,
@@ -170,6 +210,11 @@ public class FluidInit {
         WHEAT.addIcon(4, 13, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
         WHEAT.addIcon(14, -1, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_flow"));
 
+        CORN.setColor(0xaafeaa08);
+        CORN.addIcon(0, 3, 2, -1, new ResourceLocation("psychedelicraftresparked:blocks/clear_still"), new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
+        CORN.addIcon(4, 13, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
+        CORN.addIcon(14, -1, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_mature_flow"));
+
         POTATO.setColor(0xaafeaa08);
         POTATO.addIcon(0, 3, 2, -1, new ResourceLocation("psychedelicraftresparked:blocks/clear_still"), new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
         POTATO.addIcon(4, 13, 0, -1, new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_still"), new ResourceLocation("psychedelicraftresparked:blocks/rum_semi_mature_flow"));
@@ -178,6 +223,14 @@ public class FluidInit {
         GRAPES.setColor(0xee3f0822);
         GRAPES.setDistilledColor(0x993f0822);
         GRAPES.setMatureColor(0xee3f0822);
+
+        RICE.setColor(0xeecac4b2);
+        RICE.setMatureColor(0x88D6BC90);
+        RICE.addIcon(0, -1, 2, -1, new ResourceLocation("psychedelicraftresparked:blocks/clear_still"), new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
+
+        HONEY.setColor(0xbbe9ae3b);
+        HONEY.setDistilledColor(0x99e9ae3b);
+        HONEY.setMatureColor(0xaaD1984D);
 
         JUNIPER.setColor(0xcc704e21);
         JUNIPER.addIcon(0, 3, 2, -1, new ResourceLocation("psychedelicraftresparked:blocks/clear_still"), new ResourceLocation("psychedelicraftresparked:blocks/clear_flow"));
@@ -192,6 +245,14 @@ public class FluidInit {
         APPLE.setColor(0x99edc13b);
         APPLE.setDistilledColor(0x66edc13b);
         APPLE.setMatureColor(0x88edc13b);
+
+        PINEAPPLE.setColor(0x99edc13b);
+        PINEAPPLE.setDistilledColor(0x66edc13b);
+        PINEAPPLE.setMatureColor(0x88edc13b);
+
+        BANANA.setColor(0xbbe9ae3b);
+        BANANA.setDistilledColor(0x99e9ae3b);
+        BANANA.setMatureColor(0xaaD1984D);
 
         MILK_ALCOHOL.setColor(0x77cac4b2);
         MILK_ALCOHOL.setMatureColor(0x88D6BC90);
@@ -211,11 +272,16 @@ public class FluidInit {
         FluidRegistry.registerFluid(CAFFEINE_FLUID);
         FluidRegistry.registerFluid(WHEAT_HOP);
         FluidRegistry.registerFluid(WHEAT);
+        FluidRegistry.registerFluid(CORN);
         FluidRegistry.registerFluid(POTATO);
         FluidRegistry.registerFluid(GRAPES);
+        FluidRegistry.registerFluid(RICE);
+        FluidRegistry.registerFluid(HONEY);
         FluidRegistry.registerFluid(JUNIPER);
         FluidRegistry.registerFluid(SUGAR_CANE);
         FluidRegistry.registerFluid(APPLE);
+        FluidRegistry.registerFluid(PINEAPPLE);
+        FluidRegistry.registerFluid(BANANA);
         FluidRegistry.registerFluid(MILK_ALCOHOL);
     }
 }

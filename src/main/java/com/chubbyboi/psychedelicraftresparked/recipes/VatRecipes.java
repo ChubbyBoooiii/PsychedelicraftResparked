@@ -165,9 +165,12 @@ public class VatRecipes {
             .addIngredient(Items.WHEAT, 5, "cropWheat")
             .addIngredient(ItemInit.HOP_CONES, 2, "cropHops"));
         addRecipe(new Recipe(FluidInit.WHEAT, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.WHEAT, 7, "cropWheat"));
+        addRecipe(new Recipe(FluidInit.CORN, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "cropCorn"));
         addRecipe(new Recipe(FluidInit.POTATO, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.POTATO, 7, "cropPotato"));
         addRecipe(new Recipe(FluidInit.GRAPES, FluidRegistry.WATER, TileEntityVat.CAPACITY)
             .addIngredient(ItemInit.GRAPES, 7, "cropGrape", "foodGrapesPurple", "foodGrapesRed"));
+        addRecipe(new Recipe(FluidInit.RICE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "cropRice"));
+        addRecipe(new Recipe(FluidInit.HONEY, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "dropHoney"));
         addRecipe(new Recipe(FluidInit.JUNIPER, FluidRegistry.WATER, TileEntityVat.CAPACITY)
             .addIngredient(ItemInit.JUNIPER_BERRIES, 3, "cropJuniperberry")
             .addIngredient(Items.SUGAR, 1, "listAllsugar")
@@ -175,6 +178,8 @@ public class VatRecipes {
             .addIngredient(Items.WHEAT, 1, "cropWheat"));
         addRecipe(new Recipe(FluidInit.SUGAR_CANE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.REEDS, 7, "sugarcane"));
         addRecipe(new Recipe(FluidInit.APPLE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.APPLE, 7, "cropApple", "foodApple"));
+        addRecipe(new Recipe(FluidInit.PINEAPPLE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "cropPineapple"));
+        addRecipe(new Recipe(FluidInit.BANANA, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "cropBanana"));
         addRecipe(new Recipe(FluidInit.MILK_ALCOHOL, FluidInit.MILK, TileEntityVat.CAPACITY));
     }
 
