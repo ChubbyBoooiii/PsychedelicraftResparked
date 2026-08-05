@@ -24,10 +24,10 @@ public class FluidAlcohol extends FluidDrug implements FermentableFluid, Distill
     private static final String NBT_VINEGAR = "isVinegar";
 
     public static class TickInfo {
-        public final int ticksPerFermentation;
-        public final int ticksPerDistillation;
-        public final int ticksPerMaturation;
-        public final int ticksUntilAcetification;
+        public int ticksPerFermentation;
+        public int ticksPerDistillation;
+        public int ticksPerMaturation;
+        public int ticksUntilAcetification;
 
         public TickInfo(int ticksPerFermentation, int ticksPerDistillation, int ticksPerMaturation, int ticksUntilAcetification) {
             this.ticksPerFermentation = ticksPerFermentation;
@@ -86,6 +86,10 @@ public class FluidAlcohol extends FluidDrug implements FermentableFluid, Distill
         this.maturationAlcohol = maturationAlcohol;
         this.tickInfo = tickInfo;
         setDrinkable(true);
+    }
+
+    public TickInfo getTickInfo() {
+        return tickInfo;
     }
 
     public FluidAlcohol addIcon(int maturationMin, int maturationMax, int distillationMin, int distillationMax, ResourceLocation still, ResourceLocation flowing) {
