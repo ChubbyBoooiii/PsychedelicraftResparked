@@ -1,20 +1,36 @@
 package com.chubbyboi.psychedelicraftresparked.config;
 
+import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidSlurry;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.recipes.VatRecipes;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 
+@Mod.EventBusSubscriber
 public class PSConfig {
 
     public static final String CATEGORY_CLIENT = "client";
     public static final String CATEGORY_SERVER = "server";
 
     private static Configuration config;
+
+    public static Configuration getConfig() {
+        return config;
+    }
+
+    @SubscribeEvent
+    public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(Tags.MOD_ID)) {
+            loadConfig();
+        }
+    }
 
     public static boolean shader2DEnabled;
     public static boolean shader3DEnabled;

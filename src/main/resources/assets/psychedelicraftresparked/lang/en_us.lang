@@ -173,6 +173,12 @@ psychedelicraftresparked.tooltip.fluid.empty=Empty
 
 
 
+#CONFIG GUI
+psychedelicraftresparked.configgui.ctgy.client=Client (rendering, safe to differ between players)
+psychedelicraftresparked.configgui.ctgy.server=Server (gameplay, keep the same on client and server)
+
+
+
 #FLUIDS
 # Base Fluids
 fluid.psc_slurry=Slurry
