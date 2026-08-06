@@ -8,6 +8,7 @@ import com.chubbyboi.psychedelicraftresparked.init.OreDictionaryInit;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
 import com.chubbyboi.psychedelicraftresparked.recipes.CraftingRecipes;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.item.Item;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -49,6 +50,10 @@ public class RegistryHandler {
                 // 16 dye-coloured variants all share the one model (harmonium.json). The tint handler (ClientProxy) is what actually differentiates them, not separate models.
                 for (int meta = 0; meta < 16; meta++) {
                     PsychedelicraftResparked.proxy.registerItemRenderer(item, meta, "inventory");
+                }
+            } else if (item == ItemInit.VAT) {
+                for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+                    PsychedelicraftResparked.proxy.registerItemRenderer(item, type.getMetadata(), "vat_" + type.getName(), "inventory");
                 }
             } else {
                 PsychedelicraftResparked.proxy.registerItemRenderer(item, 0, "inventory");

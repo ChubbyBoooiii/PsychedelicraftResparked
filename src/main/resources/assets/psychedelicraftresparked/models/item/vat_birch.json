@@ -1,0 +1,43 @@
+{
+  "parent": "psychedelicraftresparked:block/vat",
+  "textures": {
+    "outer": "psychedelicraftresparked:blocks/wooden_vat_birch",
+    "particle": "psychedelicraftresparked:blocks/wooden_vat_birch"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, 0, 0],
+      "translation": [0, 1.5, -2],
+      "scale": [0.2, 0.2, 0.2]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, 0, 0],
+      "translation": [3.5, 1.5, -2],
+      "scale": [0.2, 0.2, 0.2]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 0, 0],
+      "translation": [-5, 3, 0],
+      "scale": [0.2, 0.2, 0.2]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 0, 0],
+      "translation": [-1.9, 3, 0],
+      "scale": [0.2, 0.2, 0.2]
+    },
+    "ground": {
+      "translation": [0, 2, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    "gui": {
+      "rotation": [30, 225, 0],
+      "translation": [3.5, 0, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    "fixed": {
+      "rotation": [-90, 0, 0],
+      "translation": [-2.5, -2.5, -1.5],
+      "scale": [0.3, 0.3, 0.3]
+    }
+  }
+}

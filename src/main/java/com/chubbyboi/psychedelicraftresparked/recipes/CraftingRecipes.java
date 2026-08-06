@@ -4,6 +4,8 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -20,8 +22,13 @@ public class CraftingRecipes {
         // Drying Table
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "drying_table"), null, new ItemStack(ItemInit.DRYING_TABLE_ITEM, 1), "WWW", "WRW", 'R', "dustRedstone", 'W', "plankWood");
 
-        // Vat
-        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "vat"), null, new ItemStack(ItemInit.VAT, 1), "W W", "I I", "WWW", 'I', "ingotIron", 'W', "plankWood");
+        // Vat - one recipe per wood type, each requiring that exact plank
+        for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+            ItemStack plank = new ItemStack(Blocks.PLANKS, 1, type.getMetadata());
+            GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "vat_" + type.getName()), null,
+                new ItemStack(ItemInit.VAT, 1, type.getMetadata()),
+                "W W", "I I", "WWW", 'I', "ingotIron", 'W', plank);
+        }
 
         // Grape Lattice
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "lattice"), null, new ItemStack(ItemInit.LATTICE_ITEM, 1), "III", "IWI", "WIW", 'I', "stickWood", 'W', "plankWood");

@@ -6,9 +6,12 @@ import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVatCompanion;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +23,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -43,6 +47,34 @@ public class BlockVatCompanion extends Block implements ITileEntityProvider, Flu
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
+    }
+
+    public static final PropertyEnum<BlockPlanks.EnumType> WOOD_TYPE = PropertyEnum.create("wood", BlockPlanks.EnumType.class);
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, WOOD_TYPE);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState();
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        BlockPos masterPos = tileEntity instanceof TileEntityVatCompanion ? ((TileEntityVatCompanion) tileEntity).getMasterPos() : null;
+        IBlockState masterState = masterPos != null ? world.getBlockState(masterPos) : null;
+        BlockPlanks.EnumType wood = masterState != null && masterState.getBlock() == BlockInit.VAT
+            ? masterState.getValue(BlockVat.WOOD_TYPE)
+            : BlockPlanks.EnumType.OAK;
+        return state.withProperty(WOOD_TYPE, wood);
     }
 
     @Override
@@ -77,6 +109,11 @@ public class BlockVatCompanion extends Block implements ITileEntityProvider, Flu
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        BlockPos masterPos = tileEntity instanceof TileEntityVatCompanion ? ((TileEntityVatCompanion) tileEntity).getMasterPos() : null;
+        if (masterPos != null && world.getBlockState(masterPos).getBlock() == BlockInit.VAT) {
+            return BlockInit.VAT.getPickBlock(world.getBlockState(masterPos), target, world, masterPos, player);
+        }
         return new ItemStack(ItemInit.VAT);
     }
 

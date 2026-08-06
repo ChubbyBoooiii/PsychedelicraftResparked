@@ -9,6 +9,14 @@
       "north": { "y": 270 },
       "west":  { "y": 180 },
       "south": { "y": 90 }
+    },
+    "wood": {
+      "oak":      { "textures": { "outer": "psychedelicraftresparked:blocks/wooden_vat_oak",      "particle": "psychedelicraftresparked:blocks/wooden_vat_oak" } },
+      "spruce":   { "textures": { "outer": "psychedelicraftresparked:blocks/wooden_vat_spruce",   "particle": "psychedelicraftresparked:blocks/wooden_vat_spruce" } },
+      "birch":    { "textures": { "outer": "psychedelicraftresparked:blocks/wooden_vat_birch",    "particle": "psychedelicraftresparked:blocks/wooden_vat_birch" } },
+      "jungle":   { "textures": { "outer": "psychedelicraftresparked:blocks/wooden_vat_jungle",   "particle": "psychedelicraftresparked:blocks/wooden_vat_jungle" } },
+      "acacia":   { "textures": { "outer": "psychedelicraftresparked:blocks/wooden_vat_acacia",   "particle": "psychedelicraftresparked:blocks/wooden_vat_acacia" } },
+      "dark_oak": { "textures": { "outer": "psychedelicraftresparked:blocks/wooden_vat_dark_oak", "particle": "psychedelicraftresparked:blocks/wooden_vat_dark_oak" } }
     }
   }
 }

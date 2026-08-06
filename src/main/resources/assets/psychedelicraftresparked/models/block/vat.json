@@ -1,7 +1,7 @@
 {
   "textures": {
-    "outer": "psychedelicraftresparked:blocks/wooden_vat",
-    "particle": "psychedelicraftresparked:blocks/wooden_vat"
+    "outer": "psychedelicraftresparked:blocks/wooden_vat_oak",
+    "particle": "psychedelicraftresparked:blocks/wooden_vat_oak"
   },
   "elements": [
     {

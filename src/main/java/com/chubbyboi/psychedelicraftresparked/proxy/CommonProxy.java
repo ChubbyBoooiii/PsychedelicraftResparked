@@ -11,6 +11,8 @@ public class CommonProxy {
 
     public void registerItemRenderer(Item item, int meta, String id) { }
 
+    public void registerItemRenderer(Item item, int meta, String modelName, String id) { }
+
     public void registerRenderers() { }
 
     // Register capabilities and event handlers. Called during preInit from the main mod class.

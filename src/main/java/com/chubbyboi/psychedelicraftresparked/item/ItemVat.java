@@ -6,14 +6,18 @@ import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVatCompanion;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,7 +29,24 @@ public class ItemVat extends Item {
         setRegistryName(Tags.MOD_ID, name);
         setCreativeTab(PsychedelicraftResparked.PSYCHTAB);
         setMaxStackSize(1);
+        setHasSubtypes(true);
+        setMaxDamage(0);
         ItemInit.ITEMS.add(this);
+    }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (!isInCreativeTab(tab)) {
+            return;
+        }
+        for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+            items.add(new ItemStack(this, 1, type.getMetadata()));
+        }
+    }
+
+    @Override
+    public String getTranslationKey(ItemStack stack) {
+        return super.getTranslationKey() + "." + BlockPlanks.EnumType.byMetadata(stack.getMetadata()).getName();
     }
 
     @Override
@@ -45,7 +66,8 @@ public class ItemVat extends Item {
         }
 
         if (!world.isRemote) {
-            world.setBlockState(masterPos, BlockInit.VAT.getDefaultState());
+            int woodMeta = player.getHeldItem(hand).getMetadata();
+            world.setBlockState(masterPos, BlockInit.VAT.getStateFromMeta(woodMeta));
             world.setBlockState(primaryPos, BlockInit.VAT_COMPANION.getDefaultState());
             world.setBlockState(secondaryPos, BlockInit.VAT_COMPANION.getDefaultState());
             world.setBlockState(diagonalPos, BlockInit.VAT_COMPANION.getDefaultState());

@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.proxy;
 
+import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.DrugVisualRenderer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationEntitySpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.SmokeMonsterSpawner;
@@ -57,6 +58,11 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerItemRenderer(Item item, int meta, String id) {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
+    }
+
+    @Override
+    public void registerItemRenderer(Item item, int meta, String modelName, String id) {
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(Tags.MOD_ID + ":" + modelName, id));
     }
 
     @Override

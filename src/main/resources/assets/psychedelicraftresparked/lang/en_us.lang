@@ -109,6 +109,12 @@ container.drying_table.time_left=Time left: %s
 
 # Vat
 item.vat.name=Vat
+item.vat.oak.name=Oak Vat
+item.vat.spruce.name=Spruce Vat
+item.vat.birch.name=Birch Vat
+item.vat.jungle.name=Jungle Vat
+item.vat.acacia.name=Acacia Vat
+item.vat.dark_oak.name=Dark Oak Vat
 tile.vat.name=Vat
 tile.vat_companion.name=Vat
 container.vat=Vat
