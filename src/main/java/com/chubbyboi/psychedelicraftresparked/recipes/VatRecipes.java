@@ -1,10 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.recipes;
 
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
-import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
@@ -56,12 +53,37 @@ public class VatRecipes {
     }
 
     public static class IngredientEntry {
-        private final Ingredient ingredient;
+        private final String key;
+        private final String[] defaultOreNames;
+        private Ingredient ingredient;
         private final int count;
 
-        public IngredientEntry(Ingredient ingredient, int count) {
-            this.ingredient = ingredient;
+        IngredientEntry(String key, int count, String[] defaultOreNames) {
+            this.key = key;
             this.count = count;
+            this.defaultOreNames = defaultOreNames;
+            this.ingredient = buildIngredient(defaultOreNames);
+        }
+
+        private static Ingredient buildIngredient(String[] oreNames) {
+            List<Ingredient> parts = new ArrayList<>();
+            for (String oreName : oreNames) {
+                parts.add(new OreIngredient(oreName));
+            }
+            return new AnyIngredient(parts);
+        }
+
+        /** Replaces the matched oreDict tags entirely - does not merge with the defaults. */
+        public void setOreNames(String... oreNames) {
+            this.ingredient = buildIngredient(oreNames);
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public String[] getDefaultOreNames() {
+            return defaultOreNames;
         }
 
         public Ingredient getIngredient() {
@@ -85,22 +107,8 @@ public class VatRecipes {
             this.requiredAmount = requiredAmount;
         }
 
-        public Recipe addIngredient(Item item, int count, String... oreNames) {
-            List<Ingredient> parts = new ArrayList<>();
-            parts.add(Ingredient.fromItem(item));
-            for (String oreName : oreNames) {
-                parts.add(new OreIngredient(oreName));
-            }
-            ingredients.add(new IngredientEntry(new AnyIngredient(parts), count));
-            return this;
-        }
-
-        public Recipe addIngredient(int count, String... oreNames) {
-            List<Ingredient> parts = new ArrayList<>();
-            for (String oreName : oreNames) {
-                parts.add(new OreIngredient(oreName));
-            }
-            ingredients.add(new IngredientEntry(new AnyIngredient(parts), count));
+        public Recipe addIngredient(String key, int count, String... oreNames) {
+            ingredients.add(new IngredientEntry(key, count, oreNames));
             return this;
         }
 
@@ -157,34 +165,38 @@ public class VatRecipes {
     private final List<Recipe> recipes = new ArrayList<>();
 
     private VatRecipes() {
-        addRecipe(new Recipe(FluidInit.COFFEE, FluidRegistry.WATER, 4000).addIngredient(ItemInit.COFFEE_BEANS, 7, "cropCoffee"));
-        addRecipe(new Recipe(FluidInit.CANNABIS_TEA, FluidRegistry.WATER, 4000).addIngredient(ItemInit.CANNABIS_LEAF, 7, "leafCannabis"));
-        addRecipe(new Recipe(FluidInit.COCA_TEA, FluidRegistry.WATER, 4000).addIngredient(ItemInit.COCA_LEAF, 7, "leafCoca"));
-        addRecipe(new Recipe(FluidInit.PEYOTE_JUICE, FluidRegistry.WATER, 4000).addIngredient(ItemInit.DRIED_PEYOTE, 7, "peyoteDried"));
+        addRecipe(new Recipe(FluidInit.COFFEE, FluidRegistry.WATER, 4000).addIngredient("coffeeBeans", 7, "cropCoffee"));
+        addRecipe(new Recipe(FluidInit.CANNABIS_TEA, FluidRegistry.WATER, 4000).addIngredient("cannabisLeaf", 7, "leafCannabis"));
+        addRecipe(new Recipe(FluidInit.COCA_TEA, FluidRegistry.WATER, 4000).addIngredient("cocaLeaf", 7, "leafCoca"));
+        addRecipe(new Recipe(FluidInit.PEYOTE_JUICE, FluidRegistry.WATER, 4000).addIngredient("driedPeyote", 7, "peyoteDried"));
         addRecipe(new Recipe(FluidInit.WHEAT_HOP, FluidRegistry.WATER, TileEntityVat.CAPACITY)
-            .addIngredient(Items.WHEAT, 5, "cropWheat")
-            .addIngredient(ItemInit.HOP_CONES, 2, "cropHops"));
-        addRecipe(new Recipe(FluidInit.WHEAT, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.WHEAT, 7, "cropWheat"));
-        addRecipe(new Recipe(FluidInit.CORN, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "cropCorn"));
-        addRecipe(new Recipe(FluidInit.POTATO, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.POTATO, 7, "cropPotato"));
+            .addIngredient("wheat", 5, "cropWheat")
+            .addIngredient("hops", 2, "cropHops"));
+        addRecipe(new Recipe(FluidInit.WHEAT, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("wheat", 7, "cropWheat"));
+        addRecipe(new Recipe(FluidInit.CORN, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("corn", 7, "cropCorn"));
+        addRecipe(new Recipe(FluidInit.POTATO, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("potato", 7, "cropPotato"));
         addRecipe(new Recipe(FluidInit.GRAPES, FluidRegistry.WATER, TileEntityVat.CAPACITY)
-            .addIngredient(ItemInit.GRAPES, 7, "cropGrape", "foodGrapesPurple", "foodGrapesRed"));
-        addRecipe(new Recipe(FluidInit.RICE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "cropRice"));
-        addRecipe(new Recipe(FluidInit.HONEY, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "dropHoney"));
+            .addIngredient("grapes", 7, "cropGrape", "foodGrapesPurple", "foodGrapesRed"));
+        addRecipe(new Recipe(FluidInit.RICE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("rice", 7, "cropRice"));
+        addRecipe(new Recipe(FluidInit.HONEY, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("honey", 7, "dropHoney"));
         addRecipe(new Recipe(FluidInit.JUNIPER, FluidRegistry.WATER, TileEntityVat.CAPACITY)
-            .addIngredient(ItemInit.JUNIPER_BERRIES, 3, "cropJuniperberry")
-            .addIngredient(Items.SUGAR, 1, "listAllsugar")
-            .addIngredient(ItemInit.GRAPES, 2, "cropGrape", "foodGrapesPurple", "foodGrapesRed")
-            .addIngredient(Items.WHEAT, 1, "cropWheat"));
-        addRecipe(new Recipe(FluidInit.SUGAR_CANE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.REEDS, 7, "sugarcane"));
-        addRecipe(new Recipe(FluidInit.APPLE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(Items.APPLE, 7, "cropApple", "foodApple"));
-        addRecipe(new Recipe(FluidInit.PINEAPPLE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "cropPineapple"));
-        addRecipe(new Recipe(FluidInit.BANANA, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient(7, "cropBanana"));
+            .addIngredient("juniperBerries", 3, "cropJuniperberry")
+            .addIngredient("sugar", 1, "listAllsugar")
+            .addIngredient("grapes", 2, "cropGrape", "foodGrapesPurple", "foodGrapesRed")
+            .addIngredient("wheat", 1, "cropWheat"));
+        addRecipe(new Recipe(FluidInit.SUGAR_CANE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("sugarCane", 7, "sugarcane"));
+        addRecipe(new Recipe(FluidInit.APPLE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("apple", 7, "cropApple", "foodApple"));
+        addRecipe(new Recipe(FluidInit.PINEAPPLE, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("pineapple", 7, "cropPineapple"));
+        addRecipe(new Recipe(FluidInit.BANANA, FluidRegistry.WATER, TileEntityVat.CAPACITY).addIngredient("banana", 7, "cropBanana"));
         addRecipe(new Recipe(FluidInit.MILK_ALCOHOL, FluidInit.MILK, TileEntityVat.CAPACITY));
     }
 
     public void addRecipe(Recipe recipe) {
         recipes.add(recipe);
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
     }
 
     public Recipe findMatch(FluidTank tank, NonNullList<ItemStack> slots) {

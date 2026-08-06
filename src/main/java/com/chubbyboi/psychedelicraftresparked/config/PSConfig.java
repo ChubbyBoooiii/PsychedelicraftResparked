@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.config;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidSlurry;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
+import com.chubbyboi.psychedelicraftresparked.recipes.VatRecipes;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import net.minecraftforge.common.config.Configuration;
 
@@ -74,6 +75,14 @@ public class PSConfig {
             readTickInfo(fluid);
         }
 
+        config.addCustomCategoryComment(CATEGORY_SERVER + ".oredict",
+            "OreDictionary tag names each Vat recipe ingredient will accept, purely oreDict-driven.\n"
+                + "Editing a list here replaces the built-in default entirely.");
+
+        for (VatRecipes.Recipe recipe : VatRecipes.getInstance().getRecipes()) {
+            readOreDictNames(recipe);
+        }
+
         if (config.hasChanged()) {
             config.save();
         }
@@ -98,5 +107,18 @@ public class PSConfig {
             "Default: " + defaultMaturation).getInt();
         tickInfo.ticksUntilAcetification = config.get(category, "ticksUntilAcetification", defaultAcetification,
             "Default: " + defaultAcetification).getInt();
+    }
+
+    private static void readOreDictNames(VatRecipes.Recipe recipe) {
+        String rawName = recipe.getOutput().getName();
+        String shortName = rawName.startsWith("psc_") ? rawName.substring(4) : rawName;
+        String category = CATEGORY_SERVER + ".oredict." + shortName;
+
+        for (VatRecipes.IngredientEntry entry : recipe.getIngredients()) {
+            String[] defaultOreNames = entry.getDefaultOreNames();
+            String[] configuredOreNames = config.get(category, entry.getKey(), defaultOreNames,
+                "Default: " + String.join(", ", defaultOreNames)).getStringList();
+            entry.setOreNames(configuredOreNames);
+        }
     }
 }

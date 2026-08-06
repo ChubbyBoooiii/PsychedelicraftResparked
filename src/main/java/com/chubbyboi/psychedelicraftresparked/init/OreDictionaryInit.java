@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.init;
 
+import net.minecraft.init.Items;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreDictionaryInit {
@@ -12,5 +13,8 @@ public class OreDictionaryInit {
         OreDictionary.registerOre("cropHops", ItemInit.HOP_CONES);
         OreDictionary.registerOre("cropGrape", ItemInit.GRAPES);
         OreDictionary.registerOre("cropJuniperberry", ItemInit.JUNIPER_BERRIES);
+
+        OreDictionary.registerOre("cropApple", Items.APPLE);
+        OreDictionary.registerOre("listAllsugar", Items.SUGAR);
     }
 }
