@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.commands;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
 import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.drug.IDrug;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.network.PacketSyncDrugProperties;
@@ -129,6 +130,11 @@ public class CommandDrugLevels extends CommandBase {
     }
 
     private void handleSet(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (!PSConfig.drugEffectsEnabled) {
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Drug effects are disabled on this server (drugEffectsEnabled = false)."));
+            return;
+        }
+
         if (args.length != 4) {
             sender.sendMessage(new TextComponentString(TextFormatting.RED + "Usage: /druglevels set <player> <drug> <strength>"));
             return;

@@ -7,6 +7,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class FluidInit {
 
     // ==================== INIT FLUIDS ====================
@@ -159,6 +162,11 @@ public class FluidInit {
         new ResourceLocation("psychedelicraftresparked:blocks/rice_wine_flow"),
         0.35, 1.7, 0.1,
         new FluidAlcohol.TickInfo(48000, 48000, 36000, 36000)
+    );
+
+    // Every registered FluidAlcohol - config loops over this to apply per-fluid tick overrides
+    public static final List<FluidAlcohol> ALL_ALCOHOLS = Arrays.asList(
+        WHEAT_HOP, WHEAT, CORN, POTATO, GRAPES, RICE, HONEY, JUNIPER, SUGAR_CANE, APPLE, PINEAPPLE, BANANA, MILK_ALCOHOL
     );
 
 

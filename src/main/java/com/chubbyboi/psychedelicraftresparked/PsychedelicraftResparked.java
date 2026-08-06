@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked;
 
 import com.chubbyboi.psychedelicraftresparked.commands.CommandDrugLevels;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.proxy.CommonProxy;
 import com.chubbyboi.psychedelicraftresparked.tabs.PsychedelicraftResparkedDrinksTab;
@@ -17,7 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixins;
 
-@Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION)
+@Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION, guiFactory = "com.chubbyboi.psychedelicraftresparked.config.PSConfigGuiFactory")
 public class PsychedelicraftResparked {
 
     @Mod.Instance
@@ -33,6 +34,9 @@ public class PsychedelicraftResparked {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        // Load mod config first, since registries below may need to consult it
+        PSConfig.loadConfig(event.getSuggestedConfigurationFile());
+
         // Register mixin config
         Mixins.addConfiguration("mixins.psychedelicraftresparked.json");
 

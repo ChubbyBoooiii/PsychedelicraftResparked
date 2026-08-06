@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.client.rendering.shaders;
 
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class ShaderPipeline {
     }
 
     public void render(float partialTicks) {
-        if (!initialized) {
+        if (!initialized || !PSConfig.shader2DEnabled) {
             return;
         }
 

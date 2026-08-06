@@ -5,6 +5,7 @@ import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
 import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationManager;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -51,7 +52,7 @@ public class WorldShaderEffect {
     }
 
     public void activate(float partialTicks) {
-        if (shaderProgram == 0) {
+        if (shaderProgram == 0 || !PSConfig.shader3DEnabled) {
             return;
         }
 

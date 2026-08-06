@@ -50,7 +50,7 @@ public class DrugPropertyManager {
         boolean hasInfluences = drugProps.hasActiveInfluences();
 
         // Early exit if no drugs or influences
-        if (!hasAnyDrugs && !hasInfluences) {
+        if (!hasAnyDrugs && !hasInfluences && !drugProps.isBreathingSmoke()) {
             return;
         }
 

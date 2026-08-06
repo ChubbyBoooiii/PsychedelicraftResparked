@@ -40,7 +40,7 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
 
     public static final String OUTPUT_ITEM_TAG = "psychedelicraftresparked_vat_output";
 
-    public static final int MIXING_TIME = 100; // 5 seconds
+    public static int MIXING_TIME = 100; // 5 seconds
 
     private static final int[] SLOTS = new int[SLOT_COUNT];
     static {

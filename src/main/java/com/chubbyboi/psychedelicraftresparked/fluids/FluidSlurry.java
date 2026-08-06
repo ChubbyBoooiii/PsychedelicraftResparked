@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class FluidSlurry extends Fluid implements UntintedFluid, FermentableFluid {
 
     public static final int FLUID_PER_DIRT = FluidHelper.BUCKET_VOLUME * 4;
-    public static final int HARDENING_TIME = 400; //36000
+    public static int HARDENING_TIME = 36000;
 
     public FluidSlurry(String fluidName, ResourceLocation still, ResourceLocation flowing) {
         super(fluidName, still, flowing);

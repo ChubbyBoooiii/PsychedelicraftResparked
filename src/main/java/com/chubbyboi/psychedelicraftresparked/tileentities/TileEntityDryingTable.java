@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.tileentities;
 
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.recipes.DryingTableRecipes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -179,7 +180,7 @@ public class TileEntityDryingTable extends TileEntity implements ITickable, ISid
     }
 
     public int getDryingTime() {
-        return 2000;
+        return PSConfig.dryingTableTickDuration;
     }
 
     private boolean canDry() {
