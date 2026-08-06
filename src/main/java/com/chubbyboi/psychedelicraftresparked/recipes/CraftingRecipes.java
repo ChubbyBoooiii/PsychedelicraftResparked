@@ -1,11 +1,11 @@
 package com.chubbyboi.psychedelicraftresparked.recipes;
 
 import com.chubbyboi.psychedelicraftresparked.Tags;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -48,15 +48,17 @@ public class CraftingRecipes {
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "cigar"), null, new ItemStack(ItemInit.CIGAR, 1), "TTT", "TTT", "PPP", 'P', Items.PAPER, 'T', ItemInit.DRIED_TOBACCO);
 
         // Harmonium
-        for (EnumDyeColor color : EnumDyeColor.values()) {
-            GameRegistry.addShapelessRecipe(
-                new ResourceLocation(Tags.MOD_ID, "harmonium_" + color.getName()),
-                null,
-                new ItemStack(ItemInit.HARMONIUM, 1, color.getMetadata()),
-                Ingredient.fromStacks(new ItemStack(Items.DYE, 1, color.getDyeDamage())),
-                Ingredient.fromItem(Items.GLOWSTONE_DUST),
-                Ingredient.fromItem(ItemInit.DRIED_TOBACCO)
-            );
+        if (PSConfig.enableHarmonium) {
+            for (EnumDyeColor color : EnumDyeColor.values()) {
+                GameRegistry.addShapelessRecipe(
+                    new ResourceLocation(Tags.MOD_ID, "harmonium_" + color.getName()),
+                    null,
+                    new ItemStack(ItemInit.HARMONIUM, 1, color.getMetadata()),
+                    Ingredient.fromStacks(new ItemStack(Items.DYE, 1, color.getDyeDamage())),
+                    Ingredient.fromItem(Items.GLOWSTONE_DUST),
+                    Ingredient.fromItem(ItemInit.DRIED_TOBACCO)
+                );
+            }
         }
 
         // Coffee

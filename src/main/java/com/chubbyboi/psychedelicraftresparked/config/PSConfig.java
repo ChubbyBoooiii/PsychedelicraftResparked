@@ -19,6 +19,7 @@ public class PSConfig {
     public static boolean shader3DEnabled;
     public static boolean hallucinationEntitiesEnabled;
     public static boolean drugEffectsEnabled;
+    public static boolean enableHarmonium;
 
     public static int dryingTableTickDuration;
     public static int slurryHardeningTime;
@@ -36,14 +37,17 @@ public class PSConfig {
             "Settings affecting world/gameplay behaviour - ideally kept the same between server and client.");
 
         shader2DEnabled = config.get(CATEGORY_CLIENT, "shader2DEnabled", true,
-            "Enables and disables all 2D (screen) drug shader effects, e.g. desaturation, bloom, double vision, motion blur. Default: True").getBoolean();
+            "Enables and disables all 2D (screen) drug shader effects, e.g. desaturation, bloom, double vision, motion blur. Default: true").getBoolean();
         shader3DEnabled = config.get(CATEGORY_CLIENT, "shader3DEnabled", true,
-            "Enables and disables all 3D (world geometry) drug shader effects, e.g. waves, fractals, colour contrast. Default: True").getBoolean();
+            "Enables and disables all 3D (world geometry) drug shader effects, e.g. waves, fractals, colour contrast. Default: true").getBoolean();
         hallucinationEntitiesEnabled = config.get(CATEGORY_CLIENT, "hallucinationEntitiesEnabled", true,
-            "Enables and disables the fake hallucinated mobs (and the Rasta-Head easter egg) some drugs can spawn. Default: True").getBoolean();
+            "Enables and disables the fake hallucinated mobs (and the Rasta-Head easter egg) some drugs can spawn. Default: true").getBoolean();
 
         drugEffectsEnabled = config.get(CATEGORY_SERVER, "drugEffectsEnabled", true,
-            "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /druglevels set. Default: True").getBoolean();
+            "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /druglevels set. Default: true").getBoolean();
+
+        enableHarmonium = config.get(CATEGORY_SERVER, "enableHarmonium", true,
+            "Enables and disables the fictional drug Harmonium's crafting recipes (16 dye colours). Default: true").getBoolean();
 
         int defaultDryingTableTickDuration = 2000;
         dryingTableTickDuration = config.get(CATEGORY_SERVER, "dryingTableTickDuration", defaultDryingTableTickDuration,
