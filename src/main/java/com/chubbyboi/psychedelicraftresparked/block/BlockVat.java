@@ -9,10 +9,12 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.util.GuiHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -63,10 +65,11 @@ public class BlockVat extends Block implements ITileEntityProvider, FluidFilled 
     }
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final PropertyEnum<BlockPlanks.EnumType> WOOD_TYPE = PropertyEnum.create("wood", BlockPlanks.EnumType.class);
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, FACING, WOOD_TYPE);
     }
 
     @Override
@@ -78,12 +81,17 @@ public class BlockVat extends Block implements ITileEntityProvider, FluidFilled 
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return 0;
+        return state.getValue(WOOD_TYPE).getMetadata();
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState();
+        return getDefaultState().withProperty(WOOD_TYPE, BlockPlanks.EnumType.byMetadata(meta));
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
     }
 
     @Override
@@ -198,7 +206,7 @@ public class BlockVat extends Block implements ITileEntityProvider, FluidFilled 
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return new ItemStack(ItemInit.VAT);
+        return new ItemStack(ItemInit.VAT, 1, getMetaFromState(state));
     }
 
     @Nullable

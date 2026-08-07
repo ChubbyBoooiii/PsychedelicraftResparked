@@ -4,7 +4,6 @@ import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidTank;
@@ -128,7 +127,7 @@ public class VatRecipes {
             return ingredients;
         }
 
-        public boolean matches(FluidTank tank, NonNullList<ItemStack> slots) {
+        public boolean matches(FluidTank tank, List<ItemStack> slots) {
             if (tank.getFluid() == null || tank.getFluid().getFluid() != requiredFluid || tank.getFluidAmount() != requiredAmount) {
                 return false;
             }
@@ -147,7 +146,7 @@ public class VatRecipes {
             return true;
         }
 
-        public void consumeIngredients(NonNullList<ItemStack> slots) {
+        public void consumeIngredients(List<ItemStack> slots) {
             for (IngredientEntry entry : ingredients) {
                 int remaining = entry.getCount();
                 for (int i = 0; i < slots.size() && remaining > 0; i++) {
@@ -199,7 +198,7 @@ public class VatRecipes {
         return recipes;
     }
 
-    public Recipe findMatch(FluidTank tank, NonNullList<ItemStack> slots) {
+    public Recipe findMatch(FluidTank tank, List<ItemStack> slots) {
         for (Recipe recipe : recipes) {
             if (recipe.matches(tank, slots)) {
                 return recipe;

@@ -1,5 +1,9 @@
 {
   "parent": "psychedelicraftresparked:block/vat",
+  "textures": {
+    "outer": "psychedelicraftresparked:blocks/wooden_vat_spruce",
+    "particle": "psychedelicraftresparked:blocks/wooden_vat_spruce"
+  },
   "display": {
     "thirdperson_righthand": {
       "rotation": [0, 0, 0],

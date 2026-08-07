@@ -120,10 +120,10 @@ public class VatContainer extends Container {
                     slot.onSlotChange(itemStack1, itemStack);
                 }
             } else if (index < 35) {
-                if (!this.mergeItemStack(itemStack1, 35, 44, false)) {
+                if (!this.mergeItemStack(itemStack1, 0, 8, false) && !this.mergeItemStack(itemStack1, 35, 44, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemStack1, 8, 35, false)) {
+            } else if (!this.mergeItemStack(itemStack1, 0, 8, false) && !this.mergeItemStack(itemStack1, 8, 35, false)) {
                 return ItemStack.EMPTY;
             }
 

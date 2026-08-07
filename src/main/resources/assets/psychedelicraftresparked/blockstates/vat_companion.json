@@ -9,6 +9,14 @@
     ],
     "inventory": [
       {}
-    ]
+    ],
+    "wood": {
+      "oak":      { "textures": { "particle": "psychedelicraftresparked:blocks/wooden_vat_oak" } },
+      "spruce":   { "textures": { "particle": "psychedelicraftresparked:blocks/wooden_vat_spruce" } },
+      "birch":    { "textures": { "particle": "psychedelicraftresparked:blocks/wooden_vat_birch" } },
+      "jungle":   { "textures": { "particle": "psychedelicraftresparked:blocks/wooden_vat_jungle" } },
+      "acacia":   { "textures": { "particle": "psychedelicraftresparked:blocks/wooden_vat_acacia" } },
+      "dark_oak": { "textures": { "particle": "psychedelicraftresparked:blocks/wooden_vat_dark_oak" } }
+    }
   }
 }

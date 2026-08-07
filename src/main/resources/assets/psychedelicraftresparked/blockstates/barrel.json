@@ -6,6 +6,17 @@
   "variants": {
     "normal": [
       {}
-    ]
+    ],
+    "inventory": [
+      {}
+    ],
+    "wood": {
+      "oak":      { "textures": { "particle": "minecraft:blocks/log_oak" } },
+      "spruce":   { "textures": { "particle": "minecraft:blocks/log_spruce" } },
+      "birch":    { "textures": { "particle": "minecraft:blocks/log_birch" } },
+      "jungle":   { "textures": { "particle": "minecraft:blocks/log_jungle" } },
+      "acacia":   { "textures": { "particle": "minecraft:blocks/log_acacia" } },
+      "dark_oak": { "textures": { "particle": "minecraft:blocks/log_big_oak" } }
+    }
   }
 }

@@ -94,10 +94,10 @@ public class DistilleryContainer extends Container {
                 }
                 slot.onSlotChange(itemStack1, itemStack);
             } else if (index < 28) {
-                if (!this.mergeItemStack(itemStack1, 28, 37, false)) {
+                if (!this.mergeItemStack(itemStack1, 0, 1, false) && !this.mergeItemStack(itemStack1, 28, 37, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemStack1, 1, 28, false)) {
+            } else if (!this.mergeItemStack(itemStack1, 0, 1, false) && !this.mergeItemStack(itemStack1, 1, 28, false)) {
                 return ItemStack.EMPTY;
             }
 
