@@ -89,6 +89,11 @@ public class FluidHelper {
         return 0xFFFFFF;
     }
 
+    public static boolean hasFluid(ItemStack stack) {
+        IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        return handler != null && handler.drain(1, false) != null;
+    }
+
     public static int getDisplayColor(FluidStack fluidStack) {
         if (fluidStack == null) {
             return 0xFFFFFFFF;

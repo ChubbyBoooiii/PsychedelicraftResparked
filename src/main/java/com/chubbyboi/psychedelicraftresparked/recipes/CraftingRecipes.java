@@ -84,6 +84,16 @@ public class CraftingRecipes {
         // Peyote
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "peyote_joint"), null, new ItemStack(ItemInit.PEYOTE_JOINT, 1), "P", "D", "P", 'D', ItemInit.DRIED_PEYOTE, 'P', Items.PAPER);
 
+        // Drink Containers
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "glass_chalice"), null, new ItemStack(ItemInit.GLASS_CHALICE, 4), "# #", " # ", " # ", '#', "blockGlassColorless");
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "wooden_mug"), null, new ItemStack(ItemInit.WOODEN_MUG, 8), "# #", "# #", "###", '#', "plankWood");
+        GameRegistry.addShapelessRecipe(new ResourceLocation(Tags.MOD_ID, "shot_glass"), null, new ItemStack(ItemInit.SHOT_GLASS, 1), Ingredient.fromStacks(new ItemStack(Blocks.GLASS)));
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "bottle_" + color.getName()), null,
+                new ItemStack(ItemInit.BOTTLE, 8, color.getMetadata()),
+                " # ", "# #", "###", '#', new ItemStack(Blocks.STAINED_GLASS, 1, color.getMetadata()));
+        }
+
 
 
 

@@ -20,6 +20,7 @@ public class PsychedelicraftResparkedDrinksTab extends CreativeTabs {
         new ContainerDef(ItemInit.WOODEN_MUG, 500),
         new ContainerDef(ItemInit.GLASS_CHALICE, 250),
         new ContainerDef(ItemInit.SHOT_GLASS, 40),
+        new ContainerDef(ItemInit.BOTTLE, 1000),
     };
 
     private static final FluidAlcohol[] ALCOHOLIC_DRINKS = {

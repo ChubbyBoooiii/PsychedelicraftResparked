@@ -97,6 +97,20 @@ public class ClientProxy extends CommonProxy {
             (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
             ItemInit.WOODEN_MUG, ItemInit.GLASS_CHALICE, ItemInit.SHOT_GLASS, ItemInit.SYRINGE
         );
+
+        event.getItemColors().registerItemColorHandler(
+            (stack, tintIndex) -> {
+                boolean filled = FluidHelper.hasFluid(stack);
+                if (tintIndex == 0) {
+                    return filled ? FluidHelper.getFluidColor(stack) : EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
+                }
+                if (tintIndex == 1 && filled) {
+                    return EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
+                }
+                return 0xFFFFFF;
+            },
+            ItemInit.BOTTLE
+        );
     }
 
     @SubscribeEvent

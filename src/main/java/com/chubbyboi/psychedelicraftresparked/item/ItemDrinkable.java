@@ -45,7 +45,7 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
         }
     }
 
-    private static final int GULP_COOLDOWN_TICKS = 20;
+    private static final int GULP_COOLDOWN_TICKS = 5;
 
     private final ConsumptionType consumptionType;
     private final int consumptionVolume;
