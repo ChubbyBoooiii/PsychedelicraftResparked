@@ -33,6 +33,16 @@ public class CraftingRecipes {
         // Grape Lattice
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "lattice"), null, new ItemStack(ItemInit.LATTICE_ITEM, 1), "III", "IWI", "WIW", 'I', "stickWood", 'W', "plankWood");
 
+        // Barrel - one recipe per wood type, each requiring that exact log.
+        for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+            ItemStack log = type == BlockPlanks.EnumType.ACACIA || type == BlockPlanks.EnumType.DARK_OAK
+                ? new ItemStack(Blocks.LOG2, 1, type.getMetadata() - 4)
+                : new ItemStack(Blocks.LOG, 1, type.getMetadata());
+            GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "barrel_" + type.getName()), null,
+                new ItemStack(ItemInit.BARREL_ITEM, 1, type.getMetadata()),
+                "L L", "I I", "LLL", 'I', "ingotIron", 'L', log);
+        }
+
 
 
         // ==================== ITEMS ====================

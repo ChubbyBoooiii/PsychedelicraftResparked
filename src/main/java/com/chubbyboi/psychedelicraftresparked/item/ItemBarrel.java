@@ -3,10 +3,13 @@ package com.chubbyboi.psychedelicraftresparked.item;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -27,7 +30,29 @@ public class ItemBarrel extends ItemBlock {
         setTranslationKey(block.getTranslationKey());
         setRegistryName(block.getRegistryName());
         setMaxStackSize(16);
+        setHasSubtypes(true);
+        setMaxDamage(0);
         ItemInit.ITEMS.add(this);
+    }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (!isInCreativeTab(tab)) {
+            return;
+        }
+        for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+            items.add(new ItemStack(this, 1, type.getMetadata()));
+        }
+    }
+
+    @Override
+    public String getTranslationKey(ItemStack stack) {
+        return super.getTranslationKey() + "." + BlockPlanks.EnumType.byMetadata(stack.getMetadata()).getName();
+    }
+
+    @Override
+    public int getMetadata(int damage) {
+        return damage;
     }
 
     @Override

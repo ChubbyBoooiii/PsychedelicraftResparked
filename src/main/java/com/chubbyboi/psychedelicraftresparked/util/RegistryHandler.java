@@ -55,6 +55,10 @@ public class RegistryHandler {
                 for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
                     PsychedelicraftResparked.proxy.registerItemRenderer(item, type.getMetadata(), "vat_" + type.getName(), "inventory");
                 }
+            } else if (item == ItemInit.BARREL_ITEM) {
+                for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+                    PsychedelicraftResparked.proxy.registerItemRenderer(item, type.getMetadata(), "barrel_" + type.getName(), "inventory");
+                }
             } else {
                 PsychedelicraftResparked.proxy.registerItemRenderer(item, 0, "inventory");
             }

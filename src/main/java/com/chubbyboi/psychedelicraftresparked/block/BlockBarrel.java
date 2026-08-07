@@ -9,9 +9,12 @@ import com.chubbyboi.psychedelicraftresparked.item.ItemBarrel;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import com.chubbyboi.psychedelicraftresparked.util.GuiHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -41,6 +44,28 @@ public class BlockBarrel extends Block implements ITileEntityProvider {
         setHardness(2.0F);
         setSoundType(SoundType.WOOD);
         BlockInit.BLOCKS.add(this);
+    }
+
+    public static final PropertyEnum<BlockPlanks.EnumType> WOOD_TYPE = PropertyEnum.create("wood", BlockPlanks.EnumType.class);
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, WOOD_TYPE);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(WOOD_TYPE).getMetadata();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(WOOD_TYPE, BlockPlanks.EnumType.byMetadata(meta));
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
     }
 
     @Override
@@ -180,7 +205,7 @@ public class BlockBarrel extends Block implements ITileEntityProvider {
             TileEntity tileEntity = world.getTileEntity(pos);
             if (tileEntity instanceof TileEntityBarrel) {
                 TileEntityBarrel barrel = (TileEntityBarrel) tileEntity;
-                ItemStack barrelStack = createFilledStack(barrel);
+                ItemStack barrelStack = createFilledStack(barrel, getMetaFromState(state));
 
                 if (barrel.hasTap()) {
                     ItemBarrel.setHasTap(barrelStack, false);
@@ -196,11 +221,11 @@ public class BlockBarrel extends Block implements ITileEntityProvider {
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        return tileEntity instanceof TileEntityBarrel ? createFilledStack((TileEntityBarrel) tileEntity) : new ItemStack(ItemInit.BARREL_ITEM);
+        return tileEntity instanceof TileEntityBarrel ? createFilledStack((TileEntityBarrel) tileEntity, getMetaFromState(state)) : new ItemStack(ItemInit.BARREL_ITEM);
     }
 
-    private ItemStack createFilledStack(TileEntityBarrel tileEntity) {
-        ItemStack stack = new ItemStack(ItemInit.BARREL_ITEM);
+    private ItemStack createFilledStack(TileEntityBarrel tileEntity, int woodMeta) {
+        ItemStack stack = new ItemStack(ItemInit.BARREL_ITEM, 1, woodMeta);
         FluidStack fluid = tileEntity.getTank().getFluid();
         if (fluid != null && fluid.amount > 0) {
             IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
