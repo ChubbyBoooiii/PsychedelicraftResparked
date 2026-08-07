@@ -99,14 +99,14 @@ public class DryingTableContainer extends Container {
                 }
                 slot.onSlotChange(itemStack1, itemStack);
             } else if (index >= 10 && index < 37) {
-                if (!this.mergeItemStack(itemStack1, 37, 46, false)) {
+                if (!this.mergeItemStack(itemStack1, 0, 9, false) && !this.mergeItemStack(itemStack1, 37, 46, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (index >= 37 && index < 46) {
-                if (!this.mergeItemStack(itemStack1, 10, 37, false)) {
+                if (!this.mergeItemStack(itemStack1, 0, 9, false) && !this.mergeItemStack(itemStack1, 10, 37, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemStack1, 10, 37, false)) {
+            } else if (!this.mergeItemStack(itemStack1, 0, 9, false) && !this.mergeItemStack(itemStack1, 10, 37, false)) {
                 return ItemStack.EMPTY;
             }
 

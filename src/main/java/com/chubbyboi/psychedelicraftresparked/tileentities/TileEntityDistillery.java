@@ -99,7 +99,7 @@ public class TileEntityDistillery extends TileEntity implements ITickable, ISide
 
         TileEntity destinationEntity = getDestinationTileEntity();
         IFluidHandler destination = getFluidHandler(destinationEntity);
-        if (destination == null) {
+        if (!canAcceptDistillate(destination, fluidStack)) {
             return;
         }
 
@@ -149,6 +149,14 @@ public class TileEntityDistillery extends TileEntity implements ITickable, ISide
     @Nullable
     public IFluidHandler getDestinationFluidHandler() {
         return getFluidHandler(getDestinationTileEntity());
+    }
+
+    private boolean canAcceptDistillate(@Nullable IFluidHandler destination, FluidStack fluidStack) {
+        if (destination == null) {
+            return false;
+        }
+        FluidStack toFill = new FluidStack(fluidStack.getFluid(), fluidStack.amount);
+        return destination.fill(toFill, false) >= toFill.amount;
     }
 
     private boolean processFluidIO() {
@@ -253,7 +261,7 @@ public class TileEntityDistillery extends TileEntity implements ITickable, ISide
         if (fluidStack != null && fluidStack.getFluid() instanceof DistillableFluid) {
             DistillableFluid distillable = (DistillableFluid) fluidStack.getFluid();
             int neededDistillationTime = distillable.distillationTime(fluidStack);
-            if (neededDistillationTime >= 0 && getDestinationFluidHandler() != null) {
+            if (neededDistillationTime >= 0 && canAcceptDistillate(getDestinationFluidHandler(), fluidStack)) {
                 return neededDistillationTime;
             }
         }

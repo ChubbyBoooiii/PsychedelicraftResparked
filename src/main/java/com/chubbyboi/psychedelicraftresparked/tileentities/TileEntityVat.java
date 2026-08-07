@@ -133,6 +133,19 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
         return fluid != null && fluid.amount > 0 && !VatRecipes.getInstance().isRawInput(fluid.getFluid());
     }
 
+    private boolean hasIngredients() {
+        for (int i = 0; i < INGREDIENT_SLOTS; i++) {
+            if (!items.get(i).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean canAcceptFluidInput(Fluid fluid) {
+        return VatRecipes.getInstance().isRawInput(fluid) || !hasIngredients();
+    }
+
     public ItemStack getSolidContents() {
         return solidContents;
     }
@@ -162,6 +175,9 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             // Drain: move fluid from the held item into the tank, paced.
             FluidStack simulated = handler.drain(FluidHelper.FLUID_IO_SPEED_PER_TICK, false);
             if (simulated == null || simulated.amount <= 0) {
+                return false;
+            }
+            if (!canAcceptFluidInput(simulated.getFluid())) {
                 return false;
             }
             int accepted = tank.fill(simulated, false);
@@ -264,7 +280,7 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
             return false;
         }
 
-        VatRecipes.Recipe recipe = VatRecipes.getInstance().findMatch(tank, items);
+        VatRecipes.Recipe recipe = VatRecipes.getInstance().findMatch(tank, items.subList(0, INGREDIENT_SLOTS));
         if (recipe == null) {
             return false;
         }
@@ -289,9 +305,9 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
         if (mixingProgress >= totalMixingTime) {
             mixing = false;
 
-            VatRecipes.Recipe recipe = VatRecipes.getInstance().findMatch(tank, items);
+            VatRecipes.Recipe recipe = VatRecipes.getInstance().findMatch(tank, items.subList(0, INGREDIENT_SLOTS));
             if (recipe != null) {
-                recipe.consumeIngredients(items);
+                recipe.consumeIngredients(items.subList(0, INGREDIENT_SLOTS));
                 tank.setFluid(new FluidStack(recipe.getOutput(), tank.getFluidAmount()));
 
                 fermenting = true;
