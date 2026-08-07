@@ -1,0 +1,8 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "psychedelicraftresparked:items/bottle_fluid",
+    "layer1": "psychedelicraftresparked:items/bottle",
+    "layer2": "psychedelicraftresparked:items/molotov_cocktail_overlay"
+  }
+}

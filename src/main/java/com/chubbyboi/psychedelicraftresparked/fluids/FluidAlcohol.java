@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 // One fluid class per ingredient, not drink.
-public class FluidAlcohol extends FluidDrug implements FermentableFluid, DistillableFluid, UntintedFluid {
+public class FluidAlcohol extends FluidDrug implements FermentableFluid, DistillableFluid, UntintedFluid, ExplodingFluid {
 
     public static final int FERMENTATION_STEPS = 2;
+    private static final float FIRE_STRENGTH_MULTIPLIER = 2.0f;
+    private static final float EXPLOSION_STRENGTH_MULTIPLIER = 0.6f;
     private static final int SECOND = 20;
     private static final int MINUTE = SECOND * 60;
 
@@ -256,22 +258,50 @@ public class FluidAlcohol extends FluidDrug implements FermentableFluid, Distill
         return slurry.amount > 0 ? slurry : null;
     }
 
-    // ==================== Alcohol content -> Alcohol drug dose ====================
+    // ==================== Alcohol content -> Alcohol drug dose / Molotov potency ====================
 
-    @Override
-    public void getDrugInfluences(FluidStack fluidStack, List<DrugInfluence> list) {
-        if (isVinegar(fluidStack)) return;
+    /** Alcohol content per liter (unscaled by volume) - reflects fermentation/distillation/maturation stage. */
+    public double getAlcoholContent(FluidStack fluidStack) {
+        if (isVinegar(fluidStack)) return 0.0;
 
         int fermentation = getFermentation(fluidStack);
         int distillation = getDistillation(fluidStack);
         int maturation = getMaturation(fluidStack);
 
-        double alcohol = ((double) fermentation / FERMENTATION_STEPS) * fermentationAlcohol
+        return ((double) fermentation / FERMENTATION_STEPS) * fermentationAlcohol
                 + distillationAlcohol * (1.0 - 1.0 / (1.0 + distillation))
                 + maturationAlcohol * (1.0 - 1.0 / (1.0 + maturation * 0.2));
+    }
 
-        double scaled = alcohol * fluidStack.amount / FluidHelper.BUCKET_VOLUME;
+    @Override
+    public void getDrugInfluences(FluidStack fluidStack, List<DrugInfluence> list) {
+        if (isVinegar(fluidStack)) return;
+
+        double scaled = getAlcoholContent(fluidStack) * fluidStack.amount / FluidHelper.BUCKET_VOLUME;
         list.add(new DrugInfluence("alcohol", 20, 0.003, 0.002, scaled));
+    }
+
+    private double getClampedAlcoholDose(FluidStack fluidStack) {
+        List<DrugInfluence> influences = new ArrayList<>();
+        getDrugInfluences(fluidStack, influences);
+
+        double alcohol = 0.0;
+        for (DrugInfluence influence : influences) {
+            if (influence.getDrugName().equals("alcohol")) {
+                alcohol += influence.getMaxInfluence();
+            }
+        }
+        return Math.max(0.0, Math.min(1.0, alcohol));
+    }
+
+    @Override
+    public float fireStrength(FluidStack fluidStack) {
+        return (float) (getClampedAlcoholDose(fluidStack) * fluidStack.amount / FluidHelper.BUCKET_VOLUME) * FIRE_STRENGTH_MULTIPLIER;
+    }
+
+    @Override
+    public float explosionStrength(FluidStack fluidStack) {
+        return (float) (getClampedAlcoholDose(fluidStack) * fluidStack.amount / FluidHelper.BUCKET_VOLUME) * EXPLOSION_STRENGTH_MULTIPLIER;
     }
 
     // ==================== Drink identity (name) resolution ====================

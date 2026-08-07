@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.item;
 
+import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
 import net.minecraft.block.Block;
@@ -80,6 +81,7 @@ public class ItemFlask extends ItemBlock {
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("psychedelicraftresparked.tooltip.fluid.empty"));
         } else {
             tooltip.add(TextFormatting.GRAY + "" + fluidStack.amount + "mB/" + TileEntityFlask.CAPACITY + "mB");
+            FluidHelper.appendPotencyTooltip(tooltip, fluidStack);
         }
     }
 

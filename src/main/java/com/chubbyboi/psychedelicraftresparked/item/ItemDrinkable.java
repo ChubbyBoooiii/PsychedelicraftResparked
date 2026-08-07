@@ -133,6 +133,7 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("psychedelicraftresparked.tooltip.fluid.empty"));
         } else {
             tooltip.add(TextFormatting.GRAY + "" + fluidStack.amount + "mB/" + capacity + "mB");
+            FluidHelper.appendPotencyTooltip(tooltip, fluidStack);
         }
     }
 

@@ -5,6 +5,7 @@ import com.chubbyboi.psychedelicraftresparked.drug.DrugInfluenceHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemBarrel;
 import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDistillery;
+import com.chubbyboi.psychedelicraftresparked.item.ItemMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemFlask;
 import com.chubbyboi.psychedelicraftresparked.item.ItemHarmonium;
@@ -221,6 +222,7 @@ public class ItemInit {
     public static final ItemDrinkable GLASS_CHALICE = new ItemDrinkable("glass_chalice", 250, 250, 32, ItemDrinkable.ConsumptionType.DRINK);
     public static final ItemDrinkable SHOT_GLASS = new ItemDrinkable("shot_glass", 40, 250, 8, ItemDrinkable.ConsumptionType.DRINK);
     public static final ItemBottle BOTTLE = new ItemBottle("bottle", 1000, 250, 32);
+    public static final ItemMolotovCocktail MOLOTOV_COCKTAIL = new ItemMolotovCocktail("molotov_cocktail", 1000);
 
 
 

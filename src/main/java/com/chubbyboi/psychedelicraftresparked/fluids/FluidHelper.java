@@ -111,4 +111,12 @@ public class FluidHelper {
         }
         return getDisplayColor(fluidStack);
     }
+
+    public static void appendPotencyTooltip(java.util.List<String> tooltip, FluidStack fluidStack) {
+        if (fluidStack != null && fluidStack.getFluid() instanceof FluidAlcohol) {
+            double potency = ((FluidAlcohol) fluidStack.getFluid()).getAlcoholContent(fluidStack);
+            tooltip.add(net.minecraft.util.text.TextFormatting.GRAY + net.minecraft.util.text.translation.I18n.translateToLocalFormatted(
+                "psychedelicraftresparked.tooltip.fluid.potency", String.format("%.1f", potency)));
+        }
+    }
 }

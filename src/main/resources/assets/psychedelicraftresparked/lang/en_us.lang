@@ -67,6 +67,15 @@ item.bottle.red.name=Red Bottle
 item.bottle.red.full.name=Red Bottle of %s
 item.bottle.black.name=Black Bottle
 item.bottle.black.full.name=Black Bottle of %s
+item.molotov_cocktail.empty=Empty Molotov Cocktail
+item.molotov_cocktail.quality.0=Useless Molotov Cocktail
+item.molotov_cocktail.quality.1=Horrible Molotov Cocktail
+item.molotov_cocktail.quality.2=Bad Molotov Cocktail
+item.molotov_cocktail.quality.3=Decent Molotov Cocktail
+item.molotov_cocktail.quality.4=Good Molotov Cocktail
+item.molotov_cocktail.quality.5=Excellent Molotov Cocktail
+item.molotov_cocktail.quality.6=Perfect Molotov Cocktail
+item.molotov_cocktail.quality.7=Unreal Molotov Cocktail
 
 # Tobacco
 item.tobacco_seeds.name=Tobacco Seeds
@@ -232,6 +241,7 @@ death.attack.alcoholPoisoning=%1$s died of alcohol poisoning
 #STATUS MESSAGES
 psychedelicraftresparked.sleep.blocked=The drugs in your body keep you awake
 psychedelicraftresparked.tooltip.fluid.empty=Empty
+psychedelicraftresparked.tooltip.fluid.potency=Potency: %s
 
 
 

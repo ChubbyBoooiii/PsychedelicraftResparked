@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class CraftingRecipes {
 
@@ -94,6 +95,11 @@ public class CraftingRecipes {
                 " # ", "# #", "###", '#', new ItemStack(Blocks.STAINED_GLASS, 1, color.getMetadata()));
         }
 
+        ForgeRegistries.RECIPES.register(new RecipeConvertFluidContainer(ItemInit.BOTTLE, ItemInit.MOLOTOV_COCKTAIL,
+            Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)))
+            .setRegistryName(Tags.MOD_ID, "bottle_to_molotov_cocktail"));
+        ForgeRegistries.RECIPES.register(new RecipeConvertFluidContainer(ItemInit.MOLOTOV_COCKTAIL, ItemInit.BOTTLE)
+            .setRegistryName(Tags.MOD_ID, "molotov_cocktail_to_bottle"));
 
 
 
