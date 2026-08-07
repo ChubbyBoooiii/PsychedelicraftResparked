@@ -35,6 +35,47 @@ item.glass_chalice.name=Glass Chalice
 item.glass_chalice.full.name=Glass Chalice of %s
 item.shot_glass.name=Shot Glass
 item.shot_glass.full.name=Shot Glass of %s
+item.bottle.white.name=White Bottle
+item.bottle.white.full.name=White Bottle of %s
+item.bottle.orange.name=Orange Bottle
+item.bottle.orange.full.name=Orange Bottle of %s
+item.bottle.magenta.name=Magenta Bottle
+item.bottle.magenta.full.name=Magenta Bottle of %s
+item.bottle.lightBlue.name=Light Blue Bottle
+item.bottle.lightBlue.full.name=Light Blue Bottle of %s
+item.bottle.yellow.name=Yellow Bottle
+item.bottle.yellow.full.name=Yellow Bottle of %s
+item.bottle.lime.name=Lime Bottle
+item.bottle.lime.full.name=Lime Bottle of %s
+item.bottle.pink.name=Pink Bottle
+item.bottle.pink.full.name=Pink Bottle of %s
+item.bottle.gray.name=Gray Bottle
+item.bottle.gray.full.name=Gray Bottle of %s
+item.bottle.silver.name=Light Gray Bottle
+item.bottle.silver.full.name=Light Gray Bottle of %s
+item.bottle.cyan.name=Cyan Bottle
+item.bottle.cyan.full.name=Cyan Bottle of %s
+item.bottle.purple.name=Purple Bottle
+item.bottle.purple.full.name=Purple Bottle of %s
+item.bottle.blue.name=Blue Bottle
+item.bottle.blue.full.name=Blue Bottle of %s
+item.bottle.brown.name=Brown Bottle
+item.bottle.brown.full.name=Brown Bottle of %s
+item.bottle.green.name=Green Bottle
+item.bottle.green.full.name=Green Bottle of %s
+item.bottle.red.name=Red Bottle
+item.bottle.red.full.name=Red Bottle of %s
+item.bottle.black.name=Black Bottle
+item.bottle.black.full.name=Black Bottle of %s
+item.molotov_cocktail.empty=Empty Molotov Cocktail
+item.molotov_cocktail.quality.0=Useless Molotov Cocktail
+item.molotov_cocktail.quality.1=Horrible Molotov Cocktail
+item.molotov_cocktail.quality.2=Bad Molotov Cocktail
+item.molotov_cocktail.quality.3=Decent Molotov Cocktail
+item.molotov_cocktail.quality.4=Good Molotov Cocktail
+item.molotov_cocktail.quality.5=Excellent Molotov Cocktail
+item.molotov_cocktail.quality.6=Perfect Molotov Cocktail
+item.molotov_cocktail.quality.7=Unreal Molotov Cocktail
 
 # Tobacco
 item.tobacco_seeds.name=Tobacco Seeds
@@ -200,6 +241,7 @@ death.attack.alcoholPoisoning=%1$s died of alcohol poisoning
 #STATUS MESSAGES
 psychedelicraftresparked.sleep.blocked=The drugs in your body keep you awake
 psychedelicraftresparked.tooltip.fluid.empty=Empty
+psychedelicraftresparked.tooltip.fluid.potency=Potency: %s
 
 
 

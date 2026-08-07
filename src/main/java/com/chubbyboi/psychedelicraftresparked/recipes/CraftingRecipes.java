@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class CraftingRecipes {
 
@@ -84,6 +85,21 @@ public class CraftingRecipes {
         // Peyote
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "peyote_joint"), null, new ItemStack(ItemInit.PEYOTE_JOINT, 1), "P", "D", "P", 'D', ItemInit.DRIED_PEYOTE, 'P', Items.PAPER);
 
+        // Drink Containers
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "glass_chalice"), null, new ItemStack(ItemInit.GLASS_CHALICE, 4), "# #", " # ", " # ", '#', "blockGlassColorless");
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "wooden_mug"), null, new ItemStack(ItemInit.WOODEN_MUG, 8), "# #", "# #", "###", '#', "plankWood");
+        GameRegistry.addShapelessRecipe(new ResourceLocation(Tags.MOD_ID, "shot_glass"), null, new ItemStack(ItemInit.SHOT_GLASS, 1), Ingredient.fromStacks(new ItemStack(Blocks.GLASS)));
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "bottle_" + color.getName()), null,
+                new ItemStack(ItemInit.BOTTLE, 8, color.getMetadata()),
+                " # ", "# #", "###", '#', new ItemStack(Blocks.STAINED_GLASS, 1, color.getMetadata()));
+        }
+
+        ForgeRegistries.RECIPES.register(new RecipeConvertFluidContainer(ItemInit.BOTTLE, ItemInit.MOLOTOV_COCKTAIL,
+            Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)))
+            .setRegistryName(Tags.MOD_ID, "bottle_to_molotov_cocktail"));
+        ForgeRegistries.RECIPES.register(new RecipeConvertFluidContainer(ItemInit.MOLOTOV_COCKTAIL, ItemInit.BOTTLE)
+            .setRegistryName(Tags.MOD_ID, "molotov_cocktail_to_bottle"));
 
 
 

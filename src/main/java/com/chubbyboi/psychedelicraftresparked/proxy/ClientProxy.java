@@ -3,7 +3,9 @@ package com.chubbyboi.psychedelicraftresparked.proxy;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.DrugVisualRenderer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationEntitySpawner;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.RenderMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.SmokeMonsterSpawner;
+import com.chubbyboi.psychedelicraftresparked.entities.EntityMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererBarrel;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDistillery;
@@ -35,6 +37,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -76,6 +79,9 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlask.class, new TileEntityRendererFlask());
         ItemInit.FLASK_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererFlask());
 
+        RenderingRegistry.registerEntityRenderingHandler(EntityMolotovCocktail.class,
+            manager -> new RenderMolotovCocktail(manager, ItemInit.MOLOTOV_COCKTAIL, Minecraft.getMinecraft().getRenderItem()));
+
         ShaderPipeline.getInstance().init();
         WorldShaderEffect.getInstance().init();
         MinecraftForge.EVENT_BUS.register(new DrugVisualRenderer());
@@ -96,6 +102,20 @@ public class ClientProxy extends CommonProxy {
         event.getItemColors().registerItemColorHandler(
             (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
             ItemInit.WOODEN_MUG, ItemInit.GLASS_CHALICE, ItemInit.SHOT_GLASS, ItemInit.SYRINGE
+        );
+
+        event.getItemColors().registerItemColorHandler(
+            (stack, tintIndex) -> {
+                boolean filled = FluidHelper.hasFluid(stack);
+                if (tintIndex == 0) {
+                    return filled ? FluidHelper.getFluidColor(stack) : EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
+                }
+                if (tintIndex == 1 && filled) {
+                    return EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
+                }
+                return 0xFFFFFF;
+            },
+            ItemInit.BOTTLE, ItemInit.MOLOTOV_COCKTAIL
         );
     }
 

@@ -89,6 +89,11 @@ public class FluidHelper {
         return 0xFFFFFF;
     }
 
+    public static boolean hasFluid(ItemStack stack) {
+        IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        return handler != null && handler.drain(1, false) != null;
+    }
+
     public static int getDisplayColor(FluidStack fluidStack) {
         if (fluidStack == null) {
             return 0xFFFFFFFF;
@@ -105,5 +110,13 @@ public class FluidHelper {
             return 0xFFFFFFFF;
         }
         return getDisplayColor(fluidStack);
+    }
+
+    public static void appendPotencyTooltip(java.util.List<String> tooltip, FluidStack fluidStack) {
+        if (fluidStack != null && fluidStack.getFluid() instanceof FluidAlcohol) {
+            double potency = ((FluidAlcohol) fluidStack.getFluid()).getAlcoholContent(fluidStack);
+            tooltip.add(net.minecraft.util.text.TextFormatting.GRAY + net.minecraft.util.text.translation.I18n.translateToLocalFormatted(
+                "psychedelicraftresparked.tooltip.fluid.potency", String.format("%.1f", potency)));
+        }
     }
 }

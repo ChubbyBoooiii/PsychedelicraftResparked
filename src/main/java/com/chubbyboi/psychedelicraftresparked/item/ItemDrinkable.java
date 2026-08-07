@@ -45,7 +45,7 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
         }
     }
 
-    private static final int GULP_COOLDOWN_TICKS = 20;
+    private static final int GULP_COOLDOWN_TICKS = 5;
 
     private final ConsumptionType consumptionType;
     private final int consumptionVolume;
@@ -133,6 +133,7 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("psychedelicraftresparked.tooltip.fluid.empty"));
         } else {
             tooltip.add(TextFormatting.GRAY + "" + fluidStack.amount + "mB/" + capacity + "mB");
+            FluidHelper.appendPotencyTooltip(tooltip, fluidStack);
         }
     }
 
