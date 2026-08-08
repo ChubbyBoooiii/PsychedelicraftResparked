@@ -145,6 +145,24 @@ public class DrugProperties implements IDrugProperties {
         return modifier;
     }
 
+    public float getSoundVolumeModifier() {
+        float modifier = 1.0f;
+        for (IDrug drug : drugs.values()) {
+            if (drug.getActiveValue() > 0.001f) {
+                modifier *= drug.getSoundVolumeModifier();
+            }
+        }
+        return modifier;
+    }
+
+    public void drawOverlays(float partialTicks, int width, int height) {
+        for (IDrug drug : drugs.values()) {
+            if (drug.getActiveValue() > 0.001f) {
+                drug.drawOverlays(partialTicks, width, height);
+            }
+        }
+    }
+
     public boolean isSleepBlocked() {
         for (IDrug drug : drugs.values()) {
             if (drug.getActiveValue() > 0.001f && drug.isSleepBlocked()) {
