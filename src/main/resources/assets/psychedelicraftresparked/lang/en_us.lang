@@ -228,6 +228,14 @@ container.flask.empty=Empty
 container.flask.fill=Fill
 container.flask.drain=Drain
 
+# Rift Jar
+tile.rift_jar.name=Rift Jar
+psychedelicraftresparked.tooltip.rift_jar.empty=Empty
+psychedelicraftresparked.tooltip.rift_jar.slightly_filled=Slightly Filled
+psychedelicraftresparked.tooltip.rift_jar.half_filled=Half Filled
+psychedelicraftresparked.tooltip.rift_jar.full=Full
+psychedelicraftresparked.tooltip.rift_jar.overflowing=Overflowing
+
 
 
 #DEATH MESSAGES

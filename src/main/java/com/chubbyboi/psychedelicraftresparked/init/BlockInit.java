@@ -10,6 +10,7 @@ import com.chubbyboi.psychedelicraftresparked.block.BlockJuniperSapling;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVat;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVatCompanion;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
+import com.chubbyboi.psychedelicraftresparked.block.BlockRiftJar;
 import com.chubbyboi.psychedelicraftresparked.block.BlockTallCrop;
 import com.chubbyboi.psychedelicraftresparked.block.BlockDryingTable;
 import net.minecraft.block.Block;
@@ -28,6 +29,7 @@ public class BlockInit {
     public static final BlockDistillery DISTILLERY = new BlockDistillery("distillery");
     public static final BlockFlask FLASK = new BlockFlask("flask");
     public static final BlockLattice LATTICE = new BlockLattice("lattice");
+    public static final BlockRiftJar RIFT_JAR = new BlockRiftJar("rift_jar");
 
     // Other Blocks
     public static final BlockJuniperSapling JUNIPER_SAPLING = new BlockJuniperSapling("juniper_sapling");
