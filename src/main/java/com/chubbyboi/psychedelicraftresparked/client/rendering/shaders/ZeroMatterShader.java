@@ -38,6 +38,8 @@ public class ZeroMatterShader {
     private static final float PIXEL_SIZE_X = 1.0F / 70.0F;
     private static final float PIXEL_SIZE_Y = -1.0F / 112.0F;
 
+    private int previousProgram = 0;
+
     public boolean isAvailable() {
         return shaderProgram != 0;
     }
@@ -46,6 +48,7 @@ public class ZeroMatterShader {
         if (shaderProgram == 0) {
             return;
         }
+        previousProgram = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
         GL20.glUseProgram(shaderProgram);
         GL20.glUniform1i(GL20.glGetUniformLocation(shaderProgram, "tex0"), 0);
         GL20.glUniform2f(GL20.glGetUniformLocation(shaderProgram, "pixelSize"), PIXEL_SIZE_X, PIXEL_SIZE_Y);
@@ -56,7 +59,7 @@ public class ZeroMatterShader {
         if (shaderProgram == 0) {
             return;
         }
-        GL20.glUseProgram(0);
+        GL20.glUseProgram(previousProgram);
     }
 
     private int compileShader(String source, int type) throws Exception {

@@ -44,6 +44,9 @@ public class PSConfig {
 
     public static int randomTicksUntilRiftSpawn;
 
+    public static float digitalEffectPixelRescaleX;
+    public static float digitalEffectPixelRescaleY;
+
     public static void loadConfig(File configFile) {
         config = new Configuration(configFile);
         loadConfig();
@@ -61,6 +64,11 @@ public class PSConfig {
             "Enables and disables all 3D (world geometry) drug shader effects, e.g. waves, fractals, colour contrast. Default: true").getBoolean();
         hallucinationEntitiesEnabled = config.get(CATEGORY_CLIENT, "hallucinationEntitiesEnabled", true,
             "Enables and disables the fake hallucinated mobs (and the Rasta-Head easter egg) some drugs can spawn. Default: true").getBoolean();
+
+        digitalEffectPixelRescaleX = (float) config.get(CATEGORY_CLIENT, "digitalEffectPixelRescaleX", 0.05,
+            "Maximum horizontal pixelation of Zero's digital shader at full strength (1.0 = no pixelation, smaller = blockier). Default: 0.05").getDouble();
+        digitalEffectPixelRescaleY = (float) config.get(CATEGORY_CLIENT, "digitalEffectPixelRescaleY", 0.05,
+            "Maximum vertical pixelation of Zero's digital shader at full strength (1.0 = no pixelation, smaller = blockier). Default: 0.05").getDouble();
 
         drugEffectsEnabled = config.get(CATEGORY_SERVER, "drugEffectsEnabled", true,
             "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /druglevels set. Default: true").getBoolean();

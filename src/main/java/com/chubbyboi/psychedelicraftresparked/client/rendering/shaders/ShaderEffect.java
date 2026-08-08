@@ -13,4 +13,8 @@ public interface ShaderEffect {
     void apply(PingPongBuffer buffer, float partialTicks);
 
     String getName();
+
+    default boolean wantsDepthBuffer(float partialTicks) {
+        return false;
+    }
 }

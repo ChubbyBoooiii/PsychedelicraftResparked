@@ -109,7 +109,7 @@ public class EntityRealityRift extends Entity {
 
             if (props instanceof DrugProperties) {
                 DrugProperties drugProps = (DrugProperties) props;
-                drugProps.addDrugStrength("zero", (float) effect * 20.0F);
+                drugProps.addDrugStrength("zero", (float) effect * 10.0F);
                 drugProps.addDrugStrength("power", (float) effect * 200.0F);
             } else if (critical) {
                 entity.attackEntityFrom(DamageSource.MAGIC, (float) effect * 20.0F);

@@ -11,6 +11,7 @@ public class ShaderPipeline {
 
     private static ShaderPipeline instance;
     private PingPongBuffer buffer;
+    private DepthCaptureBuffer depthBuffer;
     private List<ShaderEffect> effects;
     private boolean initialized = false;
 
@@ -23,6 +24,7 @@ public class ShaderPipeline {
 
     private ShaderPipeline() {
         buffer = new PingPongBuffer();
+        depthBuffer = new DepthCaptureBuffer();
         effects = new ArrayList<>();
     }
 
@@ -37,6 +39,7 @@ public class ShaderPipeline {
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.MotionBlurEffect());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.DoubleVisionEffect());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.ColorBloomEffect());
+            registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.DigitalEffect());
 
             for (ShaderEffect effect : effects) {
                 effect.init();
@@ -48,11 +51,39 @@ public class ShaderPipeline {
         }
     }
 
+    public int getDepthTexture() {
+        return depthBuffer.isReady() ? depthBuffer.getDepthTexture() : 0;
+    }
+
     public void registerEffect(ShaderEffect effect) {
         if (!initialized) {
             effects.add(effect);
         } else {
             PsychedelicraftResparked.LOGGER.warn("Cannot register effects after pipeline initialization!");
+        }
+    }
+
+    public void captureDepth(float partialTicks) {
+        if (!initialized || !PSConfig.shader2DEnabled) {
+            return;
+        }
+
+        boolean anyWantsDepth = false;
+        for (ShaderEffect effect : effects) {
+            if (effect.shouldApply(partialTicks) && effect.wantsDepthBuffer(partialTicks)) {
+                anyWantsDepth = true;
+                break;
+            }
+        }
+
+        if (!anyWantsDepth) {
+            return;
+        }
+
+        Minecraft mc = Minecraft.getMinecraft();
+        depthBuffer.setup(mc.displayWidth, mc.displayHeight);
+        if (depthBuffer.isReady()) {
+            depthBuffer.captureFrom(mc.getFramebuffer());
         }
     }
 
