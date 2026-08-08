@@ -4,8 +4,10 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.DrugVisualRenderer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationEntitySpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.RenderMolotovCocktail;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.RenderRealityRift;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.SmokeMonsterSpawner;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityMolotovCocktail;
+import com.chubbyboi.psychedelicraftresparked.entities.EntityRealityRift;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererBarrel;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDistillery;
@@ -82,8 +84,11 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityMolotovCocktail.class,
             manager -> new RenderMolotovCocktail(manager, ItemInit.MOLOTOV_COCKTAIL, Minecraft.getMinecraft().getRenderItem()));
 
+        RenderingRegistry.registerEntityRenderingHandler(EntityRealityRift.class, RenderRealityRift::new);
+
         ShaderPipeline.getInstance().init();
         WorldShaderEffect.getInstance().init();
+        com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ZeroMatterShader.getInstance().init();
         MinecraftForge.EVENT_BUS.register(new DrugVisualRenderer());
         MinecraftForge.EVENT_BUS.register(new HallucinationEntitySpawner());
         MinecraftForge.EVENT_BUS.register(SmokeMonsterSpawner.getInstance());

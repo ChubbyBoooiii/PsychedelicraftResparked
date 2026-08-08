@@ -9,8 +9,10 @@ import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugCannabis;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugCocaine;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugHarmonium;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugPeyote;
+import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugPower;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugRedShrooms;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugTobacco;
+import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugZero;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
@@ -57,8 +59,8 @@ public class DrugProperties implements IDrugProperties {
         registerDrug(new DrugTobacco());
         registerDrug(new DrugPeyote());
         registerDrug(new DrugHarmonium());
-        // Digital
-        // Zero
+        registerDrug(new DrugZero());
+        registerDrug(new DrugPower());
         // Warmth ?? (Some way of heating any drink? Instead of a furnace, hot wine would be cool - big pot over fire?)
     }
 

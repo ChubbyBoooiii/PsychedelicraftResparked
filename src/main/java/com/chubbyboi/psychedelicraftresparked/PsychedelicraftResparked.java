@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked;
 
 import com.chubbyboi.psychedelicraftresparked.commands.CommandDrugLevels;
+import com.chubbyboi.psychedelicraftresparked.commands.CommandSpawnRift;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.proxy.CommonProxy;
@@ -65,5 +66,6 @@ public class PsychedelicraftResparked {
         RegistryHandler.serverRegistries(event);
 
         event.registerServerCommand(new CommandDrugLevels());
+        event.registerServerCommand(new CommandSpawnRift());
     }
 }

@@ -42,6 +42,8 @@ public class PSConfig {
     public static int slurryHardeningTime;
     public static int vatMixingTime;
 
+    public static int randomTicksUntilRiftSpawn;
+
     public static void loadConfig(File configFile) {
         config = new Configuration(configFile);
         loadConfig();
@@ -80,6 +82,12 @@ public class PSConfig {
         vatMixingTime = config.get(CATEGORY_SERVER, "vatMixingTime", defaultVatMixingTime,
             "Number of ticks the Vat spends mixing ingredients into the fluid before fermentation begins. Default: " + defaultVatMixingTime).getInt();
         TileEntityVat.MIXING_TIME = vatMixingTime;
+
+        int defaultRandomTicksUntilRiftSpawn = 20 * 60 * 180;
+        randomTicksUntilRiftSpawn = config.get(CATEGORY_SERVER, "randomTicksUntilRiftSpawn", defaultRandomTicksUntilRiftSpawn,
+            "Average number of ticks between a Reality Rift randomly spawning near each online player (1-in-N chance per tick).\n"
+                + "Negative disables new spawns (existing rifts are left alone). 0 disables spawning AND force-despawns any existing rifts.\n"
+                + "Default: " + defaultRandomTicksUntilRiftSpawn + " (~3 hours)").getInt();
 
         config.addCustomCategoryComment(CATEGORY_SERVER + ".fluids",
             "Tick timings for each alcohol fluid's processing stages:\nticksPerFermentation (wort -> wash),\n"

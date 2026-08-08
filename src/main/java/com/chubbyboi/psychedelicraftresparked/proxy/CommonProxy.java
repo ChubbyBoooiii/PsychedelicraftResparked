@@ -4,6 +4,7 @@ import com.chubbyboi.psychedelicraftresparked.capabilities.CapabilityEventHandle
 import com.chubbyboi.psychedelicraftresparked.capabilities.CapabilityRegistry;
 import com.chubbyboi.psychedelicraftresparked.drug.DrugEffectHandler;
 import com.chubbyboi.psychedelicraftresparked.drug.DrugPropertyManager;
+import com.chubbyboi.psychedelicraftresparked.entities.RiftSpawner;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -28,5 +29,8 @@ public class CommonProxy {
 
         // Register server-side drug effect handler
         MinecraftForge.EVENT_BUS.register(new DrugEffectHandler());
+
+        // Register the passive Reality Rift spawn roll
+        MinecraftForge.EVENT_BUS.register(new RiftSpawner());
     }
 }
