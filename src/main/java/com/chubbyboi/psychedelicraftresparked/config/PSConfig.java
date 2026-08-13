@@ -18,6 +18,7 @@ public class PSConfig {
 
     public static final String CATEGORY_CLIENT = "client";
     public static final String CATEGORY_SERVER = "server";
+    public static final String CATEGORY_WORLDGEN = CATEGORY_SERVER + ".worldgen";
 
     private static Configuration config;
 
@@ -50,6 +51,14 @@ public class PSConfig {
     public static boolean enableRiftJars;
     public static boolean riftJarOverfillingEnabled;
 
+    public static boolean generateJuniper;
+    public static boolean generateCannabis;
+    public static boolean generateHop;
+    public static boolean generateTobacco;
+    public static boolean generateCoffea;
+    public static boolean generateCoca;
+    public static boolean generatePeyote;
+
     public static void loadConfig(File configFile) {
         config = new Configuration(configFile);
         loadConfig();
@@ -79,6 +88,26 @@ public class PSConfig {
         riftJarOverfillingEnabled = config.get(CATEGORY_SERVER, "riftJarOverfillingEnabled", true,
             "Whether a Rift Jar can overfill past full when left sucking. If enabled, an overfilled jar breaks and explodes.\n"
                 + "If disabled, the jar simply stops sucking once full - no overfilling, no breaking, no explosion. Default: true").getBoolean();
+
+        config.addCustomCategoryComment(CATEGORY_WORLDGEN,
+            "Toggles for each plant/tree that can naturally generate in the world. Chances are per-chunk,\n"
+                + "rolled once against each listed biome type (a chunk only ever gets one roll, against\n"
+                + "whichever of a plant's biome entries its biome matches first).");
+
+        generateJuniper = config.get(CATEGORY_WORLDGEN, "generateJuniper", true,
+            "Juniper trees. Found in: Cold+Hills biomes (10% chance), Cold+Forest biomes (5%), Snowy+Wasteland biomes (5%). Default: true").getBoolean();
+        generateCannabis = config.get(CATEGORY_WORLDGEN, "generateCannabis", true,
+            "Wild Cannabis plants. Found in: Plains biomes (4% chance), Forest biomes (4%). Default: true").getBoolean();
+        generateHop = config.get(CATEGORY_WORLDGEN, "generateHop", true,
+            "Wild Hop plants. Found in: Plains biomes (6% chance), Forest biomes (6%). Default: true").getBoolean();
+        generateTobacco = config.get(CATEGORY_WORLDGEN, "generateTobacco", true,
+            "Wild Tobacco plants. Found in: Plains biomes (4% chance), Forest biomes (4%). Default: true").getBoolean();
+        generateCoffea = config.get(CATEGORY_WORLDGEN, "generateCoffea", true,
+            "Wild Coffea plants. Found in: Plains biomes (5% chance), Forest biomes (5%). Default: true").getBoolean();
+        generateCoca = config.get(CATEGORY_WORLDGEN, "generateCoca", true,
+            "Wild Coca plants. Found in: Plains biomes (2% chance), Forest biomes (2%). Default: true").getBoolean();
+        generatePeyote = config.get(CATEGORY_WORLDGEN, "generatePeyote", true,
+            "Wild Peyote. Found in: Sandy+Hot biomes (4% chance), Mountain+Hot biomes (4%). Default: true").getBoolean();
 
         drugEffectsEnabled = config.get(CATEGORY_SERVER, "drugEffectsEnabled", true,
             "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /druglevels set. Default: true").getBoolean();

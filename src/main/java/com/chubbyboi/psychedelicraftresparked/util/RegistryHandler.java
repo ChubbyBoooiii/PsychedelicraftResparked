@@ -10,6 +10,7 @@ import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.init.OreDictionaryInit;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
 import com.chubbyboi.psychedelicraftresparked.recipes.CraftingRecipes;
+import com.chubbyboi.psychedelicraftresparked.worldgen.PSWorldGen;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.item.Item;
@@ -95,6 +96,7 @@ public class RegistryHandler {
     public static void initRegistries() {
         NetworkRegistry.INSTANCE.registerGuiHandler(PsychedelicraftResparked.instance, new GuiHandler());
         CraftingRecipes.registerCraftingRecipes();
+        PSWorldGen.initWorldGen();
     }
 
     public static void postInitRegistries() {
