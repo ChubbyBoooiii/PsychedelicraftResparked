@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.block;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.init.Blocks;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -277,27 +278,8 @@ public class BlockTallCrop extends BlockCrops {
 
     @Override
     public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
-        BlockPos belowPos = pos.down();
-        IBlockState below = world.getBlockState(belowPos);
+        Block belowBlock = world.getBlockState(pos.down()).getBlock();
 
-        if (below.getBlock() == this) {
-            return true;
-        }
-
-        if (below.getBlock().canSustainPlant(below, world, belowPos, EnumFacing.UP, this)) {
-            Block belowBlock = below.getBlock();
-
-            if (belowBlock instanceof net.minecraft.block.BlockDirt && !(belowBlock instanceof net.minecraft.block.BlockFarmland)) {
-                return false;
-            }
-
-            if (belowBlock instanceof net.minecraft.block.BlockGrass) {
-                return false;
-            }
-
-            return true;
-        }
-
-        return false;
+        return belowBlock == this || belowBlock == Blocks.FARMLAND || belowBlock == Blocks.GRASS;
     }
 }

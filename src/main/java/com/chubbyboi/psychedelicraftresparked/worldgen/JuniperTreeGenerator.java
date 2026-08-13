@@ -12,18 +12,19 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
 import java.util.Random;
 
-/**
- * Juniper tree shape, ported from vanilla's real WorldGenSavannaTree (acacia) - leaning trunk with
- * an optional second branch and a wide flat canopy - rather than source's own wandering-trunk shape.
- * Used only by BlockJuniperSapling's own growth right now; not wired into biome decoration (deferred
- * to a future world-gen branch).
- */
 public class JuniperTreeGenerator extends WorldGenAbstractTree {
     private static final IBlockState LEAVES = BlockInit.JUNIPER_LEAVES.getDefaultState()
         .withProperty(BlockJuniperLeaves.CHECK_DECAY, false);
+    private static final IBlockState LEAVES_RIPE = LEAVES.withProperty(BlockJuniperLeaves.BERRIES, true);
+
+    // Only naturally world-generated trees (not player-grown saplings) spawn with any ripe leaves already.
+    private static final float RIPE_LEAF_CHANCE = 0.05F;
+
+    private final boolean naturallyGenerated;
 
     public JuniperTreeGenerator(boolean notify) {
         super(notify);
+        this.naturallyGenerated = !notify;
     }
 
     @Override
@@ -96,7 +97,7 @@ public class JuniperTreeGenerator extends WorldGenAbstractTree {
         for (int dx = -3; dx <= 3; dx++) {
             for (int dz = -3; dz <= 3; dz++) {
                 if (Math.abs(dx) != 3 || Math.abs(dz) != 3) {
-                    placeLeafAt(world, canopyBase.add(dx, 0, dz));
+                    placeLeafAt(world, rand, canopyBase.add(dx, 0, dz));
                 }
             }
         }
@@ -104,14 +105,14 @@ public class JuniperTreeGenerator extends WorldGenAbstractTree {
         BlockPos canopyTop = canopyBase.up();
         for (int dx = -1; dx <= 1; dx++) {
             for (int dz = -1; dz <= 1; dz++) {
-                placeLeafAt(world, canopyTop.add(dx, 0, dz));
+                placeLeafAt(world, rand, canopyTop.add(dx, 0, dz));
             }
         }
 
-        placeLeafAt(world, canopyTop.east(2));
-        placeLeafAt(world, canopyTop.west(2));
-        placeLeafAt(world, canopyTop.south(2));
-        placeLeafAt(world, canopyTop.north(2));
+        placeLeafAt(world, rand, canopyTop.east(2));
+        placeLeafAt(world, rand, canopyTop.west(2));
+        placeLeafAt(world, rand, canopyTop.south(2));
+        placeLeafAt(world, rand, canopyTop.north(2));
 
         x = position.getX();
         z = position.getZ();
@@ -143,7 +144,7 @@ public class JuniperTreeGenerator extends WorldGenAbstractTree {
                 for (int dx = -2; dx <= 2; dx++) {
                     for (int dz = -2; dz <= 2; dz++) {
                         if (Math.abs(dx) != 2 || Math.abs(dz) != 2) {
-                            placeLeafAt(world, branchBase.add(dx, 0, dz));
+                            placeLeafAt(world, rand, branchBase.add(dx, 0, dz));
                         }
                     }
                 }
@@ -151,7 +152,7 @@ public class JuniperTreeGenerator extends WorldGenAbstractTree {
                 BlockPos branchTop = branchBase.up();
                 for (int dx = -1; dx <= 1; dx++) {
                     for (int dz = -1; dz <= 1; dz++) {
-                        placeLeafAt(world, branchTop.add(dx, 0, dz));
+                        placeLeafAt(world, rand, branchTop.add(dx, 0, dz));
                     }
                 }
             }
@@ -160,10 +161,11 @@ public class JuniperTreeGenerator extends WorldGenAbstractTree {
         return true;
     }
 
-    private void placeLeafAt(World world, BlockPos pos) {
+    private void placeLeafAt(World world, Random rand, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         if (state.getBlock().isAir(state, world, pos) || state.getBlock().isLeaves(state, world, pos)) {
-            setBlockAndNotifyAdequately(world, pos, LEAVES);
+            boolean ripe = naturallyGenerated && rand.nextFloat() < RIPE_LEAF_CHANCE;
+            setBlockAndNotifyAdequately(world, pos, ripe ? LEAVES_RIPE : LEAVES);
         }
     }
 }
