@@ -48,6 +48,7 @@ public class PSConfig {
     public static float digitalEffectPixelRescaleY;
 
     public static boolean enableRiftJars;
+    public static boolean riftJarOverfillingEnabled;
 
     public static void loadConfig(File configFile) {
         config = new Configuration(configFile);
@@ -74,6 +75,10 @@ public class PSConfig {
 
         enableRiftJars = config.get(CATEGORY_SERVER, "enableRiftJars", true,
             "Enables and disables the Rift Jar block/item/recipe - the only way to acquire Zero/Power essence from a Reality Rift. Default: true").getBoolean();
+
+        riftJarOverfillingEnabled = config.get(CATEGORY_SERVER, "riftJarOverfillingEnabled", true,
+            "Whether a Rift Jar can overfill past full when left sucking. If enabled, an overfilled jar breaks and explodes.\n"
+                + "If disabled, the jar simply stops sucking once full - no overfilling, no breaking, no explosion. Default: true").getBoolean();
 
         drugEffectsEnabled = config.get(CATEGORY_SERVER, "drugEffectsEnabled", true,
             "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /druglevels set. Default: true").getBoolean();

@@ -4,6 +4,7 @@ import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
 import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.bezier.BezierPath;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityRealityRift;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,7 +40,7 @@ public class TileEntityRiftJar extends TileEntity implements ITickable {
         fractionHandleUp = nearValue(fractionHandleUp, suckingRifts ? 0.0f : 1.0f, 0.0f, 0.04f);
 
         if (isSuckingRifts()) {
-            if (fractionOpen > 0.0f) {
+            if (fractionOpen > 0.0f && (PSConfig.riftJarOverfillingEnabled || currentRiftFraction < 1.0f)) {
                 List<EntityRealityRift> rifts = getAffectedRifts();
 
                 if (!rifts.isEmpty()) {
@@ -84,11 +85,15 @@ public class TileEntityRiftJar extends TileEntity implements ITickable {
         }
 
         if (currentRiftFraction > 1.0f) {
-            jarBroken = true;
+            if (PSConfig.riftJarOverfillingEnabled) {
+                jarBroken = true;
 
-            releaseRift();
-            world.setBlockToAir(pos);
-            world.createExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1.0f, false);
+                releaseRift();
+                world.setBlockToAir(pos);
+                world.createExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1.0f, false);
+            } else {
+                currentRiftFraction = 1.0f;
+            }
         }
 
         ticksAliveVisual++;
