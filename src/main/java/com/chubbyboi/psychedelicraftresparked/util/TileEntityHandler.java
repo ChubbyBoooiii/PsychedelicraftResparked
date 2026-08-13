@@ -8,6 +8,7 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVatCompanion;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityRiftJar;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -21,5 +22,6 @@ public class TileEntityHandler {
         GameRegistry.registerTileEntity(TileEntityBarrel.class, new ResourceLocation(Tags.MOD_ID, "barrel"));
         GameRegistry.registerTileEntity(TileEntityDistillery.class, new ResourceLocation(Tags.MOD_ID, "distillery"));
         GameRegistry.registerTileEntity(TileEntityFlask.class, new ResourceLocation(Tags.MOD_ID, "flask"));
+        GameRegistry.registerTileEntity(TileEntityRiftJar.class, new ResourceLocation(Tags.MOD_ID, "rift_jar"));
     }
 }

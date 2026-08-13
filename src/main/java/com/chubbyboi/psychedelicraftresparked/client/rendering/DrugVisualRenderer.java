@@ -8,15 +8,19 @@ import com.chubbyboi.psychedelicraftresparked.drug.IDrug;
 import com.chubbyboi.psychedelicraftresparked.mixins.EntityLivingBaseAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
@@ -92,6 +96,11 @@ public class DrugVisualRenderer {
                 player.swingArm(EnumHand.MAIN_HAND);
             }
         }
+    }
+
+    @SubscribeEvent
+    public void onRenderWorldLast(RenderWorldLastEvent event) {
+        shaderPipeline.captureDepth(event.getPartialTicks());
     }
 
     @SubscribeEvent
@@ -182,6 +191,38 @@ public class DrugVisualRenderer {
 
         if (anyActive) {
             shaderPipeline.render(event.getPartialTicks());
+
+            ScaledResolution resolution = event.getResolution();
+
+            GlStateManager.matrixMode(GL11.GL_PROJECTION);
+            GlStateManager.pushMatrix();
+            GlStateManager.loadIdentity();
+            GlStateManager.ortho(0.0, resolution.getScaledWidth_double(), resolution.getScaledHeight_double(), 0.0, 1000.0, 3000.0);
+            GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+            GlStateManager.pushMatrix();
+            GlStateManager.loadIdentity();
+            GlStateManager.translate(0.0f, 0.0f, -2000.0f);
+
+            GlStateManager.enableBlend();
+            GlStateManager.disableAlpha();
+            GlStateManager.disableDepth();
+            GL11.glDepthMask(false);
+            GlStateManager.tryBlendFuncSeparate(
+                GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO
+            );
+
+            drugProps.drawOverlays(event.getPartialTicks(), resolution.getScaledWidth(), resolution.getScaledHeight());
+
+            GL11.glDepthMask(true);
+            GlStateManager.enableDepth();
+            GlStateManager.enableAlpha();
+
+            GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(GL11.GL_PROJECTION);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(GL11.GL_MODELVIEW);
         }
     }
 }

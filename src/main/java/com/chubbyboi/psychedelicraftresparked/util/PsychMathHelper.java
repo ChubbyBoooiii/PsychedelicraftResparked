@@ -18,6 +18,19 @@ public class PsychMathHelper {
         return a + (b - a) * t;
     }
 
+    public static double mix(double a, double b, double t) {
+        return a + (b - a) * t;
+    }
+
+    // Two chained linear interpolations - the smooth "ease in/out" step used by the bezier beam curves.
+    public static double quadraticMix(double a, double b, double c, double t) {
+        return mix(mix(a, b, t), mix(b, c, t), t);
+    }
+
+    public static double cubicMix(double a, double b, double c, double d, double t) {
+        return mix(quadraticMix(a, b, c, t), quadraticMix(b, c, d, t), t);
+    }
+
     // Chase-ease a value towards a target
     public static float nearValue(float value, float dest, float mulSpeed, float plusSpeed) {
         value += (dest - value) * mulSpeed;

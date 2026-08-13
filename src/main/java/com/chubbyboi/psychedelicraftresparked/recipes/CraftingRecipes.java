@@ -34,6 +34,12 @@ public class CraftingRecipes {
         // Grape Lattice
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "lattice"), null, new ItemStack(ItemInit.LATTICE_ITEM, 1), "III", "IWI", "WIW", 'I', "stickWood", 'W', "plankWood");
 
+        // Rift Jar
+        if (PSConfig.enableRiftJars) {
+            GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "rift_jar"), null, new ItemStack(ItemInit.RIFT_JAR_ITEM, 1),
+                "OWO", "GO ", "OIO", 'O', "blockGlassColorless", 'W', "plankWood", 'G', "ingotGold", 'I', "ingotIron");
+        }
+
         // Barrel - one recipe per wood type, each requiring that exact log.
         for (BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
             ItemStack log = type == BlockPlanks.EnumType.ACACIA || type == BlockPlanks.EnumType.DARK_OAK

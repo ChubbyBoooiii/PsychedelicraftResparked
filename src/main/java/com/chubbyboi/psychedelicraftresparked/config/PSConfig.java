@@ -42,6 +42,14 @@ public class PSConfig {
     public static int slurryHardeningTime;
     public static int vatMixingTime;
 
+    public static int randomTicksUntilRiftSpawn;
+
+    public static float digitalEffectPixelRescaleX;
+    public static float digitalEffectPixelRescaleY;
+
+    public static boolean enableRiftJars;
+    public static boolean riftJarOverfillingEnabled;
+
     public static void loadConfig(File configFile) {
         config = new Configuration(configFile);
         loadConfig();
@@ -59,6 +67,18 @@ public class PSConfig {
             "Enables and disables all 3D (world geometry) drug shader effects, e.g. waves, fractals, colour contrast. Default: true").getBoolean();
         hallucinationEntitiesEnabled = config.get(CATEGORY_CLIENT, "hallucinationEntitiesEnabled", true,
             "Enables and disables the fake hallucinated mobs (and the Rasta-Head easter egg) some drugs can spawn. Default: true").getBoolean();
+
+        digitalEffectPixelRescaleX = (float) config.get(CATEGORY_CLIENT, "digitalEffectPixelRescaleX", 0.05,
+            "Maximum horizontal pixelation of Zero's digital shader at full strength (1.0 = no pixelation, smaller = blockier). Default: 0.05").getDouble();
+        digitalEffectPixelRescaleY = (float) config.get(CATEGORY_CLIENT, "digitalEffectPixelRescaleY", 0.05,
+            "Maximum vertical pixelation of Zero's digital shader at full strength (1.0 = no pixelation, smaller = blockier). Default: 0.05").getDouble();
+
+        enableRiftJars = config.get(CATEGORY_SERVER, "enableRiftJars", true,
+            "Enables and disables the Rift Jar block/item/recipe - the only way to acquire Zero/Power essence from a Reality Rift. Default: true").getBoolean();
+
+        riftJarOverfillingEnabled = config.get(CATEGORY_SERVER, "riftJarOverfillingEnabled", true,
+            "Whether a Rift Jar can overfill past full when left sucking. If enabled, an overfilled jar breaks and explodes.\n"
+                + "If disabled, the jar simply stops sucking once full - no overfilling, no breaking, no explosion. Default: true").getBoolean();
 
         drugEffectsEnabled = config.get(CATEGORY_SERVER, "drugEffectsEnabled", true,
             "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /druglevels set. Default: true").getBoolean();
@@ -80,6 +100,12 @@ public class PSConfig {
         vatMixingTime = config.get(CATEGORY_SERVER, "vatMixingTime", defaultVatMixingTime,
             "Number of ticks the Vat spends mixing ingredients into the fluid before fermentation begins. Default: " + defaultVatMixingTime).getInt();
         TileEntityVat.MIXING_TIME = vatMixingTime;
+
+        int defaultRandomTicksUntilRiftSpawn = 20 * 60 * 180;
+        randomTicksUntilRiftSpawn = config.get(CATEGORY_SERVER, "randomTicksUntilRiftSpawn", defaultRandomTicksUntilRiftSpawn,
+            "Average number of ticks between a Reality Rift randomly spawning near each online player (1-in-N chance per tick).\n"
+                + "Negative disables new spawns (existing rifts are left alone). 0 disables spawning AND force-despawns any existing rifts.\n"
+                + "Default: " + defaultRandomTicksUntilRiftSpawn + " (~3 hours)").getInt();
 
         config.addCustomCategoryComment(CATEGORY_SERVER + ".fluids",
             "Tick timings for each alcohol fluid's processing stages:\nticksPerFermentation (wort -> wash),\n"

@@ -4,8 +4,10 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.DrugVisualRenderer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationEntitySpawner;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.RenderMolotovCocktail;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.RenderRealityRift;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.SmokeMonsterSpawner;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityMolotovCocktail;
+import com.chubbyboi.psychedelicraftresparked.entities.EntityRealityRift;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererBarrel;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDistillery;
@@ -14,6 +16,7 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntity
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererFlask;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererVat;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererRiftJar;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
 import com.chubbyboi.psychedelicraftresparked.commands.CommandHallucinationDebug;
@@ -26,6 +29,7 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityRiftJar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
@@ -78,12 +82,16 @@ public class ClientProxy extends CommonProxy {
         ItemInit.DISTILLERY_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererDistillery());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlask.class, new TileEntityRendererFlask());
         ItemInit.FLASK_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererFlask());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRiftJar.class, new TileEntityRendererRiftJar());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityMolotovCocktail.class,
             manager -> new RenderMolotovCocktail(manager, ItemInit.MOLOTOV_COCKTAIL, Minecraft.getMinecraft().getRenderItem()));
 
+        RenderingRegistry.registerEntityRenderingHandler(EntityRealityRift.class, RenderRealityRift::new);
+
         ShaderPipeline.getInstance().init();
         WorldShaderEffect.getInstance().init();
+        com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ZeroMatterShader.getInstance().init();
         MinecraftForge.EVENT_BUS.register(new DrugVisualRenderer());
         MinecraftForge.EVENT_BUS.register(new HallucinationEntitySpawner());
         MinecraftForge.EVENT_BUS.register(SmokeMonsterSpawner.getInstance());

@@ -12,6 +12,7 @@ import com.chubbyboi.psychedelicraftresparked.item.ItemHarmonium;
 import com.chubbyboi.psychedelicraftresparked.item.ItemIngestable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemVat;
 import com.chubbyboi.psychedelicraftresparked.item.ItemPipeOfSmokeMonsters;
+import com.chubbyboi.psychedelicraftresparked.item.ItemRiftJar;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokable;
 import com.chubbyboi.psychedelicraftresparked.item.ItemSmokingTool;
 import com.chubbyboi.psychedelicraftresparked.item.ItemGrapes;
@@ -38,6 +39,7 @@ public class ItemInit {
     public static final ItemDistillery DISTILLERY_ITEM = new ItemDistillery(BlockInit.DISTILLERY);
     public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
     public static final Item LATTICE_ITEM = createItemBlock(BlockInit.LATTICE);
+    public static final ItemRiftJar RIFT_JAR_ITEM = new ItemRiftJar(BlockInit.RIFT_JAR);
 
 
 

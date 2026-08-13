@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.util;
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityMolotovCocktail;
+import com.chubbyboi.psychedelicraftresparked.entities.EntityRealityRift;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
@@ -55,6 +56,13 @@ public class RegistryHandler {
             .id(new ResourceLocation(Tags.MOD_ID, "molotov_cocktail"), 0)
             .name("molotov_cocktail")
             .tracker(64, 10, true)
+            .build());
+
+        event.getRegistry().register(EntityEntryBuilder.create()
+            .entity(EntityRealityRift.class)
+            .id(new ResourceLocation(Tags.MOD_ID, "reality_rift"), 1)
+            .name("reality_rift")
+            .tracker(80, 3, false)
             .build());
     }
 

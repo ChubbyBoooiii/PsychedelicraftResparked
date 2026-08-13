@@ -110,6 +110,10 @@ public interface IDrug {
         return 0.0f;
     }
 
+    default float getSoundVolumeModifier() {
+        return 1.0f;
+    }
+
     default float getDoubleVisionStrength() {
         return 0.0f;
     }
@@ -129,6 +133,8 @@ public interface IDrug {
     default void applyColorBloom(float[] rgba) { }
 
     default void applyContrastColorization(float[] rgba) { }
+
+    default void drawOverlays(float partialTicks, int width, int height) { }
 
 
 
