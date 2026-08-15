@@ -16,7 +16,9 @@ public final class VatRecipeMaker {
         List<VatRecipeWrapper> recipes = new ArrayList<>();
 
         for (VatRecipes.Recipe recipe : VatRecipes.getInstance().getRecipes()) {
-            recipes.add(VatRecipeWrapper.mixing(recipe));
+            if (hasAllIngredients(recipe)) {
+                recipes.add(VatRecipeWrapper.mixing(recipe));
+            }
         }
 
         for (FluidAlcohol fluid : FluidInit.ALL_ALCOHOLS) {
@@ -29,5 +31,14 @@ public final class VatRecipeMaker {
         recipes.add(VatRecipeWrapper.hardening());
 
         return recipes;
+    }
+
+    private static boolean hasAllIngredients(VatRecipes.Recipe recipe) {
+        for (VatRecipes.IngredientEntry entry : recipe.getIngredients()) {
+            if (entry.getIngredient().getMatchingStacks().length == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
