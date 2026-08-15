@@ -3,11 +3,14 @@ package com.chubbyboi.psychedelicraftresparked.gui;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
 import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.PsychedelicraftJEIPlugin;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.PsychedelicraftRecipeCategoryUid;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class DryingTableGui extends GuiContainer {
@@ -63,6 +66,16 @@ public class DryingTableGui extends GuiContainer {
                     I18n.format("container.drying_table.time_left", TimeHelper.formatTicksAsTime(ticksLeft))
                 ), mouseX, mouseY);
             }
+        }
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        // Our own method for clicking progress bar to recipes, default conflicts with current tooltips
+        if (mouseButton == 0 && this.tileentity.getField(1) == 0) {
+            PsychedelicraftJEIPlugin.tryOpenRecipes(mouseX, mouseY, this.guiLeft + 88, this.guiTop + 35, 24, 16, PsychedelicraftRecipeCategoryUid.DRYING_TABLE);
         }
     }
 
