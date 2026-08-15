@@ -6,6 +6,8 @@ import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidSlurry;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.PsychedelicraftJEIPlugin;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.PsychedelicraftRecipeCategoryUid;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -57,6 +59,15 @@ public class VatGui extends GuiContainer {
     }
 
     @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (mouseButton == 0) {
+            PsychedelicraftJEIPlugin.tryOpenRecipes(mouseX, mouseY, this.guiLeft + 23, this.guiTop + 14, 24, 17, PsychedelicraftRecipeCategoryUid.VAT);
+        }
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -104,7 +115,19 @@ public class VatGui extends GuiContainer {
         }
     }
 
-    private boolean isMouseOverVisibleIngredientSlot(int mouseX, int mouseY) {
+    public TileEntityVat getTileEntity() {
+        return tileentity;
+    }
+
+    public int getGuiLeft() {
+        return this.guiLeft;
+    }
+
+    public int getGuiTop() {
+        return this.guiTop;
+    }
+
+    public boolean isMouseOverVisibleIngredientSlot(int mouseX, int mouseY) {
         for (int i = 0; i < TileEntityVat.INGREDIENT_SLOTS; i++) {
             Slot slot = this.inventorySlots.inventorySlots.get(i);
             if (slot.isEnabled() && isPointInRegion(slot.xPos, slot.yPos, 16, 16, mouseX, mouseY)) {

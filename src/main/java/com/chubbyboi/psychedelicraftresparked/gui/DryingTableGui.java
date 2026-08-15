@@ -74,7 +74,7 @@ public class DryingTableGui extends GuiContainer {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
         // Our own method for clicking progress bar to recipes, default conflicts with current tooltips
-        if (mouseButton == 0 && this.tileentity.getField(1) == 0) {
+        if (mouseButton == 0) {
             PsychedelicraftJEIPlugin.tryOpenRecipes(mouseX, mouseY, this.guiLeft + 88, this.guiTop + 35, 24, 16, PsychedelicraftRecipeCategoryUid.DRYING_TABLE);
         }
     }

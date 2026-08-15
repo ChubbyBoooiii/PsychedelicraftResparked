@@ -1,13 +1,18 @@
 package com.chubbyboi.psychedelicraftresparked.util.compat.jei;
 
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
+import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.dryingtable.DryingTableRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.dryingtable.DryingTableRecipeMaker;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.vat.VatGuiHandler;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.vat.VatRecipeCategory;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.vat.VatRecipeMaker;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
 
@@ -23,12 +28,20 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new DryingTableRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new VatRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
     public void register(IModRegistry registry) {
         registry.addRecipes(DryingTableRecipeMaker.getRecipes(), PsychedelicraftRecipeCategoryUid.DRYING_TABLE);
         registry.addRecipeCatalyst(new ItemStack(BlockInit.DRYING_TABLE), PsychedelicraftRecipeCategoryUid.DRYING_TABLE);
+
+        registry.addRecipes(VatRecipeMaker.getRecipes(), PsychedelicraftRecipeCategoryUid.VAT);
+        for (BlockPlanks.EnumType woodType : BlockPlanks.EnumType.values()) {
+            registry.addRecipeCatalyst(new ItemStack(ItemInit.VAT, 1, woodType.getMetadata()), PsychedelicraftRecipeCategoryUid.VAT);
+        }
+
+        registry.addAdvancedGuiHandlers(new VatGuiHandler());
     }
 
     @Override
