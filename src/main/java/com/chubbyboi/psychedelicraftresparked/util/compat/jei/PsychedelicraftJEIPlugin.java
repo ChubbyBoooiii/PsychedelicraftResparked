@@ -2,6 +2,9 @@ package com.chubbyboi.psychedelicraftresparked.util.compat.jei;
 
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelGuiHandler;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelRecipeCategory;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.distillery.DistilleryRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.distillery.DistilleryRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.dryingtable.DryingTableRecipeCategory;
@@ -32,6 +35,7 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
         registry.addRecipeCategories(new DryingTableRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new VatRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new DistilleryRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new BarrelRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -48,6 +52,12 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
 
         registry.addRecipes(DistilleryRecipeMaker.getRecipes(), PsychedelicraftRecipeCategoryUid.DISTILLERY);
         registry.addRecipeCatalyst(new ItemStack(BlockInit.DISTILLERY), PsychedelicraftRecipeCategoryUid.DISTILLERY);
+
+        registry.addRecipes(BarrelRecipeMaker.getRecipes(), PsychedelicraftRecipeCategoryUid.BARREL);
+        for (BlockPlanks.EnumType woodType : BlockPlanks.EnumType.values()) {
+            registry.addRecipeCatalyst(new ItemStack(ItemInit.BARREL_ITEM, 1, woodType.getMetadata()), PsychedelicraftRecipeCategoryUid.BARREL);
+        }
+        registry.addAdvancedGuiHandlers(new BarrelGuiHandler());
     }
 
     @Override

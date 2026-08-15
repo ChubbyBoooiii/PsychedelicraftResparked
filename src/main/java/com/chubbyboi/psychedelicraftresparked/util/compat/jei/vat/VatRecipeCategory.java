@@ -38,7 +38,7 @@ public class VatRecipeCategory extends PsychedelicraftRecipeCategory<VatRecipeWr
     };
 
     private static final int ARROW_TRACK_TEX_X = 21;
-    private static final int ARROW_TRACK_TEX_Y = 13;
+    private static final int ARROW_TRACK_TEX_Y = 14;
     private static final int ARROW_FILL_TEX_X = 176;
     private static final int ARROW_FILL_TEX_Y = 0;
     private static final int ARROW_WIDTH = 24;
