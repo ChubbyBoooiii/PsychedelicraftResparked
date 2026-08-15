@@ -2,6 +2,8 @@ package com.chubbyboi.psychedelicraftresparked.util.compat.jei;
 
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.distillery.DistilleryRecipeCategory;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.distillery.DistilleryRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.dryingtable.DryingTableRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.dryingtable.DryingTableRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.vat.VatGuiHandler;
@@ -29,6 +31,7 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new DryingTableRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new VatRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new DistilleryRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -42,6 +45,9 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
         }
 
         registry.addAdvancedGuiHandlers(new VatGuiHandler());
+
+        registry.addRecipes(DistilleryRecipeMaker.getRecipes(), PsychedelicraftRecipeCategoryUid.DISTILLERY);
+        registry.addRecipeCatalyst(new ItemStack(BlockInit.DISTILLERY), PsychedelicraftRecipeCategoryUid.DISTILLERY);
     }
 
     @Override
