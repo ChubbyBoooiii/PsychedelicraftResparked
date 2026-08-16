@@ -26,6 +26,18 @@ public class RecipeConvertFluidContainer extends IForgeRegistryEntry.Impl<IRecip
         this.extraIngredients = extraIngredients;
     }
 
+    public Item getSourceItem() {
+        return sourceItem;
+    }
+
+    public Item getResultItem() {
+        return resultItem;
+    }
+
+    public Ingredient[] getExtraIngredients() {
+        return extraIngredients;
+    }
+
     private ItemStack findSource(InventoryCrafting inv) {
         for (int i = 0; i < inv.getSizeInventory(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
@@ -84,7 +96,9 @@ public class RecipeConvertFluidContainer extends IForgeRegistryEntry.Impl<IRecip
 
         ItemStack result = new ItemStack(resultItem, 1, source.getMetadata());
 
-        IFluidHandlerItem sourceHandler = source.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        ItemStack sourceProbe = source.copy();
+        sourceProbe.setCount(1);
+        IFluidHandlerItem sourceHandler = sourceProbe.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
         IFluidHandlerItem resultHandler = result.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
         if (sourceHandler != null && resultHandler != null) {
             FluidStack containedFluid = sourceHandler.drain(Integer.MAX_VALUE, false);

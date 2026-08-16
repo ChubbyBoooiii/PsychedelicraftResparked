@@ -5,6 +5,7 @@ import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelGuiHandler;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelRecipeMaker;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.containers.ContainerCraftingRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.distillery.DistilleryRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.distillery.DistilleryRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.dryingtable.DryingTableRecipeCategory;
@@ -17,6 +18,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Loader;
@@ -58,6 +60,8 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
             registry.addRecipeCatalyst(new ItemStack(ItemInit.BARREL_ITEM, 1, woodType.getMetadata()), PsychedelicraftRecipeCategoryUid.BARREL);
         }
         registry.addAdvancedGuiHandlers(new BarrelGuiHandler());
+
+        registry.addRecipes(ContainerCraftingRecipeMaker.getRecipes(), VanillaRecipeCategoryUid.CRAFTING);
     }
 
     @Override
