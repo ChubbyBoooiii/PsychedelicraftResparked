@@ -38,6 +38,7 @@ public class PSConfig {
     public static boolean hallucinationEntitiesEnabled;
     public static boolean drugEffectsEnabled;
     public static boolean enableHarmonium;
+    public static boolean distortOutgoingMessages;
 
     public static int dryingTableTickDuration;
     public static int slurryHardeningTime;
@@ -114,6 +115,10 @@ public class PSConfig {
 
         enableHarmonium = config.get(CATEGORY_SERVER, "enableHarmonium", true,
             "Enables and disables the fictional drug Harmonium's crafting recipes (16 dye colours). Default: true").getBoolean();
+
+        distortOutgoingMessages = config.get(CATEGORY_SERVER, "distortOutgoingMessages", true,
+            "Whether a player's own chat messages get slurred/glitched (Alcohol/Zero) or padded with filler words (Cannabis)\n"
+                + "based on their own drug levels, visible to everyone. Default: true").getBoolean();
 
         int defaultDryingTableTickDuration = 2000;
         dryingTableTickDuration = config.get(CATEGORY_SERVER, "dryingTableTickDuration", defaultDryingTableTickDuration,
