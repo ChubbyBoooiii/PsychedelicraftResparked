@@ -4,6 +4,8 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.FluidGuiRenderer;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDistillery;
 import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.PsychedelicraftJEIPlugin;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.PsychedelicraftRecipeCategoryUid;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -50,6 +52,15 @@ public class DistilleryGui extends GuiContainer {
             this.mc.playerController.sendEnchantPacket(this.inventorySlots.windowId, button.id);
             this.tileentity.drainingMode = !this.tileentity.drainingMode;
             updateTransferButtonTitle();
+        }
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (mouseButton == 0) {
+            PsychedelicraftJEIPlugin.tryOpenRecipes(mouseX, mouseY, this.guiLeft + 24, this.guiTop + 15, 20, 13, PsychedelicraftRecipeCategoryUid.DISTILLERY);
         }
     }
 

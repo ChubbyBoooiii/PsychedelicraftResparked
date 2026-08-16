@@ -178,7 +178,7 @@ public class BlockVat extends Block implements ITileEntityProvider, FluidFilled 
         if (tileEntity instanceof TileEntityVat) {
             FluidStack fluid = ((TileEntityVat) tileEntity).getTank().getFluid();
             if (fluid != null) {
-                return FluidHelper.getDisplayColor(fluid);
+                return FluidHelper.getFlatTintColor(fluid);
             }
         }
         return 0xFFFFFFFF;

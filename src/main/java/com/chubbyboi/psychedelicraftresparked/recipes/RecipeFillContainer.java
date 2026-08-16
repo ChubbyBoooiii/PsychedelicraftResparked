@@ -23,11 +23,21 @@ public class RecipeFillContainer extends IForgeRegistryEntry.Impl<IRecipe> imple
         this.ingredients = ingredients;
     }
 
+    public FluidStack getFill() {
+        return fill;
+    }
+
+    public Ingredient[] getExtraIngredients() {
+        return ingredients;
+    }
+
     private ItemStack findContainer(InventoryCrafting inv) {
         for (int i = 0; i < inv.getSizeInventory(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                ItemStack probe = stack.copy();
+                probe.setCount(1);
+                IFluidHandlerItem handler = probe.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                 if (handler != null && handler.fill(fill, false) >= fill.amount) {
                     return stack;
                 }

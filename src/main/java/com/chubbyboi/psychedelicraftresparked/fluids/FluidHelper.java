@@ -83,7 +83,7 @@ public class FluidHelper {
         if (handler != null) {
             FluidStack fluidStack = handler.drain(Integer.MAX_VALUE, false);
             if (fluidStack != null) {
-                return getDisplayColor(fluidStack);
+                return getFlatTintColor(fluidStack);
             }
         }
         return 0xFFFFFF;
@@ -108,6 +108,16 @@ public class FluidHelper {
     public static int getWorldRenderColor(FluidStack fluidStack) {
         if (fluidStack != null && fluidStack.getFluid() instanceof UntintedFluid) {
             return 0xFFFFFFFF;
+        }
+        return getDisplayColor(fluidStack);
+    }
+
+    public static int getFlatTintColor(FluidStack fluidStack) {
+        if (fluidStack == null) {
+            return 0xFFFFFFFF;
+        }
+        if (fluidStack.getFluid() instanceof FluidAlcohol) {
+            return ((FluidAlcohol) fluidStack.getFluid()).getFlatTintColor(fluidStack);
         }
         return getDisplayColor(fluidStack);
     }

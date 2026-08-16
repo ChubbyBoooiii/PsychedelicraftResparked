@@ -23,7 +23,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -336,7 +335,7 @@ public class TileEntityVat extends TileEntity implements ITickable, ISidedInvent
         double spawnZ = (fluidBox.minZ + marginZ) + world.rand.nextDouble() * ((fluidBox.maxZ - marginZ) - (fluidBox.minZ + marginZ));
         double spawnY = fluidBox.maxY;
 
-        int color = FluidHelper.getDisplayColor(fluidStack);
+        int color = FluidHelper.getFlatTintColor(fluidStack);
         float r = ((color >> 16) & 0xFF) / 255.0F;
         float g = ((color >> 8) & 0xFF) / 255.0F;
         float b = (color & 0xFF) / 255.0F;

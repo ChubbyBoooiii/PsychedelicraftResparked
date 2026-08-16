@@ -147,6 +147,7 @@ container.drying_table.total_speed=Total Speed: %.1f%%
 container.drying_table.rain_warning=§c§lCannot dry in rain!
 container.drying_table.progress=Progress: %d%%
 container.drying_table.time_left=Time left: %s
+jei.drying_table.experience=%s XP
 
 # Vat
 item.vat.name=Vat

@@ -134,6 +134,10 @@ public class FluidAlcohol extends FluidDrug implements FermentableFluid, Distill
 
     @Override
     public int getColor(FluidStack stack) {
+        return 0xFFFFFFFF;
+    }
+
+    public int getFlatTintColor(FluidStack stack) {
         int distillation = getDistillation(stack);
         int maturation = getMaturation(stack);
 

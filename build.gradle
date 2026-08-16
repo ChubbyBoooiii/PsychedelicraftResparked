@@ -114,6 +114,16 @@ repositories {
             includeGroup 'curse.maven'
         }
     }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
 }
 
 dependencies {
@@ -152,8 +162,12 @@ dependencies {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
-    // JEI + Addons
-    runtimeOnly "curse.maven:jei-238222:3040523"
+    // compile against the JEI API but do not include it at runtime
+    compileOnly "mezz.jei:jei_${mc_version}:${jei_version}:api"
+    // at runtime, use the full JEI jar
+    runtimeOnly "mezz.jei:jei_${mc_version}:${jei_version}"
+
+    // Just Enough Resources
     runtimeOnly "curse.maven:just-enough-resources-jer-240630:4440936"
     // HWYLA
     runtimeOnly "curse.maven:hwyla-253449:2568751"

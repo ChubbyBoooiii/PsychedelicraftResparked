@@ -34,6 +34,10 @@ public class DryingTableRecipes {
         this.experienceList.put(result, experience);
     }
 
+    public Map<ItemStack, ItemStack> getDryingList() {
+        return dryingList;
+    }
+
     public ItemStack getDryingResult(ItemStack inputs) {
         for (Entry<ItemStack, ItemStack> entry : this.dryingList.entrySet()) {
             if (this.compareItemStacks(inputs, entry.getKey())) {

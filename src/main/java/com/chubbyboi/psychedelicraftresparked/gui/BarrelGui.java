@@ -4,6 +4,8 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.FluidGuiRenderer;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import com.chubbyboi.psychedelicraftresparked.util.TimeHelper;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.PsychedelicraftJEIPlugin;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.PsychedelicraftRecipeCategoryUid;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -54,6 +56,15 @@ public class BarrelGui extends GuiContainer {
             this.mc.playerController.sendEnchantPacket(this.inventorySlots.windowId, button.id);
             this.tileentity.toggleSealed();
             updateSealButton();
+        }
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (mouseButton == 0) {
+            PsychedelicraftJEIPlugin.tryOpenRecipes(mouseX, mouseY, this.guiLeft + 23, this.guiTop + 14, 24, 17, PsychedelicraftRecipeCategoryUid.BARREL);
         }
     }
 
@@ -129,5 +140,17 @@ public class BarrelGui extends GuiContainer {
         if (fluid != null && fillHeight > 0) {
             FluidGuiRenderer.drawTiledFluidRect(fluid, tankX, tankY + tankHeight - fillHeight, tankWidth, fillHeight);
         }
+    }
+
+    public TileEntityBarrel getTileEntity() {
+        return tileentity;
+    }
+
+    public int getGuiLeft() {
+        return this.guiLeft;
+    }
+
+    public int getGuiTop() {
+        return this.guiTop;
     }
 }
