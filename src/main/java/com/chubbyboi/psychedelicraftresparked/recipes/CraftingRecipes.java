@@ -50,6 +50,19 @@ public class CraftingRecipes {
                 "L L", "I I", "LLL", 'I', "ingotIron", 'L', log);
         }
 
+        // Flask
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "flask"), null, new ItemStack(ItemInit.FLASK_ITEM, 1),
+            " # ", "#G#", "###", 'G', "blockGlassColorless", '#', "ingotIron");
+
+        // Distillery
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "distillery"), null, new ItemStack(ItemInit.DISTILLERY_ITEM, 1),
+            "##", "D ", 'D', ItemInit.FLASK_ITEM, '#', "ingotIron");
+
+        // Juniper Log -> Spruce Planks
+        GameRegistry.addShapelessRecipe(new ResourceLocation(Tags.MOD_ID, "juniper_log_to_planks"), null,
+            new ItemStack(Blocks.PLANKS, 4, BlockPlanks.EnumType.SPRUCE.getMetadata()),
+            Ingredient.fromItem(ItemInit.JUNIPER_LOG_ITEM));
+
 
 
         // ==================== ITEMS ====================
@@ -57,7 +70,6 @@ public class CraftingRecipes {
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "pipe"), null, new ItemStack(ItemInit.PIPE, 1), "  I", " S ", "WS ", 'I', "ingotIron", 'S', "stickWood", 'W', "plankWood");
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "bong"), null, new ItemStack(ItemInit.BONG, 1), " P ", "G G", "GGG", 'G', "blockGlassColorless", 'P', "paneGlassColorless");
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "syringe"), null, new ItemStack(ItemInit.SYRINGE, 1), "I", "G", 'G', "blockGlassColorless", 'I', "ingotIron");
-
 
         // Cannabis
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "joint"), null, new ItemStack(ItemInit.JOINT, 1), "P", "C", "P", 'C', ItemInit.DRIED_CANNABIS_BUDS, 'P', Items.PAPER);
@@ -92,6 +104,7 @@ public class CraftingRecipes {
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "peyote_joint"), null, new ItemStack(ItemInit.PEYOTE_JOINT, 1), "P", "D", "P", 'D', ItemInit.DRIED_PEYOTE, 'P', Items.PAPER);
 
         // Drink Containers
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "tap"), null, new ItemStack(ItemInit.TAP, 8), " I ", "III", "I  ", 'I', "ingotIron");
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "glass_chalice"), null, new ItemStack(ItemInit.GLASS_CHALICE, 4), "# #", " # ", " # ", '#', "blockGlassColorless");
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "wooden_mug"), null, new ItemStack(ItemInit.WOODEN_MUG, 8), "# #", "# #", "###", '#', "plankWood");
         GameRegistry.addShapelessRecipe(new ResourceLocation(Tags.MOD_ID, "shot_glass"), null, new ItemStack(ItemInit.SHOT_GLASS, 1), Ingredient.fromStacks(new ItemStack(Blocks.GLASS)));
