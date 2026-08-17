@@ -13,6 +13,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Loader;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class BarrelGui extends GuiContainer {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if (mouseButton == 0) {
+        if (mouseButton == 0 && Loader.isModLoaded("jei")) {
             PsychedelicraftJEIPlugin.tryOpenRecipes(mouseX, mouseY, this.guiLeft + 23, this.guiTop + 14, 24, 17, PsychedelicraftRecipeCategoryUid.BARREL);
         }
     }
