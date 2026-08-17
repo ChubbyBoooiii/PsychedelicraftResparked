@@ -2,6 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.proxy;
 
 import com.chubbyboi.psychedelicraftresparked.capabilities.CapabilityEventHandler;
 import com.chubbyboi.psychedelicraftresparked.capabilities.CapabilityRegistry;
+import com.chubbyboi.psychedelicraftresparked.drug.ChatDistortionHandler;
 import com.chubbyboi.psychedelicraftresparked.drug.DrugEffectHandler;
 import com.chubbyboi.psychedelicraftresparked.drug.DrugPropertyManager;
 import com.chubbyboi.psychedelicraftresparked.entities.RiftSpawner;
@@ -32,5 +33,8 @@ public class CommonProxy {
 
         // Register the passive Reality Rift spawn roll
         MinecraftForge.EVENT_BUS.register(new RiftSpawner());
+
+        // Register outgoing chat message distortion (Alcohol/Zero/Cannabis)
+        MinecraftForge.EVENT_BUS.register(new ChatDistortionHandler());
     }
 }
