@@ -21,7 +21,9 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -140,6 +142,7 @@ public class HallucinationEntitySpawner {
 
     private final List<HallucinatedEntity> active = new ArrayList<>();
     private RastaHead activeRastaHead;
+    private RastaHeadChatBot activeChatBot;
     private int ticksExisted = 0;
     private final Set<Class<?>> loggedFailureClasses = new HashSet<>();
 
@@ -186,8 +189,10 @@ public class HallucinationEntitySpawner {
         if (activeRastaHead != null) {
             if (activeRastaHead.isDead(ticksExisted)) {
                 activeRastaHead = null;
+                activeChatBot = null;
             } else {
                 updateRastaHead(activeRastaHead, player);
+                activeChatBot.tick();
             }
         }
 
@@ -286,6 +291,18 @@ public class HallucinationEntitySpawner {
     private void spawnRastaHead(EntityPlayerSP player, Random random) {
         int maxTicks = (random.nextInt(59) + 120) * 20;
         activeRastaHead = new RastaHead(ticksExisted, maxTicks, player.posX, player.posY, player.posZ);
+        activeChatBot = new RastaHeadChatBot(player);
+    }
+
+    @SubscribeEvent
+    public void onChatReceived(ClientChatReceivedEvent event) {
+        if (activeChatBot == null || event.getType() != ChatType.CHAT) return;
+
+        String message = event.getMessage().getUnformattedText();
+        int tagEnd = message.indexOf('>');
+        if (message.indexOf('<') != 0 || tagEnd <= 0) return;
+
+        activeChatBot.onMessageReceived(message.substring(1, tagEnd));
     }
 
     private void spawnRandomEntity(EntityPlayerSP player, Random random) {
