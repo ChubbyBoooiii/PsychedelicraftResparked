@@ -136,6 +136,11 @@ tile.juniper_leaves.name=Juniper Leaves
 
 
 
+# ENTITIES
+entity.Villager.herbalist=Herbalist
+
+
+
 # TILE ENTITIES
 # Drying Table
 tile.drying_table.name=Drying Table

@@ -9,6 +9,7 @@ import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.init.OreDictionaryInit;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
+import com.chubbyboi.psychedelicraftresparked.init.VillagerInit;
 import com.chubbyboi.psychedelicraftresparked.recipes.CraftingRecipes;
 import com.chubbyboi.psychedelicraftresparked.worldgen.PSWorldGen;
 import net.minecraft.block.Block;
@@ -24,6 +25,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 @Mod.EventBusSubscriber
 public class RegistryHandler {
@@ -65,6 +67,17 @@ public class RegistryHandler {
             .name("reality_rift")
             .tracker(80, 3, false)
             .build());
+    }
+
+    @SubscribeEvent
+    public static void onVillagerProfessionRegister(RegistryEvent.Register<VillagerRegistry.VillagerProfession> event) {
+        VillagerRegistry.VillagerProfession herbalist = new VillagerRegistry.VillagerProfession(
+            Tags.MOD_ID + ":herbalist",
+            Tags.MOD_ID + ":textures/entities/herbalist.png",
+            "minecraft:textures/entity/zombie_villager/zombie_villager.png"
+        );
+        event.getRegistry().register(herbalist);
+        VillagerInit.registerCareer(herbalist);
     }
 
     @SubscribeEvent
