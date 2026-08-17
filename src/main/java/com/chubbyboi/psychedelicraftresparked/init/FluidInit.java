@@ -2,6 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.init;
 
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidDrug;
+import com.chubbyboi.psychedelicraftresparked.fluids.FluidMilk;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidSlurry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
@@ -19,7 +20,7 @@ public class FluidInit {
         new ResourceLocation("psychedelicraftresparked:blocks/slurry_flow")
     );
 
-    public static final Fluid MILK = new Fluid("psc_milk_raw",
+    public static final FluidMilk MILK = new FluidMilk("psc_milk_raw",
         new ResourceLocation("psychedelicraftresparked:blocks/clear_still"),
         new ResourceLocation("psychedelicraftresparked:blocks/clear_flow")
     );

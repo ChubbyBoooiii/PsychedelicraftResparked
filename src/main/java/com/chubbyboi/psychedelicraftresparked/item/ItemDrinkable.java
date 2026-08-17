@@ -23,6 +23,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -109,7 +110,7 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
             public boolean canFillFluidType(FluidStack fluid) {
                 Fluid f = fluid.getFluid();
                 return consumptionType == ConsumptionType.DRINK
-                    ? f instanceof DrinkableFluid && ((DrinkableFluid) f).canDrink(fluid, null)
+                    ? f == FluidRegistry.WATER || (f instanceof DrinkableFluid && ((DrinkableFluid) f).canDrink(fluid, null))
                     : f instanceof InjectableFluid && ((InjectableFluid) f).canInject(fluid, null);
             }
         };

@@ -45,9 +45,10 @@ public class FluidHelper {
         FluidStack wouldDrain = handler.drain(maxDrunk, false);
         if (wouldDrain != null && wouldDrain.amount > 0) {
             Fluid fluid = wouldDrain.getFluid();
-            if (fluid instanceof DrinkableFluid && ((DrinkableFluid) fluid).canDrink(wouldDrain, entity)) {
+            boolean isDrinkableDrug = fluid instanceof DrinkableFluid && ((DrinkableFluid) fluid).canDrink(wouldDrain, entity);
+            if (isDrinkableDrug || fluid == FluidRegistry.WATER) {
                 FluidStack drained = handler.drain(maxDrunk, doDrink);
-                if (doDrink && drained != null) {
+                if (doDrink && drained != null && isDrinkableDrug) {
                     ((DrinkableFluid) fluid).drink(drained, entity);
                 }
                 return drained;
