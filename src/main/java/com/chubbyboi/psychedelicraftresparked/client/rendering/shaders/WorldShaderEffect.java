@@ -88,8 +88,8 @@ public class WorldShaderEffect {
 
         GL20.glUniform1i(uniform("lightmapEnabled"), 1);
 
-        GL20.glUniform1i(uniform("fogEnabled"), 1);
-        GL20.glUniform1i(uniform("fogMode"), GL11.GL_LINEAR);
+        GL20.glUniform1i(uniform("fogEnabled"), GL11.glIsEnabled(GL11.GL_FOG) ? 1 : 0);
+        GL20.glUniform1i(uniform("fogMode"), GL11.glGetInteger(GL11.GL_FOG_MODE));
 
         boolean colorSafeMode = GL11.glIsEnabled(GL11.GL_BLEND) && GL11.glGetInteger(GL11.GL_BLEND_DST) != GL11.GL_ONE_MINUS_SRC_ALPHA;
         GL20.glUniform1i(uniform("colorSafeMode"), colorSafeMode ? 1 : 0);
