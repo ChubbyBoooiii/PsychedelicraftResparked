@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -74,7 +75,7 @@ public class DryingTableGui extends GuiContainer {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
         // Our own method for clicking progress bar to recipes, default conflicts with current tooltips
-        if (mouseButton == 0) {
+        if (mouseButton == 0 && Loader.isModLoaded("jei")) {
             PsychedelicraftJEIPlugin.tryOpenRecipes(mouseX, mouseY, this.guiLeft + 88, this.guiTop + 35, 24, 16, PsychedelicraftRecipeCategoryUid.DRYING_TABLE);
         }
     }

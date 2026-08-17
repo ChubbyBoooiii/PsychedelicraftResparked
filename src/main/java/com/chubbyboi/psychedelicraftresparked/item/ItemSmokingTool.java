@@ -55,6 +55,9 @@ public class ItemSmokingTool extends PsychItem {
         this.addPropertyOverride(new ResourceLocation("smoking"), (stack, worldIn, entityIn) ->
             entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F
         );
+        this.addPropertyOverride(new ResourceLocation("filled"), (stack, worldIn, entityIn) ->
+            entityIn instanceof EntityPlayer && getUsedConsumable((EntityPlayer) entityIn) != null ? 1.0F : 0.0F
+        );
     }
 
     public ItemSmokingTool addConsumable(Consumable consumable) {

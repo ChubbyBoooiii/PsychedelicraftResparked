@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "psychedelicraftresparked:items/bong_empty"
+    "layer0": "psychedelicraftresparked:items/bong"
   },
   "display": {
     "firstperson_righthand": {
@@ -14,19 +14,5 @@
       "translation": [0, 4, 0],
       "scale": [0.6, 0.6, 0.6]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "filled": 1
-      },
-      "model": "psychedelicraftresparked:item/bong_filled"
-    },
-    {
-      "predicate": {
-        "smoking": 1
-      },
-      "model": "psychedelicraftresparked:item/bong_in_use"
-    }
-  ]
+  }
 }
