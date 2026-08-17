@@ -70,6 +70,10 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
         ItemInit.ITEMS.add(this);
     }
 
+    public ConsumptionType getConsumptionType() {
+        return consumptionType;
+    }
+
     public ItemDrinkable setFinishSound(SoundEvent finishSound) {
         this.finishSound = finishSound;
         return this;
