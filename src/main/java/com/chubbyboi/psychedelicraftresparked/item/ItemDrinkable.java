@@ -195,4 +195,13 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
             ? FluidHelper.drink(stack, entity, consumptionVolume, doConsume)
             : FluidHelper.inject(stack, entity, consumptionVolume, doConsume);
     }
+
+    @Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+        if (consumptionType == ConsumptionType.INJECT && target instanceof EntityPlayer
+                && !target.world.isRemote && itemRand.nextFloat() < 0.5F) {
+            FluidHelper.inject(stack, target, consumptionVolume, true);
+        }
+        return true;
+    }
 }
