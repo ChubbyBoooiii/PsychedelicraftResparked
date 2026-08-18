@@ -11,6 +11,7 @@ import com.chubbyboi.psychedelicraftresparked.init.OreDictionaryInit;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
 import com.chubbyboi.psychedelicraftresparked.init.VillagerInit;
 import com.chubbyboi.psychedelicraftresparked.recipes.CraftingRecipes;
+import com.chubbyboi.psychedelicraftresparked.util.compat.immersiveengineering.ImmersiveEngineeringCompat;
 import com.chubbyboi.psychedelicraftresparked.worldgen.PSWorldGen;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
@@ -113,7 +114,9 @@ public class RegistryHandler {
     }
 
     public static void postInitRegistries() {
-
+        if (net.minecraftforge.fml.common.Loader.isModLoaded("immersiveengineering")) {
+            ImmersiveEngineeringCompat.init();
+        }
     }
 
     public static void serverRegistries(FMLServerStartingEvent event) {

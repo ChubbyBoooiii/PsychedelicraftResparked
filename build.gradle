@@ -164,6 +164,13 @@ dependencies {
 
     // compile against the JEI API but do not include it at runtime
     compileOnly "mezz.jei:jei_${mc_version}:${jei_version}:api"
+
+    // compile against Immersive Engineering
+    compileOnly "curse.maven:immersiveengineering-231951:2974106"
+
+    // compile against AgriCraft & InfinityLib
+    compileOnly "curse.maven:agricraft-225635:3317747"
+    compileOnly "curse.maven:infinitylib-251396:2455040"
 }
 
 apply from: 'gradle/scripts/dependencies.gradle'
