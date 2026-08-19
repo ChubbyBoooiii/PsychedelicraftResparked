@@ -5,10 +5,12 @@ import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.fluids.DrinkableFluid;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.fluids.InjectableFluid;
+import com.chubbyboi.psychedelicraftresparked.init.AdvancementInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -173,6 +175,9 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
                 }
                 if (entityLiving instanceof EntityPlayer) {
                     ((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, GULP_COOLDOWN_TICKS);
+                }
+                if (entityLiving instanceof EntityPlayerMP) {
+                    AdvancementInit.DRUNK_FLUID.trigger((EntityPlayerMP) entityLiving, drunk);
                 }
             }
         }

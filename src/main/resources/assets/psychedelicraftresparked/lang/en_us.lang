@@ -394,3 +394,9 @@ fluid.psc_milk_alcohol.mature=Blaand (%d DM)
 fluid.psc_milk_alcohol.distill=Arkhi (%d TD)
 fluid.psc_milk_alcohol.dmature=Arkhi (%d DM, %d TD)
 fluid.psc_milk_alcohol.vinegar=Spoiled Milk
+
+
+
+# ADVANCEMENTS
+advancements.psychedelicraftresparked.root.title=Psychedelicraft Resparked
+advancements.psychedelicraftresparked.root.description=Welcome to the mod, hope you enjoy
