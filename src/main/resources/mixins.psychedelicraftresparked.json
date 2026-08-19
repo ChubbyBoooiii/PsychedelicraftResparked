@@ -15,6 +15,7 @@
 	"client": [
 		"MixinEntityRenderer",
 		"MixinGlStateManager",
+		"MixinRenderLivingBase",
 		"MixinSoundManager",
 		"EntityLivingBaseAccessor"
 	]
