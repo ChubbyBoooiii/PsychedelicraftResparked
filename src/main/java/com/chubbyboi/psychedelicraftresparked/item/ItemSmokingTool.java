@@ -138,6 +138,7 @@ public class ItemSmokingTool extends PsychItem {
                 for (DrugInfluence influence : usedConsumable.drugInfluences) {
                     ((DrugProperties) props).addInfluence(influence.clone());
                 }
+                ((DrugProperties) props).applySecondhandSmoke(player, java.util.Arrays.asList(usedConsumable.drugInfluences));
             }
 
             if (!player.capabilities.isCreativeMode) {

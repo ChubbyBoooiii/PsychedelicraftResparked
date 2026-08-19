@@ -70,6 +70,7 @@ public class ItemSmokable extends PsychItem {
                 for (DrugInfluence influence : drugInfluences) {
                     ((DrugProperties) props).addInfluence(influence.clone());
                 }
+                ((DrugProperties) props).applySecondhandSmoke(player, drugInfluences);
             }
 
             if (props instanceof DrugProperties) {
