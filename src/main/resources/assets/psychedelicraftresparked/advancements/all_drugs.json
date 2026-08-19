@@ -1,0 +1,30 @@
+{
+  "parent": "psychedelicraftresparked:root",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:harmonium", "data": 10 },
+    "title": { "translate": "advancements.psychedelicraftresparked.all_drugs.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.all_drugs.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "all_drugs": {
+      "trigger": "psychedelicraftresparked:drug_threshold",
+      "conditions": {
+        "drugs": [
+          { "drug": "alcohol", "value": { "min": 0.01 } },
+          { "drug": "cannabis", "value": { "min": 0.01 } },
+          { "drug": "cocaine", "value": { "min": 0.01 } },
+          { "drug": "brownshrooms", "value": { "min": 0.01 } },
+          { "drug": "redshrooms", "value": { "min": 0.01 } },
+          { "drug": "caffeine", "value": { "min": 0.01 } },
+          { "drug": "tobacco", "value": { "min": 0.01 } },
+          { "drug": "peyote", "value": { "min": 0.01 } },
+          { "drug": "harmonium", "value": { "min": 0.01 } },
+          { "drug": "zero", "value": { "min": 0.01 } }
+        ]
+      }
+    }
+  }
+}

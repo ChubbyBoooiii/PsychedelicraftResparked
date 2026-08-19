@@ -14,6 +14,7 @@ import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugRedShrooms;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugTobacco;
 import com.chubbyboi.psychedelicraftresparked.drug.drugs.DrugZero;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
+import com.chubbyboi.psychedelicraftresparked.init.AdvancementInit;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.network.PacketSpawnSmokeParticles;
@@ -21,6 +22,7 @@ import com.chubbyboi.psychedelicraftresparked.util.EntityRayTrace;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -218,6 +220,10 @@ public class DrugProperties implements IDrugProperties {
         if (target instanceof EntityLiving) {
             ((EntityLiving) target).playLivingSound();
         }
+
+        if (smoker instanceof EntityPlayerMP) {
+            AdvancementInit.CUSTOM.trigger((EntityPlayerMP) smoker, "breathe_smoke_on_entity", target);
+        }
     }
 
     private void updateBreathingSmoke(EntityPlayer player) {
@@ -336,6 +342,10 @@ public class DrugProperties implements IDrugProperties {
 
             if (timeBreathingSmoke > 0) {
                 updateBreathingSmoke(player);
+            }
+
+            if (player instanceof EntityPlayerMP) {
+                AdvancementInit.DRUG_THRESHOLD.trigger((EntityPlayerMP) player);
             }
         }
 

@@ -1,0 +1,25 @@
+{
+  "parent": "psychedelicraftresparked:make_drying_table",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:red_magic_mushrooms" },
+    "title": { "translate": "advancements.psychedelicraftresparked.dry_red_brown_mushrooms.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.dry_red_brown_mushrooms.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_red_mushrooms": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:red_magic_mushrooms" }]
+      }
+    },
+    "get_brown_mushrooms": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:brown_magic_mushrooms" }]
+      }
+    }
+  }
+}

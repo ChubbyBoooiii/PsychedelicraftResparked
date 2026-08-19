@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:dry_coca",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:cocaine_powder" },
+    "title": { "translate": "advancements.psychedelicraftresparked.make_cocaine_powder.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.make_cocaine_powder.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_dried_cannabis_buds": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:cocaine_powder" }]
+      }
+    }
+  }
+}

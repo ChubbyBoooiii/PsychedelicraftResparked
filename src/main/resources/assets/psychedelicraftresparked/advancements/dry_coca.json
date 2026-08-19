@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:make_drying_table",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:dried_coca_leaves" },
+    "title": { "translate": "advancements.psychedelicraftresparked.dry_coca.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.dry_coca.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_dried_cannabis_buds": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:dried_coca_leaves" }]
+      }
+    }
+  }
+}

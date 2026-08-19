@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:dry_cannabis_leaf_and_buds",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:hash_muffin" },
+    "title": { "translate": "advancements.psychedelicraftresparked.hash_muffin.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.hash_muffin.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_hash_muffin": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:hash_muffin" }]
+      }
+    }
+  }
+}

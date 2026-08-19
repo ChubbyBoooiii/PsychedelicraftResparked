@@ -4,6 +4,7 @@ import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityRealityRift;
+import com.chubbyboi.psychedelicraftresparked.init.AdvancementInit;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
@@ -105,6 +106,7 @@ public class RegistryHandler {
 
     public static void preInitRegistries() {
         FluidInit.registerFluids();
+        AdvancementInit.register();
     }
 
     public static void initRegistries() {

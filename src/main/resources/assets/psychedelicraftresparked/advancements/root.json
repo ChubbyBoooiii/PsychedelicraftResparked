@@ -1,0 +1,16 @@
+{
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:cannabis_leaf" },
+    "title": { "translate": "advancements.psychedelicraftresparked.root.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.root.description" },
+    "background": "minecraft:textures/blocks/planks_spruce.png",
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

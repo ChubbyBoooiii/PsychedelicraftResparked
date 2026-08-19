@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:make_cocaine_powder",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:syringe", "nbt": "{Fluid:{FluidName:\"psc_cocaine_fluid\",Amount:10}}" },
+    "title": { "translate": "advancements.psychedelicraftresparked.make_cocaine_syringe.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.make_cocaine_syringe.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_cocaine_syringe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:syringe", "nbt": "{Fluid:{FluidName:\"psc_cocaine_fluid\"}}" }]
+      }
+    }
+  }
+}

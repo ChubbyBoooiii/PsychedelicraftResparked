@@ -1,0 +1,20 @@
+{
+  "parent": "psychedelicraftresparked:dry_tobacco",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:cigarette" },
+    "title": { "translate": "advancements.psychedelicraftresparked.500_cigarettes.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.500_cigarettes.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "hoarded": {
+      "trigger": "psychedelicraftresparked:total_item_count",
+      "conditions": {
+        "item": "psychedelicraftresparked:cigarette",
+        "count": { "min": 500 }
+      }
+    }
+  }
+}
