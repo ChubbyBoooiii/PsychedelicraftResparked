@@ -66,6 +66,13 @@ public class DrugInfluence {
         return maxInfluence <= 0.0;
     }
 
+    public DrugInfluence scaled(double factor) {
+        DrugInfluence copy = clone();
+        copy.maxInfluence = maxInfluence * factor;
+        copy.influenceSpeedPlus = influenceSpeedPlus * factor;
+        return copy;
+    }
+
     public DrugInfluence clone() {
         DrugInfluence copy = null;
         try {

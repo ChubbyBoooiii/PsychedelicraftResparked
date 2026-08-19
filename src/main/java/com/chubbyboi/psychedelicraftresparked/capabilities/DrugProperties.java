@@ -17,6 +17,9 @@ import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.network.PacketSpawnSmokeParticles;
+import com.chubbyboi.psychedelicraftresparked.util.EntityRayTrace;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
@@ -192,6 +195,29 @@ public class DrugProperties implements IDrugProperties {
 
     public boolean isBreathingSmoke() {
         return timeBreathingSmoke > 0;
+    }
+
+    private static final double SECONDHAND_SMOKE_RANGE = 3.0;
+    private static final double SECONDHAND_SMOKE_DOSE_FACTOR = 0.3;
+
+    public void applySecondhandSmoke(EntityPlayer smoker, List<DrugInfluence> influences) {
+        EntityLivingBase target = EntityRayTrace.rayTraceLivingEntity(smoker, SECONDHAND_SMOKE_RANGE);
+        if (target == null) {
+            return;
+        }
+
+        if (target instanceof EntityPlayer) {
+            IDrugProperties targetProps = target.getCapability(DrugPropertiesProvider.DRUG_PROPERTIES_CAPABILITY, null);
+            if (targetProps instanceof DrugProperties) {
+                for (DrugInfluence influence : influences) {
+                    ((DrugProperties) targetProps).addInfluence(influence.scaled(SECONDHAND_SMOKE_DOSE_FACTOR));
+                }
+            }
+        }
+
+        if (target instanceof EntityLiving) {
+            ((EntityLiving) target).playLivingSound();
+        }
     }
 
     private void updateBreathingSmoke(EntityPlayer player) {
