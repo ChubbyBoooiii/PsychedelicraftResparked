@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:make_vat",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:wooden_mug", "nbt": "{Fluid:{FluidName:\"psc_coffee\",Amount:500}}" },
+    "title": { "translate": "advancements.psychedelicraftresparked.mix_coffee.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.mix_coffee.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "mixed": {
+      "trigger": "psychedelicraftresparked:held_fluid",
+      "conditions": {
+        "fluid": "psc_coffee"
+      }
+    }
+  }
+}

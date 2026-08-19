@@ -11,21 +11,24 @@ import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DrinkTrigger implements ICriterionTrigger<DrinkTrigger.Instance> {
+public class HeldFluidTrigger implements ICriterionTrigger<HeldFluidTrigger.Instance> {
 
     private final ResourceLocation id;
     private final Map<PlayerAdvancements, Listeners> listeners = Maps.newHashMap();
 
-    public DrinkTrigger(ResourceLocation id) {
+    public HeldFluidTrigger(ResourceLocation id) {
         this.id = id;
     }
 
@@ -64,10 +67,10 @@ public class DrinkTrigger implements ICriterionTrigger<DrinkTrigger.Instance> {
         return new Instance(id, fluidName, fermentation, maturation, distillation);
     }
 
-    public void trigger(EntityPlayerMP player, FluidStack drunk) {
+    public void trigger(EntityPlayerMP player) {
         Listeners l = listeners.get(player.getAdvancements());
         if (l != null) {
-            l.trigger(player, drunk);
+            l.trigger(player);
         }
     }
 
@@ -85,8 +88,33 @@ public class DrinkTrigger implements ICriterionTrigger<DrinkTrigger.Instance> {
             this.distillation = distillation;
         }
 
-        public boolean test(FluidStack drunk) {
-            Fluid fluid = drunk.getFluid();
+        public boolean test(EntityPlayerMP player) {
+            for (ItemStack stack : player.inventory.mainInventory) {
+                if (matches(stack)) {
+                    return true;
+                }
+            }
+            for (ItemStack stack : player.inventory.offHandInventory) {
+                if (matches(stack)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private boolean matches(ItemStack stack) {
+            if (stack.isEmpty()) {
+                return false;
+            }
+            IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            if (handler == null) {
+                return false;
+            }
+            FluidStack fluidStack = handler.drain(Integer.MAX_VALUE, false);
+            if (fluidStack == null) {
+                return false;
+            }
+            Fluid fluid = fluidStack.getFluid();
             if (fluid == null || !fluid.getName().equals(fluidName)) {
                 return false;
             }
@@ -94,9 +122,9 @@ public class DrinkTrigger implements ICriterionTrigger<DrinkTrigger.Instance> {
                 return true;
             }
             FluidAlcohol alcohol = (FluidAlcohol) fluid;
-            return fermentation.test(alcohol.getFermentation(drunk))
-                && maturation.test(alcohol.getMaturation(drunk))
-                && distillation.test(alcohol.getDistillation(drunk));
+            return fermentation.test(alcohol.getFermentation(fluidStack))
+                && maturation.test(alcohol.getMaturation(fluidStack))
+                && distillation.test(alcohol.getDistillation(fluidStack));
         }
     }
 
@@ -120,10 +148,10 @@ public class DrinkTrigger implements ICriterionTrigger<DrinkTrigger.Instance> {
             listeners.remove(listener);
         }
 
-        void trigger(EntityPlayerMP player, FluidStack drunk) {
+        void trigger(EntityPlayerMP player) {
             List<ICriterionTrigger.Listener<Instance>> matched = null;
             for (ICriterionTrigger.Listener<Instance> listener : listeners) {
-                if (listener.getCriterionInstance().test(drunk)) {
+                if (listener.getCriterionInstance().test(player)) {
                     if (matched == null) {
                         matched = Lists.newArrayList();
                     }

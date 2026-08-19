@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:dry_cannabis_leaf_and_buds",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:joint" },
+    "title": { "translate": "advancements.psychedelicraftresparked.roll_joint.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.roll_joint.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_joint": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:joint" }]
+      }
+    }
+  }
+}

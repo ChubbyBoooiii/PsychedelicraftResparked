@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:make_vat",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:barrel" },
+    "title": { "translate": "advancements.psychedelicraftresparked.make_barrel.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.make_barrel.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_barrel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:barrel" }]
+      }
+    }
+  }
+}

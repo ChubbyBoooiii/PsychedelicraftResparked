@@ -1,0 +1,22 @@
+{
+  "parent": "psychedelicraftresparked:ferment_grapes",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:wooden_mug", "nbt": "{Fluid:{FluidName:\"psc_grapes\",Amount:500,Tag:{fermentation:2,distillation:0,maturation:1}}}" },
+    "title": { "translate": "advancements.psychedelicraftresparked.mature_grapes.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.mature_grapes.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "matured": {
+      "trigger": "psychedelicraftresparked:held_fluid",
+      "conditions": {
+        "fluid": "psc_grapes",
+        "fermentation": { "min": 2 },
+        "distillation": { "max": 0 },
+        "maturation": { "min": 1 }
+      }
+    }
+  }
+}

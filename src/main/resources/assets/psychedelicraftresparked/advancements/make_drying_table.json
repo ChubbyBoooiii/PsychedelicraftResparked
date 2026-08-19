@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:root",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:drying_table" },
+    "title": { "translate": "advancements.psychedelicraftresparked.make_drying_table.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.make_drying_table.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_drying_table": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:drying_table" }]
+      }
+    }
+  }
+}

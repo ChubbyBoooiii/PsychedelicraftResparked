@@ -9,6 +9,7 @@
 		"MixinEntityLivingBase",
 		"MixinEntity",
 		"MixinEntityItem",
+		"MixinEntityPlayerMP",
 		"EntityAccessor"
 	],
 	"server": [],

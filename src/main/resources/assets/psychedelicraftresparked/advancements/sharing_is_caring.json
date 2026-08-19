@@ -1,0 +1,18 @@
+{
+  "parent": "psychedelicraftresparked:dry_tobacco",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:pipe" },
+    "title": { "translate": "advancements.psychedelicraftresparked.sharing_is_caring.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.sharing_is_caring.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "player": { "trigger": "psychedelicraftresparked:custom", "conditions": { "event": "breathe_smoke_on_entity", "entity": { "type": "minecraft:player" } } },
+    "villager": { "trigger": "psychedelicraftresparked:custom", "conditions": { "event": "breathe_smoke_on_entity", "entity": { "type": "minecraft:villager" } } }
+  },
+  "requirements": [
+    ["player", "villager"]
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "parent": "psychedelicraftresparked:make_drying_table",
+  "display": {
+    "icon": { "item": "psychedelicraftresparked:dried_tobacco" },
+    "title": { "translate": "advancements.psychedelicraftresparked.dry_tobacco.title" },
+    "description": { "translate": "advancements.psychedelicraftresparked.dry_tobacco.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "get_drying_table": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{ "item": "psychedelicraftresparked:dried_tobacco" }]
+      }
+    }
+  }
+}
