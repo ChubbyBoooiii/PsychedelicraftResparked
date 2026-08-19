@@ -20,6 +20,8 @@ public class MixinEntityPlayerMP {
         require = 1
     )
     private void onInventoryChanged(CallbackInfo ci) {
-        AdvancementInit.HELD_FLUID.trigger((EntityPlayerMP) (Object) this);
+        EntityPlayerMP player = (EntityPlayerMP) (Object) this;
+        AdvancementInit.HELD_FLUID.trigger(player);
+        AdvancementInit.TOTAL_ITEM_COUNT.trigger(player);
     }
 }
