@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Grant Execute Permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Read gradle.properties
+        uses: BrycensRanch/read-properties-action@v1
+        id: properties
+        with:
+          file: gradle.properties
+          all: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Check for existing release
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.properties.outputs.mod_version }}
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Extract changelog section
+        if: steps.check.outputs.exists == 'false'
+        id: changelog
+        env:
+          VERSION: ${{ steps.properties.outputs.mod_version }}
+        run: |
+          BODY_FILE="$RUNNER_TEMP/release-notes.md"
+          awk -v ver="$VERSION" '
+            BEGIN { esc = ver; gsub(/[.[\]\\^$*+?(){}|]/, "\\\\&", esc) }
+            $0 ~ "^## \\[" esc "\\]" { found=1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > "$BODY_FILE"
+          if [ ! -s "$BODY_FILE" ]; then
+            echo "No changelog section found for version $VERSION" >&2
+            exit 1
+          fi
+          echo "body_file=$BODY_FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.properties.outputs.mod_version }}
+          MOD_NAME: ${{ steps.properties.outputs.mod_name }}
+          MOD_ID: ${{ steps.properties.outputs.mod_id }}
+          RELEASE_TYPE: ${{ steps.properties.outputs.release_type }}
+        run: |
+          PRERELEASE_FLAG=""
+          if [ "$RELEASE_TYPE" != "release" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+          gh release create "$TAG" \
+            "build/libs/${MOD_ID}-${TAG}.jar" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$MOD_NAME $TAG" \
+            --notes-file "${{ steps.changelog.outputs.body_file }}" \
+            --target "$GITHUB_SHA" \
+            $PRERELEASE_FLAG
