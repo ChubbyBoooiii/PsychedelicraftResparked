@@ -1,6 +1,8 @@
 # Changelog
 
-## [1.0.0] - 2023-09-15
+## [0.1.0b] - 2026-08-19
 
 ### Added
-- This is a default template changelog that follows the [KeepAChangelog Convention](https://keepachangelog.com/en/1.1.0/)
+- Initial beta release.
+- Github workflows to validate and release.
+- See commits for additions and fixes, can't be on with listing them all. Will start doing it for additions and fixes going forward.
