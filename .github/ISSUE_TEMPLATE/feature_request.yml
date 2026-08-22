@@ -1,0 +1,24 @@
+name: Feature Request
+description: Suggest an idea, mechanic, or addition for the mod
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got an idea for something the mod should have? Please have a look at the other issues first in case it's already been suggested.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What's the idea?
+      description: Describe the feature or addition you'd like to see.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else - references, examples, etc.
+    validations:
+      required: false

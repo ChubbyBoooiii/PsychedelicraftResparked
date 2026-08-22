@@ -1,0 +1,66 @@
+name: Bug Report
+description: Report something broken or behaving unexpectedly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The mod is currently in beta, so I'm hoping to squash as many bugs as possible. Please fill in as much detail as you can.
+        Please have a look at the other issues first in case it's been reported already.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+      placeholder: What did you expect to happen, and what happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: How can we make it happen again? Filling this in will really help in fixing it.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: false
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod version
+      description: Found in the mods menu, or the jar filename (e.g. psychedelicraftresparked-0.1.0b.jar)
+      placeholder: "0.1.0b"
+    validations:
+      required: true
+
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft / Forge version
+      placeholder: "1.12.2, Forge 14.23.5.2860"
+    validations:
+      required: true
+
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other mods installed
+      description: Can you please list the other mods (or attach/link a mod list). Otherwise, "none" or "just this mod" is fine. If it's a modpack, just link that so you don't have to write out all the mods.
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Log or crash report
+      description: |
+        If there are any, please add logs here. For a crash, use the file from `crash-reports/`; otherwise `logs/latest.log`.
+        For anything long, please use something like pastebin and link it here instead of pasting the whole thing.
+      render: shell
+    validations:
+      required: false
