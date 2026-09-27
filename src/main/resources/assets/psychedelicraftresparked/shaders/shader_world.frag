@@ -19,6 +19,7 @@ uniform int lightingEnabled;
 uniform int texture2DEnabled;
 uniform vec4 overrideColor;
 uniform int useScreenTexCoords;
+uniform ivec4 texGenMode;
 
 uniform vec4 pulses;
 uniform float surfaceFractal;
@@ -36,6 +37,8 @@ void main() {
     if (texture2DEnabled == 1) {
         if (useScreenTexCoords == 1) {
             gl_FragColor = texture2D(texture, (gl_FragCoord.xy + gl_TexCoord[0].st) * pixelSize);
+        } else if (any(notEqual(texGenMode, ivec4(0)))) {
+            gl_FragColor = texture2DProj(texture, gl_TexCoord[0]);
         } else {
             gl_FragColor = texture2D(texture, gl_TexCoord[0].st);
         }

@@ -32,6 +32,12 @@ public class WorldShaderEffect {
     private boolean active = false;
     private boolean bound = false;
     private boolean lightingEnabled = false;
+    // S, T, R, Q
+    private static final int[] TEX_GEN_COORDS = {GL11.GL_S, GL11.GL_T, GL11.GL_R, GL11.GL_Q};
+    private static final int[] TEX_GEN_ENABLE_CAPS = {GL11.GL_TEXTURE_GEN_S, GL11.GL_TEXTURE_GEN_T, GL11.GL_TEXTURE_GEN_R, GL11.GL_TEXTURE_GEN_Q};
+    private final boolean[] texGenEnabled = new boolean[4];
+    private final int[] texGenMode = new int[4];
+    private boolean pausedForTexGen = false;
 
     public void init() {
         try {
@@ -86,6 +92,12 @@ public class WorldShaderEffect {
         lightingEnabled = GL11.glIsEnabled(GL11.GL_LIGHTING);
         GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
 
+        pausedForTexGen = false;
+        for (int i = 0; i < 4; i++) {
+            texGenEnabled[i] = GL11.glIsEnabled(TEX_GEN_ENABLE_CAPS[i]);
+            texGenMode[i] = GL11.glGetTexGeni(TEX_GEN_COORDS[i], GL11.GL_TEXTURE_GEN_MODE);
+        }
+
         GL20.glUniform1i(uniform("lightmapEnabled"), 1);
 
         GL20.glUniform1i(uniform("fogEnabled"), GL11.glIsEnabled(GL11.GL_FOG) ? 1 : 0);
@@ -119,11 +131,14 @@ public class WorldShaderEffect {
         }
         contrastColor[3] = clamp01(contrastColor[3]);
         GL20.glUniform4f(uniform("worldColorization"), contrastColor[0], contrastColor[1], contrastColor[2], contrastColor[3]);
+
+        updateTexGen();
     }
 
     public void deactivate() {
         active = false;
         bound = false;
+        pausedForTexGen = false;
         if (shaderProgram == 0) {
             return;
         }
@@ -140,6 +155,55 @@ public class WorldShaderEffect {
         }
     }
 
+    public void setTexGenEnabled(GlStateManager.TexGen coord, boolean enabled) {
+        if (shaderProgram == 0) {
+            return;
+        }
+        texGenEnabled[coord.ordinal()] = enabled;
+        updateTexGen();
+    }
+
+    public void setTexGenMode(GlStateManager.TexGen coord, int mode) {
+        if (shaderProgram == 0) {
+            return;
+        }
+        texGenMode[coord.ordinal()] = mode;
+        updateTexGen();
+    }
+
+    private void updateTexGen() {
+        if (!active) {
+            return;
+        }
+        boolean unsupported = false;
+        for (int i = 0; i < 4; i++) {
+            if (texGenEnabled[i] && texGenMode[i] != GL11.GL_OBJECT_LINEAR && texGenMode[i] != GL11.GL_EYE_LINEAR) {
+                unsupported = true;
+            }
+        }
+
+        if (unsupported && !pausedForTexGen) {
+            pauseForUntexturedDraw();
+            pausedForTexGen = true;
+        } else if (!unsupported && pausedForTexGen) {
+            pausedForTexGen = false;
+            resumeAfterUntexturedDraw();
+        } else if (bound) {
+            uploadTexGen();
+        }
+    }
+
+    private int shaderTexGenMode(int i) {
+        if (!texGenEnabled[i]) {
+            return 0;
+        }
+        return texGenMode[i] == GL11.GL_OBJECT_LINEAR ? 1 : 2;
+    }
+
+    private void uploadTexGen() {
+        GL20.glUniform4i(uniform("texGenMode"), shaderTexGenMode(0), shaderTexGenMode(1), shaderTexGenMode(2), shaderTexGenMode(3));
+    }
+
     public void pauseForUntexturedDraw() {
         if (active && shaderProgram != 0) {
             GL20.glUseProgram(0);
@@ -148,10 +212,11 @@ public class WorldShaderEffect {
     }
 
     public void resumeAfterUntexturedDraw() {
-        if (active && shaderProgram != 0) {
+        if (active && shaderProgram != 0 && !pausedForTexGen) {
             GL20.glUseProgram(shaderProgram);
             bound = true;
             GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
+            uploadTexGen();
         }
     }
 
