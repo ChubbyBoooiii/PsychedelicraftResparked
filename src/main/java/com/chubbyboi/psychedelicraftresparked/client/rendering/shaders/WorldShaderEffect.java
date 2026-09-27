@@ -52,7 +52,7 @@ public class WorldShaderEffect {
     }
 
     public void activate(float partialTicks) {
-        if (shaderProgram == 0 || !PSConfig.shader3DEnabled) {
+        if (shaderProgram == 0 || !PSConfig.advancedShadersEnabled) {
             return;
         }
 

@@ -173,6 +173,11 @@ public class DigitalEffect implements ShaderEffect {
         return "Digital Effect";
     }
 
+    @Override
+    public boolean isAdvanced() {
+        return true;
+    }
+
     private static float mix(float value1, float value2, float progress) {
         return value1 + (value2 - value1) * progress;
     }

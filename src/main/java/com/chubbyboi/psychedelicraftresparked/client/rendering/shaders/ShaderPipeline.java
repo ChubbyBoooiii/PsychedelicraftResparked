@@ -64,13 +64,13 @@ public class ShaderPipeline {
     }
 
     public void captureDepth(float partialTicks) {
-        if (!initialized || !PSConfig.shader2DEnabled) {
+        if (!initialized) {
             return;
         }
 
         boolean anyWantsDepth = false;
         for (ShaderEffect effect : effects) {
-            if (effect.shouldApply(partialTicks) && effect.wantsDepthBuffer(partialTicks)) {
+            if (isCategoryEnabled(effect) && effect.shouldApply(partialTicks) && effect.wantsDepthBuffer(partialTicks)) {
                 anyWantsDepth = true;
                 break;
             }
@@ -88,13 +88,13 @@ public class ShaderPipeline {
     }
 
     public void render(float partialTicks) {
-        if (!initialized || !PSConfig.shader2DEnabled) {
+        if (!initialized) {
             return;
         }
 
         boolean anyActive = false;
         for (ShaderEffect effect : effects) {
-            if (effect.shouldApply(partialTicks)) {
+            if (isCategoryEnabled(effect) && effect.shouldApply(partialTicks)) {
                 anyActive = true;
                 break;
             }
@@ -119,7 +119,7 @@ public class ShaderPipeline {
 
         // Apply each active effect in sequence
         for (ShaderEffect effect : effects) {
-            if (effect.shouldApply(partialTicks)) {
+            if (isCategoryEnabled(effect) && effect.shouldApply(partialTicks)) {
                 buffer.bindWriteBuffer();
 
                 effect.apply(buffer, partialTicks);
@@ -129,5 +129,9 @@ public class ShaderPipeline {
         }
 
         buffer.renderToScreen();
+    }
+
+    private boolean isCategoryEnabled(ShaderEffect effect) {
+        return effect.isAdvanced() ? PSConfig.advancedShadersEnabled : PSConfig.simpleShadersEnabled;
     }
 }
