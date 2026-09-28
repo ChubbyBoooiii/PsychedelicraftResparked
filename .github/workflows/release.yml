@@ -89,3 +89,21 @@ jobs:
             --notes-file "${{ steps.changelog.outputs.body_file }}" \
             --target "$GITHUB_SHA" \
             $PRERELEASE_FLAG
+
+      - name: Publish to CurseForge
+        if: steps.check.outputs.exists == 'false'
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          curseforge-id: ${{ steps.properties.outputs.curseforge_project_id }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: build/libs/${{ steps.properties.outputs.mod_id }}-${{ steps.properties.outputs.mod_version }}.jar
+          name: ${{ steps.properties.outputs.mod_name }} ${{ steps.properties.outputs.mod_version }}
+          version: ${{ steps.properties.outputs.mod_version }}
+          version-type: ${{ steps.properties.outputs.release_type }}
+          changelog-file: ${{ steps.changelog.outputs.body_file }}
+          loaders: forge
+          game-versions: 1.12.2
+          java: 8
+          dependencies: |
+            mixin-booter(required)
+            jei(optional)
