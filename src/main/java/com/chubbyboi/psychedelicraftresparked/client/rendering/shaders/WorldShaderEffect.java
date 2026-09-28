@@ -31,7 +31,16 @@ public class WorldShaderEffect {
 
     private boolean active = false;
     private boolean bound = false;
+    private boolean wantBound = false;
+    private boolean foreignProgram = false;
     private boolean lightingEnabled = false;
+    // S, T, R, Q
+    private static final int[] TEX_GEN_COORDS = {GL11.GL_S, GL11.GL_T, GL11.GL_R, GL11.GL_Q};
+    private static final int[] TEX_GEN_ENABLE_CAPS = {GL11.GL_TEXTURE_GEN_S, GL11.GL_TEXTURE_GEN_T, GL11.GL_TEXTURE_GEN_R, GL11.GL_TEXTURE_GEN_Q};
+    private final boolean[] texGenEnabled = new boolean[4];
+    private final int[] texGenMode = new int[4];
+    private boolean pausedForTexGen = false;
+    private boolean pausedForOutline = false;
 
     public void init() {
         try {
@@ -52,7 +61,7 @@ public class WorldShaderEffect {
     }
 
     public void activate(float partialTicks) {
-        if (shaderProgram == 0 || !PSConfig.shader3DEnabled) {
+        if (shaderProgram == 0 || !PSConfig.advancedShadersEnabled) {
             return;
         }
 
@@ -64,6 +73,8 @@ public class WorldShaderEffect {
 
         active = true;
         bound = true;
+        wantBound = true;
+        foreignProgram = false;
         GL20.glUseProgram(shaderProgram);
 
         float ticks = mc.ingameGUI.getUpdateCounter() + partialTicks;
@@ -85,6 +96,13 @@ public class WorldShaderEffect {
 
         lightingEnabled = GL11.glIsEnabled(GL11.GL_LIGHTING);
         GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
+
+        pausedForTexGen = false;
+        pausedForOutline = false;
+        for (int i = 0; i < 4; i++) {
+            texGenEnabled[i] = GL11.glIsEnabled(TEX_GEN_ENABLE_CAPS[i]);
+            texGenMode[i] = GL11.glGetTexGeni(TEX_GEN_COORDS[i], GL11.GL_TEXTURE_GEN_MODE);
+        }
 
         GL20.glUniform1i(uniform("lightmapEnabled"), 1);
 
@@ -119,11 +137,17 @@ public class WorldShaderEffect {
         }
         contrastColor[3] = clamp01(contrastColor[3]);
         GL20.glUniform4f(uniform("worldColorization"), contrastColor[0], contrastColor[1], contrastColor[2], contrastColor[3]);
+
+        updateTexGen();
     }
 
     public void deactivate() {
         active = false;
         bound = false;
+        wantBound = false;
+        foreignProgram = false;
+        pausedForTexGen = false;
+        pausedForOutline = false;
         if (shaderProgram == 0) {
             return;
         }
@@ -140,19 +164,110 @@ public class WorldShaderEffect {
         }
     }
 
+    public void setTexGenEnabled(GlStateManager.TexGen coord, boolean enabled) {
+        if (shaderProgram == 0) {
+            return;
+        }
+        texGenEnabled[coord.ordinal()] = enabled;
+        updateTexGen();
+    }
+
+    public void setTexGenMode(GlStateManager.TexGen coord, int mode) {
+        if (shaderProgram == 0) {
+            return;
+        }
+        texGenMode[coord.ordinal()] = mode;
+        updateTexGen();
+    }
+
+    private void updateTexGen() {
+        if (!active) {
+            return;
+        }
+        boolean unsupported = false;
+        for (int i = 0; i < 4; i++) {
+            if (texGenEnabled[i] && texGenMode[i] != GL11.GL_OBJECT_LINEAR && texGenMode[i] != GL11.GL_EYE_LINEAR) {
+                unsupported = true;
+            }
+        }
+
+        if (unsupported && !pausedForTexGen) {
+            pauseForUntexturedDraw();
+            pausedForTexGen = true;
+        } else if (!unsupported && pausedForTexGen) {
+            pausedForTexGen = false;
+            resumeAfterUntexturedDraw();
+        } else if (bound) {
+            uploadTexGen();
+        }
+    }
+
+    public void setOutlineMode(boolean enabled) {
+        if (!active || shaderProgram == 0 || enabled == pausedForOutline) {
+            return;
+        }
+        if (enabled) {
+            pauseForUntexturedDraw();
+            pausedForOutline = true;
+        } else {
+            pausedForOutline = false;
+            resumeAfterUntexturedDraw();
+        }
+    }
+
+    private int shaderTexGenMode(int i) {
+        if (!texGenEnabled[i]) {
+            return 0;
+        }
+        return texGenMode[i] == GL11.GL_OBJECT_LINEAR ? 1 : 2;
+    }
+
+    private void uploadTexGen() {
+        GL20.glUniform4i(uniform("texGenMode"), shaderTexGenMode(0), shaderTexGenMode(1), shaderTexGenMode(2), shaderTexGenMode(3));
+    }
+
     public void pauseForUntexturedDraw() {
         if (active && shaderProgram != 0) {
-            GL20.glUseProgram(0);
-            bound = false;
+            wantBound = false;
+            if (!foreignProgram) {
+                GL20.glUseProgram(0);
+                bound = false;
+            }
         }
     }
 
     public void resumeAfterUntexturedDraw() {
-        if (active && shaderProgram != 0) {
-            GL20.glUseProgram(shaderProgram);
-            bound = true;
-            GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
+        if (active && shaderProgram != 0 && !pausedForTexGen && !pausedForOutline) {
+            wantBound = true;
+            if (!foreignProgram) {
+                bind();
+            }
         }
+    }
+
+    // Another mod's shader owns the GL program until it releases it; never bind over it or upload uniforms into it
+    public void onExternalProgramChange(int program) {
+        if (!active || shaderProgram == 0 || program == shaderProgram) {
+            return;
+        }
+        if (program != 0) {
+            foreignProgram = true;
+            bound = false;
+        } else if (foreignProgram) {
+            foreignProgram = false;
+            if (wantBound) {
+                bind();
+            }
+        } else {
+            bound = false;
+        }
+    }
+
+    private void bind() {
+        GL20.glUseProgram(shaderProgram);
+        bound = true;
+        GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
+        uploadTexGen();
     }
 
     private void registerFractals() {
