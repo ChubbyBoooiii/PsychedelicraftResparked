@@ -35,6 +35,16 @@ public class MixinGlStateManager {
         WorldShaderEffect.getInstance().setTexGenMode(texGen, mode);
     }
 
+    @Inject(method = "enableOutlineMode", at = @At("RETURN"))
+    private static void onEnableOutlineMode(int color, CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setOutlineMode(true);
+    }
+
+    @Inject(method = "disableOutlineMode", at = @At("HEAD"))
+    private static void onDisableOutlineMode(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setOutlineMode(false);
+    }
+
     @Inject(method = "disableLighting", at = @At("HEAD"))
     private static void onDisableLighting(CallbackInfo ci) {
         WorldShaderEffect.getInstance().setLightingEnabled(false);

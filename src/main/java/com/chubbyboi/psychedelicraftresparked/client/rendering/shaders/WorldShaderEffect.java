@@ -40,6 +40,7 @@ public class WorldShaderEffect {
     private final boolean[] texGenEnabled = new boolean[4];
     private final int[] texGenMode = new int[4];
     private boolean pausedForTexGen = false;
+    private boolean pausedForOutline = false;
 
     public void init() {
         try {
@@ -97,6 +98,7 @@ public class WorldShaderEffect {
         GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
 
         pausedForTexGen = false;
+        pausedForOutline = false;
         for (int i = 0; i < 4; i++) {
             texGenEnabled[i] = GL11.glIsEnabled(TEX_GEN_ENABLE_CAPS[i]);
             texGenMode[i] = GL11.glGetTexGeni(TEX_GEN_COORDS[i], GL11.GL_TEXTURE_GEN_MODE);
@@ -145,6 +147,7 @@ public class WorldShaderEffect {
         wantBound = false;
         foreignProgram = false;
         pausedForTexGen = false;
+        pausedForOutline = false;
         if (shaderProgram == 0) {
             return;
         }
@@ -199,6 +202,19 @@ public class WorldShaderEffect {
         }
     }
 
+    public void setOutlineMode(boolean enabled) {
+        if (!active || shaderProgram == 0 || enabled == pausedForOutline) {
+            return;
+        }
+        if (enabled) {
+            pauseForUntexturedDraw();
+            pausedForOutline = true;
+        } else {
+            pausedForOutline = false;
+            resumeAfterUntexturedDraw();
+        }
+    }
+
     private int shaderTexGenMode(int i) {
         if (!texGenEnabled[i]) {
             return 0;
@@ -221,7 +237,7 @@ public class WorldShaderEffect {
     }
 
     public void resumeAfterUntexturedDraw() {
-        if (active && shaderProgram != 0 && !pausedForTexGen) {
+        if (active && shaderProgram != 0 && !pausedForTexGen && !pausedForOutline) {
             wantBound = true;
             if (!foreignProgram) {
                 bind();
