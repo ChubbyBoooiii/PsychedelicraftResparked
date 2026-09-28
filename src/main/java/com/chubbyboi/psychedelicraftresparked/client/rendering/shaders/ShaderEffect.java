@@ -18,6 +18,10 @@ public interface ShaderEffect {
         return false;
     }
 
+    default boolean wantsHandDepthBuffer(float partialTicks) {
+        return false;
+    }
+
     default boolean isAdvanced() {
         return false;
     }
