@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -105,6 +104,8 @@ public class DrugVisualRenderer {
 
     @SubscribeEvent
     public void onRenderHand(RenderSpecificHandEvent event) {
+        shaderPipeline.captureHandProjection(event.getPartialTicks());
+
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         if (player == null) return;
 
@@ -166,11 +167,9 @@ public class DrugVisualRenderer {
         }
     }
 
-    @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent.Pre event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
-
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
+    public static void renderScreenEffects(float partialTicks) {
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityPlayerSP player = mc.player;
         if (player == null) return;
 
         IDrugProperties props = player.getCapability(DrugPropertiesProvider.DRUG_PROPERTIES_CAPABILITY, null);
@@ -190,9 +189,9 @@ public class DrugVisualRenderer {
         }
 
         if (anyActive) {
-            shaderPipeline.render(event.getPartialTicks());
+            ShaderPipeline.getInstance().render(partialTicks);
 
-            ScaledResolution resolution = event.getResolution();
+            ScaledResolution resolution = new ScaledResolution(mc);
 
             GlStateManager.matrixMode(GL11.GL_PROJECTION);
             GlStateManager.pushMatrix();
@@ -203,6 +202,8 @@ public class DrugVisualRenderer {
             GlStateManager.loadIdentity();
             GlStateManager.translate(0.0f, 0.0f, -2000.0f);
 
+            GlStateManager.disableLighting();
+            GlStateManager.disableFog();
             GlStateManager.enableBlend();
             GlStateManager.disableAlpha();
             GlStateManager.disableDepth();
@@ -212,7 +213,7 @@ public class DrugVisualRenderer {
                 GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO
             );
 
-            drugProps.drawOverlays(event.getPartialTicks(), resolution.getScaledWidth(), resolution.getScaledHeight());
+            drugProps.drawOverlays(partialTicks, resolution.getScaledWidth(), resolution.getScaledHeight());
 
             GL11.glDepthMask(true);
             GlStateManager.enableDepth();

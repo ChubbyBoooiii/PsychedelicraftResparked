@@ -10,16 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GlStateManager.class)
 public class MixinGlStateManager {
 
-    @Inject(method = "disableTexture2D", at = @At("HEAD"))
-    private static void onDisableTexture2D(CallbackInfo ci) {
-        WorldShaderEffect.getInstance().pauseForUntexturedDraw();
-    }
-
-    @Inject(method = "enableTexture2D", at = @At("HEAD"))
-    private static void onEnableTexture2D(CallbackInfo ci) {
-        WorldShaderEffect.getInstance().resumeAfterUntexturedDraw();
-    }
-
     @Inject(method = "enableTexGenCoord", at = @At("HEAD"))
     private static void onEnableTexGenCoord(GlStateManager.TexGen texGen, CallbackInfo ci) {
         WorldShaderEffect.getInstance().setTexGenEnabled(texGen, true);
@@ -35,14 +25,29 @@ public class MixinGlStateManager {
         WorldShaderEffect.getInstance().setTexGenMode(texGen, mode);
     }
 
-    @Inject(method = "enableOutlineMode", at = @At("RETURN"))
-    private static void onEnableOutlineMode(int color, CallbackInfo ci) {
-        WorldShaderEffect.getInstance().setOutlineMode(true);
+    @Inject(method = "enableLight", at = @At("HEAD"))
+    private static void onEnableLight(int light, CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setLightEnabled(light, true);
     }
 
-    @Inject(method = "disableOutlineMode", at = @At("HEAD"))
-    private static void onDisableOutlineMode(CallbackInfo ci) {
-        WorldShaderEffect.getInstance().setOutlineMode(false);
+    @Inject(method = "disableLight", at = @At("HEAD"))
+    private static void onDisableLight(int light, CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setLightEnabled(light, false);
+    }
+
+    @Inject(method = "enableColorMaterial", at = @At("HEAD"))
+    private static void onEnableColorMaterial(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setColorMaterialEnabled(true);
+    }
+
+    @Inject(method = "disableColorMaterial", at = @At("HEAD"))
+    private static void onDisableColorMaterial(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setColorMaterialEnabled(false);
+    }
+
+    @Inject(method = "colorMaterial", at = @At("HEAD"))
+    private static void onColorMaterial(int face, int mode, CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setColorMaterialMode(mode);
     }
 
     @Inject(method = "disableLighting", at = @At("HEAD"))
