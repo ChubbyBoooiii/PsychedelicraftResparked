@@ -13,6 +13,14 @@ uniform float surfaceFractal;
 
 uniform vec3 playerPos;
 
+uniform ivec4 texGenMode;
+
+float texGen(int mode, vec4 objectPlane, vec4 eyePlane, vec4 eyeVertex, float current) {
+    if (mode == 1) return dot(objectPlane, gl_Vertex);
+    if (mode == 2) return dot(eyePlane, eyeVertex);
+    return current;
+}
+
 varying vec3 relativeVertex;
 varying vec3 normalVector;
 varying vec4 projGLPos;
@@ -20,10 +28,16 @@ varying vec4 projGLPos;
 void main() {
     gl_Position = ftransform();
     projGLPos = vec4(gl_Position);
-    relativeVertex = vec3(gl_ModelViewMatrix * gl_Vertex);
+    vec4 eyeVertex = gl_ModelViewMatrix * gl_Vertex;
+    relativeVertex = vec3(eyeVertex);
     normalVector = normalize(gl_NormalMatrix * gl_Normal);
 
-    gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
+    vec4 texCoord0 = gl_MultiTexCoord0;
+    texCoord0.s = texGen(texGenMode.x, gl_ObjectPlaneS[0], gl_EyePlaneS[0], eyeVertex, texCoord0.s);
+    texCoord0.t = texGen(texGenMode.y, gl_ObjectPlaneT[0], gl_EyePlaneT[0], eyeVertex, texCoord0.t);
+    texCoord0.p = texGen(texGenMode.z, gl_ObjectPlaneR[0], gl_EyePlaneR[0], eyeVertex, texCoord0.p);
+    texCoord0.q = texGen(texGenMode.w, gl_ObjectPlaneQ[0], gl_EyePlaneQ[0], eyeVertex, texCoord0.q);
+    gl_TexCoord[0] = gl_TextureMatrix[0] * texCoord0;
     gl_TexCoord[1] = gl_TextureMatrix[1] * gl_MultiTexCoord1;
 
     if (surfaceFractal > 0.0) {

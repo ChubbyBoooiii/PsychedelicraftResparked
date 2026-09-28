@@ -20,6 +20,31 @@ public class MixinGlStateManager {
         WorldShaderEffect.getInstance().resumeAfterUntexturedDraw();
     }
 
+    @Inject(method = "enableTexGenCoord", at = @At("HEAD"))
+    private static void onEnableTexGenCoord(GlStateManager.TexGen texGen, CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setTexGenEnabled(texGen, true);
+    }
+
+    @Inject(method = "disableTexGenCoord", at = @At("HEAD"))
+    private static void onDisableTexGenCoord(GlStateManager.TexGen texGen, CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setTexGenEnabled(texGen, false);
+    }
+
+    @Inject(method = "texGen(Lnet/minecraft/client/renderer/GlStateManager$TexGen;I)V", at = @At("HEAD"))
+    private static void onTexGenMode(GlStateManager.TexGen texGen, int mode, CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setTexGenMode(texGen, mode);
+    }
+
+    @Inject(method = "enableOutlineMode", at = @At("RETURN"))
+    private static void onEnableOutlineMode(int color, CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setOutlineMode(true);
+    }
+
+    @Inject(method = "disableOutlineMode", at = @At("HEAD"))
+    private static void onDisableOutlineMode(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().setOutlineMode(false);
+    }
+
     @Inject(method = "disableLighting", at = @At("HEAD"))
     private static void onDisableLighting(CallbackInfo ci) {
         WorldShaderEffect.getInstance().setLightingEnabled(false);

@@ -33,8 +33,8 @@ public class PSConfig {
         }
     }
 
-    public static boolean shader2DEnabled;
-    public static boolean shader3DEnabled;
+    public static boolean simpleShadersEnabled;
+    public static boolean advancedShadersEnabled;
     public static boolean hallucinationEntitiesEnabled;
     public static boolean drugEffectsEnabled;
     public static boolean enableHarmonium;
@@ -71,10 +71,12 @@ public class PSConfig {
         config.addCustomCategoryComment(CATEGORY_SERVER,
             "Settings affecting world/gameplay behaviour - ideally kept the same between server and client.");
 
-        shader2DEnabled = config.get(CATEGORY_CLIENT, "shader2DEnabled", true,
-            "Enables and disables all 2D (screen) drug shader effects, e.g. desaturation, bloom, double vision, motion blur. Default: true").getBoolean();
-        shader3DEnabled = config.get(CATEGORY_CLIENT, "shader3DEnabled", true,
-            "Enables and disables all 3D (world geometry) drug shader effects, e.g. waves, fractals, colour contrast. Default: true").getBoolean();
+        simpleShadersEnabled = config.get(CATEGORY_CLIENT, "simpleShadersEnabled", true,
+            "Enables and disables simple screen-space drug shader effects, e.g. desaturation, bloom, double vision, motion blur. Default: true").getBoolean();
+        advancedShadersEnabled = config.get(CATEGORY_CLIENT, "advancedShadersEnabled", true,
+            "Enables and disables advanced/complex drug shader effects, e.g. 3D world geometry (waves, fractals, colour contrast)\n"
+                + "and Zero's digital/glitch effect. These are the most likely to conflict with OptiFine shaderpacks - disable this\n"
+                + "first if you're seeing rendering glitches with a shaderpack active. Default: true").getBoolean();
         hallucinationEntitiesEnabled = config.get(CATEGORY_CLIENT, "hallucinationEntitiesEnabled", true,
             "Enables and disables the fake hallucinated mobs (and the Rasta-Head easter egg) some drugs can spawn. Default: true").getBoolean();
 

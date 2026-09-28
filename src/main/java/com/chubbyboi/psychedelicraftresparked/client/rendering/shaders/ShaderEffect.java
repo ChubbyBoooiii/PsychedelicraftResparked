@@ -17,4 +17,8 @@ public interface ShaderEffect {
     default boolean wantsDepthBuffer(float partialTicks) {
         return false;
     }
+
+    default boolean isAdvanced() {
+        return false;
+    }
 }
