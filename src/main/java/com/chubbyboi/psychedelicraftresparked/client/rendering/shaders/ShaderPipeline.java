@@ -3,7 +3,12 @@ package com.chubbyboi.psychedelicraftresparked.client.rendering.shaders;
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderManager;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +17,16 @@ public class ShaderPipeline {
     private static ShaderPipeline instance;
     private PingPongBuffer buffer;
     private DepthCaptureBuffer depthBuffer;
+    private DepthCaptureBuffer handDepthBuffer;
     private List<ShaderEffect> effects;
     private boolean initialized = false;
+
+    private final FloatBuffer matrixScratch = BufferUtils.createFloatBuffer(16);
+    private final FloatBuffer inverseWorldProjection = BufferUtils.createFloatBuffer(16);
+    private final FloatBuffer inverseWorldModelView = BufferUtils.createFloatBuffer(16);
+    private final FloatBuffer inverseHandProjection = BufferUtils.createFloatBuffer(16);
+    private final double[] worldCameraPos = new double[3];
+    private boolean hasWorldMatrices = false;
 
     public static ShaderPipeline getInstance() {
         if (instance == null) {
@@ -25,6 +38,7 @@ public class ShaderPipeline {
     private ShaderPipeline() {
         buffer = new PingPongBuffer();
         depthBuffer = new DepthCaptureBuffer();
+        handDepthBuffer = new DepthCaptureBuffer();
         effects = new ArrayList<>();
     }
 
@@ -34,6 +48,7 @@ public class ShaderPipeline {
         }
 
         try {
+            registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.WorldColorEffect());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.SimpleEffectsShader());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.BloomEffect());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.MotionBlurEffect());
@@ -63,20 +78,32 @@ public class ShaderPipeline {
         }
     }
 
+    public int getHandDepthTexture() {
+        return handDepthBuffer.isReady() ? handDepthBuffer.getDepthTexture() : 0;
+    }
+
+    public boolean hasWorldMatrices() {
+        return hasWorldMatrices;
+    }
+
+    public FloatBuffer getInverseWorldProjection() {
+        return inverseWorldProjection;
+    }
+
+    public FloatBuffer getInverseWorldModelView() {
+        return inverseWorldModelView;
+    }
+
+    public FloatBuffer getInverseHandProjection() {
+        return inverseHandProjection;
+    }
+
+    public double[] getWorldCameraPos() {
+        return worldCameraPos;
+    }
+
     public void captureDepth(float partialTicks) {
-        if (!initialized) {
-            return;
-        }
-
-        boolean anyWantsDepth = false;
-        for (ShaderEffect effect : effects) {
-            if (isCategoryEnabled(effect) && effect.shouldApply(partialTicks) && effect.wantsDepthBuffer(partialTicks)) {
-                anyWantsDepth = true;
-                break;
-            }
-        }
-
-        if (!anyWantsDepth) {
+        if (!anyWants(partialTicks, false)) {
             return;
         }
 
@@ -85,6 +112,58 @@ public class ShaderPipeline {
         if (depthBuffer.isReady()) {
             depthBuffer.captureFrom(mc.getFramebuffer());
         }
+
+        captureInverseMatrix(GL11.GL_PROJECTION_MATRIX, inverseWorldProjection);
+        captureInverseMatrix(GL11.GL_MODELVIEW_MATRIX, inverseWorldModelView);
+        RenderManager renderManager = mc.getRenderManager();
+        worldCameraPos[0] = renderManager.viewerPosX;
+        worldCameraPos[1] = renderManager.viewerPosY;
+        worldCameraPos[2] = renderManager.viewerPosZ;
+        hasWorldMatrices = true;
+    }
+
+    public void captureHandProjection(float partialTicks) {
+        if (!anyWants(partialTicks, true)) {
+            return;
+        }
+        captureInverseMatrix(GL11.GL_PROJECTION_MATRIX, inverseHandProjection);
+    }
+
+    public void captureHandDepth(float partialTicks) {
+        if (!anyWants(partialTicks, true)) {
+            return;
+        }
+
+        Minecraft mc = Minecraft.getMinecraft();
+        handDepthBuffer.setup(mc.displayWidth, mc.displayHeight);
+        if (handDepthBuffer.isReady()) {
+            handDepthBuffer.captureFrom(mc.getFramebuffer());
+        }
+    }
+
+    private boolean anyWants(float partialTicks, boolean hand) {
+        if (!initialized) {
+            return false;
+        }
+        for (ShaderEffect effect : effects) {
+            if (isCategoryEnabled(effect) && effect.shouldApply(partialTicks)
+                    && (hand ? effect.wantsHandDepthBuffer(partialTicks) : effect.wantsDepthBuffer(partialTicks))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void captureInverseMatrix(int matrix, FloatBuffer out) {
+        matrixScratch.clear();
+        GL11.glGetFloat(matrix, matrixScratch);
+        matrixScratch.rewind();
+        Matrix4f inverse = new Matrix4f();
+        inverse.load(matrixScratch);
+        inverse.invert();
+        out.clear();
+        inverse.store(out);
+        out.rewind();
     }
 
     public void render(float partialTicks) {

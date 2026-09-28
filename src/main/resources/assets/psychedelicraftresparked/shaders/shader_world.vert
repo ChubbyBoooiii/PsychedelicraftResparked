@@ -1,19 +1,26 @@
 #version 120
 
-uniform float ticks;
+// Vertex-only program: fragment processing stays fixed-function, so everything that happens per pixel
+const int GL_AMBIENT = 4608;
+const int GL_DIFFUSE = 4609;
+const int GL_SPECULAR = 4610;
+const int GL_EMISSION = 5632;
+const int GL_AMBIENT_AND_DIFFUSE = 5634;
 
-uniform vec4 fractal0TexCoords;
-varying vec2 texFractal0Coords;
+uniform float ticks;
 
 uniform float bigWaves;
 uniform float smallWaves;
 uniform float wiggleWaves;
 uniform float distantWorldDeformation;
-uniform float surfaceFractal;
 
 uniform vec3 playerPos;
 
 uniform ivec4 texGenMode;
+
+uniform int lightingEnabled;
+uniform int lightEnabled[8];
+uniform int colorMaterialMode;
 
 float texGen(int mode, vec4 objectPlane, vec4 eyePlane, vec4 eyeVertex, float current) {
     if (mode == 1) return dot(objectPlane, gl_Vertex);
@@ -21,16 +28,81 @@ float texGen(int mode, vec4 objectPlane, vec4 eyePlane, vec4 eyeVertex, float cu
     return current;
 }
 
-varying vec3 relativeVertex;
-varying vec3 normalVector;
-varying vec4 projGLPos;
+vec4 computeLighting(vec3 eyePos, vec3 normal) {
+    vec4 ambientMat = gl_FrontMaterial.ambient;
+    vec4 diffuseMat = gl_FrontMaterial.diffuse;
+    vec4 specularMat = gl_FrontMaterial.specular;
+    vec4 emissionMat = gl_FrontMaterial.emission;
+
+    if (colorMaterialMode == GL_AMBIENT_AND_DIFFUSE) {
+        ambientMat = gl_Color;
+        diffuseMat = gl_Color;
+    } else if (colorMaterialMode == GL_AMBIENT) {
+        ambientMat = gl_Color;
+    } else if (colorMaterialMode == GL_DIFFUSE) {
+        diffuseMat = gl_Color;
+    } else if (colorMaterialMode == GL_SPECULAR) {
+        specularMat = gl_Color;
+    } else if (colorMaterialMode == GL_EMISSION) {
+        emissionMat = gl_Color;
+    }
+
+    vec3 color = emissionMat.rgb + gl_LightModel.ambient.rgb * ambientMat.rgb;
+
+    for (int i = 0; i < 8; i++) {
+        if (lightEnabled[i] == 0) {
+            continue;
+        }
+
+        vec3 lightDir;
+        float attenuation = 1.0;
+        if (gl_LightSource[i].position.w == 0.0) {
+            lightDir = normalize(gl_LightSource[i].position.xyz);
+        } else {
+            vec3 toLight = gl_LightSource[i].position.xyz / gl_LightSource[i].position.w - eyePos;
+            float dist = length(toLight);
+            lightDir = toLight / dist;
+            attenuation = 1.0 / (gl_LightSource[i].constantAttenuation
+                + gl_LightSource[i].linearAttenuation * dist
+                + gl_LightSource[i].quadraticAttenuation * dist * dist);
+
+            if (gl_LightSource[i].spotCutoff != 180.0) {
+                float spotDot = dot(-lightDir, normalize(gl_LightSource[i].spotDirection));
+                attenuation *= spotDot >= gl_LightSource[i].spotCosCutoff ? pow(max(spotDot, 0.0), gl_LightSource[i].spotExponent) : 0.0;
+            }
+        }
+
+        float nDotL = max(dot(normal, lightDir), 0.0);
+        vec3 contribution = gl_LightSource[i].ambient.rgb * ambientMat.rgb
+            + nDotL * gl_LightSource[i].diffuse.rgb * diffuseMat.rgb;
+
+        if (nDotL > 0.0) {
+            // Non-local viewer, so the eye direction is always +Z
+            vec3 halfVector = normalize(lightDir + vec3(0.0, 0.0, 1.0));
+            float nDotH = max(dot(normal, halfVector), 0.0);
+            float specular = gl_FrontMaterial.shininess > 0.0 ? pow(nDotH, gl_FrontMaterial.shininess) : 1.0;
+            contribution += specular * gl_LightSource[i].specular.rgb * specularMat.rgb;
+        }
+
+        color += attenuation * contribution;
+    }
+
+    return vec4(clamp(color, 0.0, 1.0), clamp(diffuseMat.a, 0.0, 1.0));
+}
 
 void main() {
     gl_Position = ftransform();
-    projGLPos = vec4(gl_Position);
     vec4 eyeVertex = gl_ModelViewMatrix * gl_Vertex;
-    relativeVertex = vec3(eyeVertex);
-    normalVector = normalize(gl_NormalMatrix * gl_Normal);
+    gl_ClipVertex = eyeVertex;
+
+    if (lightingEnabled == 1) {
+        gl_FrontColor = computeLighting(eyeVertex.xyz / eyeVertex.w, normalize(gl_NormalMatrix * gl_Normal));
+    } else {
+        gl_FrontColor = gl_Color;
+    }
+    gl_BackColor = gl_FrontColor;
+    gl_FrontSecondaryColor = gl_SecondaryColor;
+    gl_BackSecondaryColor = gl_SecondaryColor;
 
     vec4 texCoord0 = gl_MultiTexCoord0;
     texCoord0.s = texGen(texGenMode.x, gl_ObjectPlaneS[0], gl_EyePlaneS[0], eyeVertex, texCoord0.s);
@@ -39,17 +111,10 @@ void main() {
     texCoord0.q = texGen(texGenMode.w, gl_ObjectPlaneQ[0], gl_EyePlaneQ[0], eyeVertex, texCoord0.q);
     gl_TexCoord[0] = gl_TextureMatrix[0] * texCoord0;
     gl_TexCoord[1] = gl_TextureMatrix[1] * gl_MultiTexCoord1;
+    gl_TexCoord[2] = gl_TextureMatrix[2] * gl_MultiTexCoord2;
+    gl_TexCoord[3] = gl_TextureMatrix[3] * gl_MultiTexCoord3;
 
-    if (surfaceFractal > 0.0) {
-        texFractal0Coords = vec2(
-            mix(fractal0TexCoords[0], fractal0TexCoords[2], (mod(gl_Vertex[0] + gl_Vertex[1], 4.0)) / 4.0),
-            mix(fractal0TexCoords[1], fractal0TexCoords[3], (mod(gl_Vertex[2] + gl_Vertex[1], 4.0)) / 4.0)
-        );
-    }
-
-    gl_FrontColor = gl_Color;
-
-    gl_FogFragCoord = length(relativeVertex);
+    gl_FogFragCoord = length(eyeVertex.xyz);
 
     if (smallWaves > 0.0) {
         float w1 = 8.0;

@@ -53,10 +53,11 @@ public class DepthCaptureBuffer {
             return false;
         }
 
+        int previousFramebuffer = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
         GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, source.framebufferObject);
         GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, framebufferObject);
         GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL11.GL_DEPTH_BUFFER_BIT, GL11.GL_NEAREST);
-        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, previousFramebuffer);
 
         return true;
     }

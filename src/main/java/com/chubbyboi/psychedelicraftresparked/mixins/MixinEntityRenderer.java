@@ -3,7 +3,9 @@ package com.chubbyboi.psychedelicraftresparked.mixins;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
 import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.DrugVisualRenderer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.SmoothCameraHelper;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
 import com.chubbyboi.psychedelicraftresparked.drug.IDrug;
 import net.minecraft.client.Minecraft;
@@ -11,6 +13,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -121,6 +124,20 @@ public class MixinEntityRenderer {
     )
     private void deactivateWorldShader(float partialTicks, long nanoTime, CallbackInfo ci) {
         WorldShaderEffect.getInstance().deactivate();
+        ShaderPipeline.getInstance().captureHandDepth(partialTicks);
+    }
+
+    @Inject(
+        method = "updateCameraAndRender",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/client/renderer/EntityRenderer;renderEndNanoTime:J",
+            opcode = Opcodes.PUTFIELD,
+            ordinal = 0
+        )
+    )
+    private void renderDrugScreenEffects(float partialTicks, long nanoTime, CallbackInfo ci) {
+        DrugVisualRenderer.renderScreenEffects(partialTicks);
     }
 
     @Inject(
