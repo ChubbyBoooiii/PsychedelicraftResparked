@@ -31,6 +31,8 @@ public class WorldShaderEffect {
 
     private boolean active = false;
     private boolean bound = false;
+    private boolean wantBound = false;
+    private boolean foreignProgram = false;
     private boolean lightingEnabled = false;
     // S, T, R, Q
     private static final int[] TEX_GEN_COORDS = {GL11.GL_S, GL11.GL_T, GL11.GL_R, GL11.GL_Q};
@@ -70,6 +72,8 @@ public class WorldShaderEffect {
 
         active = true;
         bound = true;
+        wantBound = true;
+        foreignProgram = false;
         GL20.glUseProgram(shaderProgram);
 
         float ticks = mc.ingameGUI.getUpdateCounter() + partialTicks;
@@ -138,6 +142,8 @@ public class WorldShaderEffect {
     public void deactivate() {
         active = false;
         bound = false;
+        wantBound = false;
+        foreignProgram = false;
         pausedForTexGen = false;
         if (shaderProgram == 0) {
             return;
@@ -206,18 +212,46 @@ public class WorldShaderEffect {
 
     public void pauseForUntexturedDraw() {
         if (active && shaderProgram != 0) {
-            GL20.glUseProgram(0);
-            bound = false;
+            wantBound = false;
+            if (!foreignProgram) {
+                GL20.glUseProgram(0);
+                bound = false;
+            }
         }
     }
 
     public void resumeAfterUntexturedDraw() {
         if (active && shaderProgram != 0 && !pausedForTexGen) {
-            GL20.glUseProgram(shaderProgram);
-            bound = true;
-            GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
-            uploadTexGen();
+            wantBound = true;
+            if (!foreignProgram) {
+                bind();
+            }
         }
+    }
+
+    // Another mod's shader owns the GL program until it releases it; never bind over it or upload uniforms into it
+    public void onExternalProgramChange(int program) {
+        if (!active || shaderProgram == 0 || program == shaderProgram) {
+            return;
+        }
+        if (program != 0) {
+            foreignProgram = true;
+            bound = false;
+        } else if (foreignProgram) {
+            foreignProgram = false;
+            if (wantBound) {
+                bind();
+            }
+        } else {
+            bound = false;
+        }
+    }
+
+    private void bind() {
+        GL20.glUseProgram(shaderProgram);
+        bound = true;
+        GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
+        uploadTexGen();
     }
 
     private void registerFractals() {
