@@ -1,3 +1,6 @@
+[![Curse Downloads](http://cf.way2muchnoise.eu/full_1660834_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/psychedelicraft-resparked)
+[![Curse Version](https://cf.way2muchnoise.eu/versions/1660834_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/psychedelicraft-resparked/files/latest)
+
 # Psychedelicraft Resparked
 A Forge 1.12.2 port/rewrite of [Ivorforce's Psychedelicraft](https://github.com/Ivorforce/Psychedelicraft) (originally built for 1.7.10).
 
