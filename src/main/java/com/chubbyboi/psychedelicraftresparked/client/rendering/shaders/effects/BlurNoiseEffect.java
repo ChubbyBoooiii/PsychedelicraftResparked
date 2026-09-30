@@ -4,49 +4,38 @@ import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
 import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
-import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationManager;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.PingPongBuffer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderEffect;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderUtils;
-import com.chubbyboi.psychedelicraftresparked.drug.IDrug;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-public class BloomEffect implements ShaderEffect {
+import java.util.Random;
+
+public class BlurNoiseEffect implements ShaderEffect {
 
     private int shaderProgram = 0;
-    private int uniformTexture;
-    private int uniformPixelSize;
-    private int uniformVertical;
-    private int uniformTotalAlpha;
 
     @Override
     public void init() {
         try {
-
             String vertexSource = ShaderUtils.loadShader("shader_basic.vert");
-            String fragmentSource = ShaderUtils.loadShaderWithUtils("shader_bloom.frag");
+            String fragmentSource = ShaderUtils.loadShaderWithUtils("shader_blur_noise.frag");
 
             int vertexShader = compileShader(vertexSource, GL20.GL_VERTEX_SHADER);
             int fragmentShader = compileShader(fragmentSource, GL20.GL_FRAGMENT_SHADER);
 
             shaderProgram = linkProgram(vertexShader, fragmentShader);
 
-            uniformTexture = GL20.glGetUniformLocation(shaderProgram, "tex0");
-            uniformPixelSize = GL20.glGetUniformLocation(shaderProgram, "pixelSize");
-            uniformVertical = GL20.glGetUniformLocation(shaderProgram, "vertical");
-            uniformTotalAlpha = GL20.glGetUniformLocation(shaderProgram, "totalAlpha");
-
             GL20.glDeleteShader(vertexShader);
             GL20.glDeleteShader(fragmentShader);
-
         } catch (Exception e) {
-            PsychedelicraftResparked.LOGGER.error("Failed to initialize Bloom shader!", e);
+            PsychedelicraftResparked.LOGGER.error("Failed to initialize Blur Noise shader!", e);
             shaderProgram = 0;
         }
     }
@@ -61,7 +50,7 @@ public class BloomEffect implements ShaderEffect {
 
     @Override
     public boolean shouldApply(float partialTicks) {
-        return shaderProgram != 0 && getStrength(partialTicks) > 0.001f;
+        return shaderProgram != 0 && getStrength(partialTicks) > 0.0f;
     }
 
     @Override
@@ -72,31 +61,21 @@ public class BloomEffect implements ShaderEffect {
         IDrugProperties props = mc.player.getCapability(DrugPropertiesProvider.DRUG_PROPERTIES_CAPABILITY, null);
         if (!(props instanceof DrugProperties)) return 0.0f;
 
-        DrugProperties drugProps = (DrugProperties) props;
-
-        // Aggregate bloom from ALL drugs
-        float totalBloom = 0.0f;
-        for (IDrug drug : drugProps.getAllDrugs()) {
-            if (drug.getActiveValue() > 0.001f) {
-                totalBloom += drug.getBloomHallucinationStrength();
-            }
-        }
-
-        totalBloom += HallucinationManager.getInstance().getBloom();
-
-        return totalBloom;
+        return ((DrugProperties) props).getDrugStrength("power") * 0.6f;
     }
 
     @Override
     public void apply(PingPongBuffer buffer, float partialTicks) {
-        float bloom = getStrength(partialTicks);
-        if (bloom <= 0.001f) return;
+        float strength = getStrength(partialTicks);
+        if (strength <= 0.0f) return;
 
         Minecraft mc = Minecraft.getMinecraft();
         int width = mc.displayWidth;
         int height = mc.displayHeight;
 
-        GL11.glViewport(0, 0, width, height);
+        Entity viewEntity = mc.getRenderViewEntity();
+        int ticks = viewEntity != null ? viewEntity.ticksExisted : 0;
+        float seed = new Random((long) ((ticks + partialTicks) * 1000.0)).nextFloat() * 9.0f + 1.0f;
 
         GlStateManager.disableDepth();
         GL11.glDepthMask(false);
@@ -110,37 +89,18 @@ public class BloomEffect implements ShaderEffect {
 
         GL20.glUseProgram(shaderProgram);
 
-        GL20.glUniform1i(uniformTexture, 0);
+        GL20.glUniform1i(GL20.glGetUniformLocation(shaderProgram, "tex0"), 0);
+        GL20.glUniform2f(GL20.glGetUniformLocation(shaderProgram, "pixelSize"), 1.0f / width, 1.0f / height);
+        GL20.glUniform1f(GL20.glGetUniformLocation(shaderProgram, "strength"), strength);
+        GL20.glUniform1f(GL20.glGetUniformLocation(shaderProgram, "seed"), seed);
+        GL20.glUniform1f(GL20.glGetUniformLocation(shaderProgram, "totalAlpha"), 1.0f);
 
-        GL20.glUniform2f(uniformPixelSize, 1.0f / width * 2.0f, 1.0f / height * 2.0f);
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+        GlStateManager.bindTexture(buffer.getReadTexture());
 
-        int numPasses = MathHelper.ceil(bloom);
-        
-        for (int n = 0; n < numPasses; n++) {
-            float activeBloom = bloom - n;
-            if (activeBloom > 1.0f) {
-                activeBloom = 1.0f;
-            }
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, buffer.getWriteBuffer().framebufferObject);
 
-            GL20.glUniform1f(uniformTotalAlpha, activeBloom);
-
-            for (int pass = 0; pass < 2; pass++) {
-                GL20.glUniform1i(uniformVertical, pass);
-
-                // Bind read texture
-                GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-                GlStateManager.bindTexture(buffer.getReadTexture());
-
-                // Bind write framebuffer
-                GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, buffer.getWriteBuffer().framebufferObject);
-
-                // Render
-                renderFullScreenQuad();
-                buffer.swap();
-            }
-        }
-
-        buffer.swap();
+        renderFullScreenQuad();
 
         GL20.glUseProgram(0);
 
@@ -153,7 +113,7 @@ public class BloomEffect implements ShaderEffect {
 
     @Override
     public String getName() {
-        return "Bloom/Blur Effect";
+        return "Blur Noise Effect";
     }
 
     private int compileShader(String source, int type) throws Exception {

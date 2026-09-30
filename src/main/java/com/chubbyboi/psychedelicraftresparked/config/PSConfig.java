@@ -36,6 +36,8 @@ public class PSConfig {
     public static boolean simpleShadersEnabled;
     public static boolean advancedShadersEnabled;
     public static boolean hallucinationEntitiesEnabled;
+    public static boolean biomeHeatDistortion;
+    public static boolean waterDistortion;
     public static boolean drugEffectsEnabled;
     public static boolean enableHarmonium;
     public static boolean distortOutgoingMessages;
@@ -79,6 +81,12 @@ public class PSConfig {
                 + "first if you're seeing rendering glitches with a shaderpack active. Default: true").getBoolean();
         hallucinationEntitiesEnabled = config.get(CATEGORY_CLIENT, "hallucinationEntitiesEnabled", true,
             "Enables and disables the fake hallucinated mobs (and the Rasta-Head easter egg) some drugs can spawn. Default: true").getBoolean();
+        biomeHeatDistortion = config.get(CATEGORY_CLIENT, "biomeHeatDistortion", true,
+            "Enables and disables the heat shimmer on distant terrain in hot biomes (desert, mesa, Nether). Not a drug effect,\n"
+                + "unaffected by simpleShadersEnabled/advancedShadersEnabled. Default: true").getBoolean();
+        waterDistortion = config.get(CATEGORY_CLIENT, "waterDistortion", true,
+            "Enables and disables the wobble distortion while your view is underwater. Not a drug effect,\n"
+                + "unaffected by simpleShadersEnabled/advancedShadersEnabled. Default: true").getBoolean();
 
         digitalEffectPixelRescaleX = (float) config.get(CATEGORY_CLIENT, "digitalEffectPixelRescaleX", 0.05,
             "Maximum horizontal pixelation of Zero's digital shader at full strength (1.0 = no pixelation, smaller = blockier). Default: 0.05").getDouble();
@@ -113,7 +121,7 @@ public class PSConfig {
             "Wild Peyote. Found in: Sandy+Hot biomes (4% chance), Mountain+Hot biomes (4%). Default: true").getBoolean();
 
         drugEffectsEnabled = config.get(CATEGORY_SERVER, "drugEffectsEnabled", true,
-            "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /druglevels set. Default: true").getBoolean();
+            "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /psyche druglevels set. Default: true").getBoolean();
 
         enableHarmonium = config.get(CATEGORY_SERVER, "enableHarmonium", true,
             "Enables and disables the fictional drug Harmonium's crafting recipes (16 dye colours). Default: true").getBoolean();

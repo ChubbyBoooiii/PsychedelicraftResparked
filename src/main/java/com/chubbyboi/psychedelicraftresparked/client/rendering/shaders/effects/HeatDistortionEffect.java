@@ -1,52 +1,54 @@
 package com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects;
 
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
-import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
-import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
-import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
-import com.chubbyboi.psychedelicraftresparked.client.rendering.HallucinationManager;
+import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.PingPongBuffer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderEffect;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderUtils;
-import com.chubbyboi.psychedelicraftresparked.drug.IDrug;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-public class BloomEffect implements ShaderEffect {
+import java.util.function.Supplier;
+
+public class HeatDistortionEffect implements ShaderEffect {
+
+    private static final ResourceLocation NOISE_TEXTURE =
+        new ResourceLocation(Tags.MOD_ID, "textures/effects/heat_distortion_noise.png");
+
+    private final String name;
+    private final float wobbleSpeed;
+    private final Supplier<Float> strength;
 
     private int shaderProgram = 0;
-    private int uniformTexture;
-    private int uniformPixelSize;
-    private int uniformVertical;
-    private int uniformTotalAlpha;
+
+    public HeatDistortionEffect(String name, float wobbleSpeed, Supplier<Float> strength) {
+        this.name = name;
+        this.wobbleSpeed = wobbleSpeed;
+        this.strength = strength;
+    }
 
     @Override
     public void init() {
         try {
-
             String vertexSource = ShaderUtils.loadShader("shader_basic.vert");
-            String fragmentSource = ShaderUtils.loadShaderWithUtils("shader_bloom.frag");
+            String fragmentSource = ShaderUtils.loadShaderWithUtils("shader_heat_distortion.frag");
 
             int vertexShader = compileShader(vertexSource, GL20.GL_VERTEX_SHADER);
             int fragmentShader = compileShader(fragmentSource, GL20.GL_FRAGMENT_SHADER);
 
             shaderProgram = linkProgram(vertexShader, fragmentShader);
 
-            uniformTexture = GL20.glGetUniformLocation(shaderProgram, "tex0");
-            uniformPixelSize = GL20.glGetUniformLocation(shaderProgram, "pixelSize");
-            uniformVertical = GL20.glGetUniformLocation(shaderProgram, "vertical");
-            uniformTotalAlpha = GL20.glGetUniformLocation(shaderProgram, "totalAlpha");
-
             GL20.glDeleteShader(vertexShader);
             GL20.glDeleteShader(fragmentShader);
-
         } catch (Exception e) {
-            PsychedelicraftResparked.LOGGER.error("Failed to initialize Bloom shader!", e);
+            PsychedelicraftResparked.LOGGER.error("Failed to initialize " + name + " shader!", e);
             shaderProgram = 0;
         }
     }
@@ -61,42 +63,36 @@ public class BloomEffect implements ShaderEffect {
 
     @Override
     public boolean shouldApply(float partialTicks) {
-        return shaderProgram != 0 && getStrength(partialTicks) > 0.001f;
+        return shaderProgram != 0 && getStrength(partialTicks) > 0.0f;
     }
 
     @Override
     public float getStrength(float partialTicks) {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.player == null) return 0.0f;
+        if (Minecraft.getMinecraft().player == null) return 0.0f;
+        return strength.get();
+    }
 
-        IDrugProperties props = mc.player.getCapability(DrugPropertiesProvider.DRUG_PROPERTIES_CAPABILITY, null);
-        if (!(props instanceof DrugProperties)) return 0.0f;
+    @Override
+    public boolean wantsDepthBuffer(float partialTicks) {
+        return getStrength(partialTicks) > 0.0f;
+    }
 
-        DrugProperties drugProps = (DrugProperties) props;
-
-        // Aggregate bloom from ALL drugs
-        float totalBloom = 0.0f;
-        for (IDrug drug : drugProps.getAllDrugs()) {
-            if (drug.getActiveValue() > 0.001f) {
-                totalBloom += drug.getBloomHallucinationStrength();
-            }
-        }
-
-        totalBloom += HallucinationManager.getInstance().getBloom();
-
-        return totalBloom;
+    @Override
+    public boolean isAmbient() {
+        return true;
     }
 
     @Override
     public void apply(PingPongBuffer buffer, float partialTicks) {
-        float bloom = getStrength(partialTicks);
-        if (bloom <= 0.001f) return;
+        float distortion = getStrength(partialTicks);
+        if (distortion <= 0.0f) return;
 
         Minecraft mc = Minecraft.getMinecraft();
-        int width = mc.displayWidth;
-        int height = mc.displayHeight;
+        Entity viewEntity = mc.getRenderViewEntity();
+        float ticks = (viewEntity != null ? viewEntity.ticksExisted : 0) + partialTicks;
 
-        GL11.glViewport(0, 0, width, height);
+        // 0 until the first capture lands; an unbound depth sampler reads 0, which zeroes depthMul (no-op pass)
+        int depthTexture = ShaderPipeline.getInstance().getDepthTexture();
 
         GlStateManager.disableDepth();
         GL11.glDepthMask(false);
@@ -110,39 +106,33 @@ public class BloomEffect implements ShaderEffect {
 
         GL20.glUseProgram(shaderProgram);
 
-        GL20.glUniform1i(uniformTexture, 0);
+        GL20.glUniform1i(GL20.glGetUniformLocation(shaderProgram, "tex0"), 0);
+        GL20.glUniform1i(GL20.glGetUniformLocation(shaderProgram, "noiseTex"), 1);
+        GL20.glUniform1i(GL20.glGetUniformLocation(shaderProgram, "depthTex"), 2);
+        GL20.glUniform1f(GL20.glGetUniformLocation(shaderProgram, "totalAlpha"), 1.0f);
+        GL20.glUniform1f(GL20.glGetUniformLocation(shaderProgram, "ticks"), ticks * wobbleSpeed);
+        GL20.glUniform1f(GL20.glGetUniformLocation(shaderProgram, "strength"), distortion);
 
-        GL20.glUniform2f(uniformPixelSize, 1.0f / width * 2.0f, 1.0f / height * 2.0f);
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE2);
+        GlStateManager.bindTexture(depthTexture);
 
-        int numPasses = MathHelper.ceil(bloom);
-        
-        for (int n = 0; n < numPasses; n++) {
-            float activeBloom = bloom - n;
-            if (activeBloom > 1.0f) {
-                activeBloom = 1.0f;
-            }
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE1);
+        mc.getTextureManager().bindTexture(NOISE_TEXTURE);
 
-            GL20.glUniform1f(uniformTotalAlpha, activeBloom);
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+        GlStateManager.bindTexture(buffer.getReadTexture());
 
-            for (int pass = 0; pass < 2; pass++) {
-                GL20.glUniform1i(uniformVertical, pass);
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, buffer.getWriteBuffer().framebufferObject);
 
-                // Bind read texture
-                GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-                GlStateManager.bindTexture(buffer.getReadTexture());
-
-                // Bind write framebuffer
-                GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, buffer.getWriteBuffer().framebufferObject);
-
-                // Render
-                renderFullScreenQuad();
-                buffer.swap();
-            }
-        }
-
-        buffer.swap();
+        renderFullScreenQuad();
 
         GL20.glUseProgram(0);
+
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE2);
+        GlStateManager.bindTexture(0);
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE1);
+        GlStateManager.bindTexture(0);
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
 
         GL11.glDepthMask(true);
         GlStateManager.enableDepth();
@@ -153,7 +143,7 @@ public class BloomEffect implements ShaderEffect {
 
     @Override
     public String getName() {
-        return "Bloom/Blur Effect";
+        return name;
     }
 
     private int compileShader(String source, int type) throws Exception {

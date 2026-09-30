@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.client.rendering;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
 import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.ambient.AmbientEnvironment;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.drug.IDrug;
 import com.chubbyboi.psychedelicraftresparked.mixins.EntityLivingBaseAccessor;
@@ -39,6 +40,8 @@ public class DrugVisualRenderer {
 
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         if (player == null) return;
+
+        AmbientEnvironment.getInstance().update(player);
 
         IDrugProperties props = player.getCapability(DrugPropertiesProvider.DRUG_PROPERTIES_CAPABILITY, null);
         if (!(props instanceof DrugProperties)) return;
@@ -188,9 +191,9 @@ public class DrugVisualRenderer {
             anyActive = HallucinationManager.getInstance().hasAnyEffect();
         }
 
-        if (anyActive) {
-            ShaderPipeline.getInstance().render(partialTicks);
+        ShaderPipeline.getInstance().render(partialTicks);
 
+        if (anyActive) {
             ScaledResolution resolution = new ScaledResolution(mc);
 
             GlStateManager.matrixMode(GL11.GL_PROJECTION);
