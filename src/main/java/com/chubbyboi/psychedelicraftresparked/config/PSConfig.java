@@ -12,6 +12,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Mod.EventBusSubscriber
 public class PSConfig {
@@ -169,9 +171,20 @@ public class PSConfig {
             readOreDictNames(recipe);
         }
 
-        if (config.hasChanged()) {
-            config.save();
-        }
+        config.setCategoryPropertyOrder(CATEGORY_CLIENT, new ArrayList<>(Arrays.asList(
+            "simpleShadersEnabled", "advancedShadersEnabled",
+            "digitalEffectPixelRescaleX", "digitalEffectPixelRescaleY",
+            "biomeHeatDistortion", "waterDistortion",
+            "hallucinationEntitiesEnabled")));
+        config.setCategoryPropertyOrder(CATEGORY_SERVER, new ArrayList<>(Arrays.asList(
+            "drugEffectsEnabled", "distortOutgoingMessages",
+            "enableHarmonium",
+            "dryingTableTickDuration", "vatMixingTime", "slurryHardeningTime",
+            "enableRiftJars", "riftJarOverfillingEnabled", "randomTicksUntilRiftSpawn")));
+        config.setCategoryPropertyOrder(CATEGORY_WORLDGEN, new ArrayList<>(Arrays.asList(
+            "generateJuniper", "generateCannabis", "generateHop", "generateTobacco",
+            "generateCoffea", "generateCoca", "generatePeyote")));
+        config.save();
     }
 
     private static void readTickInfo(FluidAlcohol fluid) {
