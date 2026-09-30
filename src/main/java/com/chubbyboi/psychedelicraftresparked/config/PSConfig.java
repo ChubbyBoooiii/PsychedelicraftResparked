@@ -122,7 +122,7 @@ public class PSConfig {
             "Whether a player's own chat messages get slurred/glitched (Alcohol/Zero) or padded with filler words (Cannabis)\n"
                 + "based on their own drug levels, visible to everyone. Default: true").getBoolean();
 
-        int defaultDryingTableTickDuration = 2000;
+        int defaultDryingTableTickDuration = 3600;
         dryingTableTickDuration = config.get(CATEGORY_SERVER, "dryingTableTickDuration", defaultDryingTableTickDuration,
             "Base number of ticks the Drying Table takes to dry a full stack of items (actual time also depends on light and biome temperature). Default: "
                 + defaultDryingTableTickDuration).getInt();
