@@ -1,7 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked;
 
-import com.chubbyboi.psychedelicraftresparked.commands.CommandDrugLevels;
-import com.chubbyboi.psychedelicraftresparked.commands.CommandSpawnRift;
+import com.chubbyboi.psychedelicraftresparked.commands.CommandPsyche;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.network.NetworkHandler;
 import com.chubbyboi.psychedelicraftresparked.proxy.CommonProxy;
@@ -17,7 +16,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.mixin.Mixins;
 
 @Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION, guiFactory = "com.chubbyboi.psychedelicraftresparked.config.PSConfigGuiFactory")
 public class PsychedelicraftResparked {
@@ -37,9 +35,6 @@ public class PsychedelicraftResparked {
     public void preInit(FMLPreInitializationEvent event) {
         // Load mod config first, since registries below may need to consult it
         PSConfig.loadConfig(event.getSuggestedConfigurationFile());
-
-        // Register mixin config
-        Mixins.addConfiguration("mixins.psychedelicraftresparked.json");
 
         // Register capabilities first
         proxy.registerCapabilities();
@@ -65,7 +60,6 @@ public class PsychedelicraftResparked {
     public void serverInit(FMLServerStartingEvent event) {
         RegistryHandler.serverRegistries(event);
 
-        event.registerServerCommand(new CommandDrugLevels());
-        event.registerServerCommand(new CommandSpawnRift());
+        event.registerServerCommand(new CommandPsyche());
     }
 }

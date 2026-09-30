@@ -216,10 +216,15 @@ public class WorldShaderEffect {
 
     // Another mod's shader owns the GL program until it releases it; never bind over it or upload uniforms into it
     public void onExternalProgramChange(int program) {
-        if (!active || shaderProgram == 0 || program == shaderProgram) {
+        if (!active || shaderProgram == 0) {
             return;
         }
-        if (program != 0) {
+        if (program == shaderProgram) {
+            foreignProgram = false;
+            if (wantBound) {
+                bind();
+            }
+        } else if (program != 0) {
             foreignProgram = true;
             bound = false;
         } else if (foreignProgram) {

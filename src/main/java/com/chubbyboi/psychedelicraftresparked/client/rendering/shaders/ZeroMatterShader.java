@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.client.rendering.shaders;
 
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
+import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -49,7 +50,7 @@ public class ZeroMatterShader {
             return;
         }
         previousProgram = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
-        GL20.glUseProgram(shaderProgram);
+        OpenGlHelper.glUseProgram(shaderProgram);
         GL20.glUniform1i(GL20.glGetUniformLocation(shaderProgram, "tex0"), 0);
         GL20.glUniform2f(GL20.glGetUniformLocation(shaderProgram, "pixelSize"), PIXEL_SIZE_X, PIXEL_SIZE_Y);
         GL20.glUniform2f(GL20.glGetUniformLocation(shaderProgram, "cellOffset"), cellOffsetX, cellOffsetY);
@@ -59,7 +60,7 @@ public class ZeroMatterShader {
         if (shaderProgram == 0) {
             return;
         }
-        GL20.glUseProgram(previousProgram);
+        OpenGlHelper.glUseProgram(previousProgram);
     }
 
     private int compileShader(String source, int type) throws Exception {
