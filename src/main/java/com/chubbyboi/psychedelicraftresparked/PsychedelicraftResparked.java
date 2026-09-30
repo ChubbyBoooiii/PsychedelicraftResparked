@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.mixin.Mixins;
 
 @Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION, guiFactory = "com.chubbyboi.psychedelicraftresparked.config.PSConfigGuiFactory")
 public class PsychedelicraftResparked {
@@ -36,9 +35,6 @@ public class PsychedelicraftResparked {
     public void preInit(FMLPreInitializationEvent event) {
         // Load mod config first, since registries below may need to consult it
         PSConfig.loadConfig(event.getSuggestedConfigurationFile());
-
-        // Register mixin config
-        Mixins.addConfiguration("mixins.psychedelicraftresparked.json");
 
         // Register capabilities first
         proxy.registerCapabilities();
