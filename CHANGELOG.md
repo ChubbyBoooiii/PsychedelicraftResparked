@@ -1,4 +1,8 @@
 # Changelog
+## [0.2.1b] - 2026-09-30
+### Fixed
+- Crash on launch with MixinBooter 10.x (LinkageError). Should support versions 10.2+ like intended.
+
 ## [0.2.0b] - 2026-09-28
 ### Added
 - Releases now get uploaded to CurseForge automatically.
