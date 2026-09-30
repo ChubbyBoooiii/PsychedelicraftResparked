@@ -1,30 +1,20 @@
 package com.chubbyboi.psychedelicraftresparked.core;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.Mixins;
+import zone.rong.mixinbooter.IEarlyMixinLoader;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.Name("Psychedelicraft Resparked Core")
-public class PsychedelicraftCoremod implements IFMLLoadingPlugin {
+public class PsychedelicraftCoremod implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
-    public PsychedelicraftCoremod() {
-        // Initialize Mixin if not already done
-        MixinBootstrap.init();
-
-        System.out.println("[Psychedelicraft Resparked] About to register mixin config...");
-
-        // Register our mixin config
-        try {
-            Mixins.addConfiguration("mixins.psychedelicraftresparked.json");
-            System.out.println("[Psychedelicraft Resparked] Successfully registered mixin config!");
-        } catch (Exception e) {
-            System.out.println("[Psychedelicraft Resparked] ERROR registering mixin config: " + e.getMessage());
-            e.printStackTrace();
-        }
+    @Override
+    public List<String> getMixinConfigs() {
+        return Collections.singletonList("mixins.psychedelicraftresparked.json");
     }
 
     @Override
