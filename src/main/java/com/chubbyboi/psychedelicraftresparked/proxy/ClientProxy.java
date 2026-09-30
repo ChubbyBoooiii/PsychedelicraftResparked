@@ -19,7 +19,6 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntity
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererRiftJar;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
-import com.chubbyboi.psychedelicraftresparked.commands.CommandHallucinationDebug;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
@@ -35,7 +34,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -95,7 +93,6 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new DrugVisualRenderer());
         MinecraftForge.EVENT_BUS.register(new HallucinationEntitySpawner());
         MinecraftForge.EVENT_BUS.register(SmokeMonsterSpawner.getInstance());
-        ClientCommandHandler.instance.registerCommand(new CommandHallucinationDebug());
 
         MinecraftForge.EVENT_BUS.register(this);
     }

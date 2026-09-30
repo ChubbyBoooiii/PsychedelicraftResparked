@@ -51,5 +51,13 @@ public class NetworkHandler {
             packetId++,
             Side.CLIENT
         );
+
+        // /psyche hallucinate debug overrides (server -> client)
+        INSTANCE.registerMessage(
+            PacketHallucinationDebug.Handler.class,
+            PacketHallucinationDebug.class,
+            packetId++,
+            Side.CLIENT
+        );
     }
 }
