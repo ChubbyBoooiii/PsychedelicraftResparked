@@ -9,17 +9,24 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.PingPongB
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderEffect;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderUtils;
+import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 public class WorldColorEffect implements ShaderEffect {
+
+    private static final int SKY_NONE = 0;
+    private static final int SKY_FAKE_BOX = 1;
+    private static final int SKY_SURFACE = 2;
+    private static final int SKY_END = 3;
 
     private int shaderProgram = 0;
 
@@ -120,6 +127,11 @@ public class WorldColorEffect implements ShaderEffect {
         GL20.glUniform4f(uniform("pulses"), pulseColor[0], pulseColor[1], pulseColor[2], pulseColor[3]);
         GL20.glUniform4f(uniform("worldColorization"), contrastColor[0], contrastColor[1], contrastColor[2], contrastColor[3]);
 
+        GL20.glUniform1i(uniform("skyMode"), getSkyMode(mc));
+        GL20.glUniform1f(uniform("skyHorizonOffset"),
+            mc.player != null && mc.world != null ? (float) (mc.player.getPositionEyes(partialTicks).y - mc.world.getHorizon()) : 0.0f);
+        GL20.glUniform1f(uniform("fakeSkyboxDistance"), mc.gameSettings.renderDistanceChunks * 16 * 0.75f * (float) Math.sqrt(3.0));
+
         TextureAtlasSprite sprite = mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(Blocks.PORTAL.getDefaultState());
         GL20.glUniform4f(uniform("fractal0TexCoords"), sprite.getMinU(), sprite.getMinV(), sprite.getMaxU(), sprite.getMaxV());
 
@@ -161,6 +173,21 @@ public class WorldColorEffect implements ShaderEffect {
     @Override
     public boolean isAdvanced() {
         return true;
+    }
+
+    private static int getSkyMode(Minecraft mc) {
+        World world = mc.world;
+        if (!PSConfig.skyDrugEffects || world == null) {
+            return SKY_NONE;
+        }
+
+        if (mc.gameSettings.renderDistanceChunks < 4 || world.provider.getSkyRenderer() != null) {
+            return SKY_FAKE_BOX;
+        }
+        if (world.provider.getDimensionType().getId() == 1) {
+            return SKY_END;
+        }
+        return world.provider.isSurfaceWorld() ? SKY_SURFACE : SKY_FAKE_BOX;
     }
 
     private static float getSurfaceFractal() {

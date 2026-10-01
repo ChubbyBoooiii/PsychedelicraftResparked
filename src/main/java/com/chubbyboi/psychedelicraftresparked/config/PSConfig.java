@@ -37,6 +37,7 @@ public class PSConfig {
 
     public static boolean simpleShadersEnabled;
     public static boolean advancedShadersEnabled;
+    public static boolean skyDrugEffects;
     public static boolean hallucinationEntitiesEnabled;
     public static boolean biomeHeatDistortion;
     public static boolean waterDistortion;
@@ -84,6 +85,9 @@ public class PSConfig {
             "Enables and disables advanced/complex drug shader effects, e.g. 3D world geometry (waves, fractals, colour contrast)\n"
                 + "and Zero's digital/glitch effect. These are the most likely to conflict with OptiFine shaderpacks - disable this\n"
                 + "first if you're seeing rendering glitches with a shaderpack active. Default: true").getBoolean();
+        skyDrugEffects = config.get(CATEGORY_CLIENT, "skyDrugEffects", true,
+            "Whether the advanced world effects (pulses, fractals, colour contrast) also reach the sky. Turn this off if a mod\n"
+                + "with its own sky renderer looks wrong with them. Needs advancedShadersEnabled. Default: true").getBoolean();
         hallucinationEntitiesEnabled = config.get(CATEGORY_CLIENT, "hallucinationEntitiesEnabled", true,
             "Enables and disables the fake hallucinated mobs (and the Rasta-Head easter egg) some drugs can spawn. Default: true").getBoolean();
         biomeHeatDistortion = config.get(CATEGORY_CLIENT, "biomeHeatDistortion", true,
@@ -181,7 +185,7 @@ public class PSConfig {
         }
 
         config.setCategoryPropertyOrder(CATEGORY_CLIENT, new ArrayList<>(Arrays.asList(
-            "simpleShadersEnabled", "advancedShadersEnabled",
+            "simpleShadersEnabled", "advancedShadersEnabled", "skyDrugEffects",
             "digitalEffectPixelRescaleX", "digitalEffectPixelRescaleY",
             "biomeHeatDistortion", "waterDistortion",
             "sunFlareIntensity", "sunFlareDisabledDimensions",
