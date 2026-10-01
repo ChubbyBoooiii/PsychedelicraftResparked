@@ -4,6 +4,7 @@ import com.chubbyboi.psychedelicraftresparked.capabilities.DrugProperties;
 import com.chubbyboi.psychedelicraftresparked.capabilities.DrugPropertiesProvider;
 import com.chubbyboi.psychedelicraftresparked.capabilities.IDrugProperties;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.ambient.AmbientEnvironment;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.ambient.LensFlareEffect;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.drug.IDrug;
 import com.chubbyboi.psychedelicraftresparked.mixins.EntityLivingBaseAccessor;
@@ -42,6 +43,7 @@ public class DrugVisualRenderer {
         if (player == null) return;
 
         AmbientEnvironment.getInstance().update(player);
+        LensFlareEffect.getInstance().update(player);
 
         IDrugProperties props = player.getCapability(DrugPropertiesProvider.DRUG_PROPERTIES_CAPABILITY, null);
         if (!(props instanceof DrugProperties)) return;
@@ -190,6 +192,8 @@ public class DrugVisualRenderer {
         if (!anyActive) {
             anyActive = HallucinationManager.getInstance().hasAnyEffect();
         }
+
+        LensFlareEffect.getInstance().render(partialTicks);
 
         ShaderPipeline.getInstance().render(partialTicks);
 

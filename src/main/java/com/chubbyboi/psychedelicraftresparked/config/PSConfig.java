@@ -53,6 +53,9 @@ public class PSConfig {
     public static float digitalEffectPixelRescaleX;
     public static float digitalEffectPixelRescaleY;
 
+    public static float sunFlareIntensity;
+    public static int[] sunFlareDisabledDimensions;
+
     public static boolean enableRiftJars;
     public static boolean riftJarOverfillingEnabled;
 
@@ -89,6 +92,12 @@ public class PSConfig {
         waterDistortion = config.get(CATEGORY_CLIENT, "waterDistortion", true,
             "Enables and disables the wobble distortion while your view is underwater. Not a drug effect,\n"
                 + "unaffected by simpleShadersEnabled/advancedShadersEnabled. Default: true").getBoolean();
+        sunFlareIntensity = (float) config.get(CATEGORY_CLIENT, "sunFlareIntensity", 0.25,
+            "Intensity of the lens flare and glare when looking at the sun. Set to 0 to disable it entirely. Not a drug effect,\n"
+                + "unaffected by simpleShadersEnabled/advancedShadersEnabled. Default: 0.25").getDouble();
+        sunFlareDisabledDimensions = config.get(CATEGORY_CLIENT, "sunFlareDisabledDimensions", new int[0],
+            "Dimension IDs where the sun flare never shows, e.g. modded dimensions without a sun. Not needed for the\n"
+                + "Nether or End, which never show one. Default: none").getIntList();
 
         digitalEffectPixelRescaleX = (float) config.get(CATEGORY_CLIENT, "digitalEffectPixelRescaleX", 0.05,
             "Maximum horizontal pixelation of Zero's digital shader at full strength (1.0 = no pixelation, smaller = blockier). Default: 0.05").getDouble();
@@ -175,6 +184,7 @@ public class PSConfig {
             "simpleShadersEnabled", "advancedShadersEnabled",
             "digitalEffectPixelRescaleX", "digitalEffectPixelRescaleY",
             "biomeHeatDistortion", "waterDistortion",
+            "sunFlareIntensity", "sunFlareDisabledDimensions",
             "hallucinationEntitiesEnabled")));
         config.setCategoryPropertyOrder(CATEGORY_SERVER, new ArrayList<>(Arrays.asList(
             "drugEffectsEnabled", "distortOutgoingMessages",
