@@ -16,6 +16,8 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntity
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererFlask;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererVat;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPlacedContainers;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.placedcontainers.PlacementPreviewRenderer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererRiftJar;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
@@ -28,13 +30,17 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPlacedContainers;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityRiftJar;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -42,6 +48,8 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.function.IntUnaryOperator;
 
 public class ClientProxy extends CommonProxy {
 
@@ -81,6 +89,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlask.class, new TileEntityRendererFlask());
         ItemInit.FLASK_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererFlask());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRiftJar.class, new TileEntityRendererRiftJar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlacedContainers.class, new TileEntityRendererPlacedContainers());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityMolotovCocktail.class,
             manager -> new RenderMolotovCocktail(manager, ItemInit.MOLOTOV_COCKTAIL, Minecraft.getMinecraft().getRenderItem()));
@@ -93,6 +102,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new DrugVisualRenderer());
         MinecraftForge.EVENT_BUS.register(new HallucinationEntitySpawner());
         MinecraftForge.EVENT_BUS.register(SmokeMonsterSpawner.getInstance());
+        MinecraftForge.EVENT_BUS.register(new PlacementPreviewRenderer());
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -110,18 +120,22 @@ public class ClientProxy extends CommonProxy {
         );
 
         event.getItemColors().registerItemColorHandler(
-            (stack, tintIndex) -> {
-                boolean filled = FluidHelper.hasFluid(stack);
-                if (tintIndex == 0) {
-                    return filled ? FluidHelper.getFluidColor(stack) : EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
-                }
-                if (tintIndex == 1 && filled) {
-                    return EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
-                }
-                return 0xFFFFFF;
-            },
-            ItemInit.BOTTLE, ItemInit.MOLOTOV_COCKTAIL
-        );
+            bottleColors(meta -> MapColor.getBlockColor(EnumDyeColor.byMetadata(meta)).colorValue), ItemInit.BOTTLE);
+        event.getItemColors().registerItemColorHandler(
+            bottleColors(meta -> EnumDyeColor.byMetadata(meta).getColorValue()), ItemInit.MOLOTOV_COCKTAIL);
+    }
+
+    private static IItemColor bottleColors(IntUnaryOperator glassColor) {
+        return (stack, tintIndex) -> {
+            boolean filled = FluidHelper.hasFluid(stack);
+            if (tintIndex == 0) {
+                return filled ? FluidHelper.getFluidColor(stack) : glassColor.applyAsInt(stack.getMetadata());
+            }
+            if (tintIndex == 1 && filled) {
+                return glassColor.applyAsInt(stack.getMetadata());
+            }
+            return 0xFFFFFF;
+        };
     }
 
     @SubscribeEvent
@@ -148,5 +162,11 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/mead_flow"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_bubble"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_splash"));
+        TileEntityRendererPlacedContainers.registerTextures(event.getMap());
+    }
+
+    @SubscribeEvent
+    public void onModelBake(ModelBakeEvent event) {
+        TileEntityRendererPlacedContainers.bakeModels();
     }
 }

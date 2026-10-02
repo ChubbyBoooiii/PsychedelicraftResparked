@@ -18,6 +18,7 @@
 		"MixinGlStateManager",
 		"MixinOpenGlHelper",
 		"MixinSoundManager",
+		"MixinTileEntityRendererDispatcher",
 		"EntityLivingBaseAccessor",
 		"EntityRendererAccessor"
 	]

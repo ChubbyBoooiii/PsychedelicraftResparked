@@ -236,6 +236,7 @@ container.flask.drain=Drain
 
 # Rift Jar
 tile.rift_jar.name=Rift Jar
+tile.placed_containers.name=Placed Drinks
 psychedelicraftresparked.tooltip.rift_jar.empty=Empty
 psychedelicraftresparked.tooltip.rift_jar.slightly_filled=Slightly Filled
 psychedelicraftresparked.tooltip.rift_jar.half_filled=Half Filled

@@ -10,6 +10,7 @@ import com.chubbyboi.psychedelicraftresparked.block.BlockJuniperSapling;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVat;
 import com.chubbyboi.psychedelicraftresparked.block.BlockVatCompanion;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPeyote;
+import com.chubbyboi.psychedelicraftresparked.block.BlockPlacedContainers;
 import com.chubbyboi.psychedelicraftresparked.block.BlockRiftJar;
 import com.chubbyboi.psychedelicraftresparked.block.BlockTallCrop;
 import com.chubbyboi.psychedelicraftresparked.block.BlockDryingTable;
@@ -30,6 +31,7 @@ public class BlockInit {
     public static final BlockFlask FLASK = new BlockFlask("flask");
     public static final BlockLattice LATTICE = new BlockLattice("lattice");
     public static final BlockRiftJar RIFT_JAR = new BlockRiftJar("rift_jar");
+    public static final BlockPlacedContainers PLACED_CONTAINERS = new BlockPlacedContainers("placed_containers");
 
     // Other Blocks
     public static final BlockJuniperSapling JUNIPER_SAPLING = new BlockJuniperSapling("juniper_sapling");
