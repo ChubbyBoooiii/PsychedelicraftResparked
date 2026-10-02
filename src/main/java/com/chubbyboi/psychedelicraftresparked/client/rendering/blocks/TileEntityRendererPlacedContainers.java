@@ -55,6 +55,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     }
 
     private static final Map<PlacedContainerType, SplitModel> MODELS = new EnumMap<>(PlacedContainerType.class);
+    private static final float GLASS_FILTER_STRENGTH = 0.85F;
 
     public static void registerTextures(TextureMap map) {
         for (PlacedContainerType type : PlacedContainerType.values()) {
@@ -368,6 +369,13 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
             alpha = 255;
         }
         int[] rgba = {(color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, alpha};
+
+        int glass = getTint(pending.entry.stack, 0);
+        for (int channel = 0; channel < 3; channel++) {
+            int glassChannel = (glass >> (16 - channel * 8)) & 0xFF;
+            float filtered = rgba[channel] * glassChannel / 255.0F;
+            rgba[channel] = (int) (rgba[channel] + (filtered - rgba[channel]) * GLASS_FILTER_STRENGTH);
+        }
 
         if (!neckSection) {
             float bodyTop = type.fluidBottom + Math.min(level, type.fluidMaxHeight);

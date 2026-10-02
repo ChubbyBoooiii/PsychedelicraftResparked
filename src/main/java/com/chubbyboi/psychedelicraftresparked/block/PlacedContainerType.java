@@ -20,10 +20,11 @@ public enum PlacedContainerType {
     //     bottom      - where the fluid starts, above the floor
     //     maxHeight   - fluid height in the body when full
     //   neck:
-    //     maxHeight   - how far up the neck the fluid reaches when full;
     //     halfWidth   - half the width of the neck's fluid box; 0 = no neck (body only)
+    //     maxHeight   - how far up the neck the fluid reaches when full
     //   sound         - place/pick-up sound
-    BOTTLE(() -> ItemInit.BOTTLE, 2.0F, 14.5F, 1.99F, 0.01F, 9.98F, 0.99F, 2.25F, SoundType.GLASS);
+    BOTTLE(() -> ItemInit.BOTTLE, 2.0F, 14.5F, 1.99F, 0.01F, 9.98F, 0.99F, 2.25F, SoundType.GLASS),
+    SHOT_GLASS(() -> ItemInit.SHOT_GLASS, 1.0F, 2.5F, 0.99F, 0.01F, 2.0F, 0.0F, 0.0F, SoundType.GLASS);
 
     private final Supplier<Item> item;
     public final float hitHalfWidth;
