@@ -1,0 +1,52 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "psychedelicraftresparked:blocks/placed/glass_chalice",
+		"particle": "psychedelicraftresparked:blocks/placed/glass_chalice"
+	},
+	"elements": [
+		{
+			"name": "base",
+			"from": [6.75, 0, 6.75],
+			"to": [9.25, 0.5, 9.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0.25, 8]},
+			"faces": {
+				"north": {"uv": [10, 3, 15, 4], "texture": "#0"},
+				"east": {"uv": [10, 3, 15, 4], "texture": "#0"},
+				"south": {"uv": [10, 3, 15, 4], "texture": "#0"},
+				"west": {"uv": [10, 3, 15, 4], "texture": "#0"},
+				"up": {"uv": [10, 0, 15, 5], "texture": "#0"},
+				"down": {"uv": [10, 5, 15, 10], "texture": "#0"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [7.5, 0.5, 7.5],
+			"to": [8.5, 1.5, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1, 8]},
+			"faces": {
+				"north": {"uv": [0, 8, 2, 10], "texture": "#0"},
+				"east": {"uv": [0, 8, 2, 10], "texture": "#0"},
+				"south": {"uv": [0, 8, 2, 10], "texture": "#0"},
+				"west": {"uv": [0, 8, 2, 10], "texture": "#0"},
+				"up": {"uv": [0, 10, 2, 12], "texture": "#0"},
+				"down": {"uv": [2, 8, 4, 10], "texture": "#0"}
+			}
+		},
+		{
+			"name": "body",
+			"from": [6.75, 1.5, 6.75],
+			"to": [9.25, 5.5, 9.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 3.5, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 5, 8], "texture": "#0"},
+				"east": {"uv": [0, 0, 5, 8], "texture": "#0"},
+				"south": {"uv": [0, 0, 5, 8], "texture": "#0"},
+				"west": {"uv": [0, 0, 5, 8], "texture": "#0"},
+				"up": {"uv": [5, 5, 10, 10], "texture": "#0"},
+				"down": {"uv": [5, 0, 10, 5], "texture": "#0"}
+			}
+		}
+	]
+}

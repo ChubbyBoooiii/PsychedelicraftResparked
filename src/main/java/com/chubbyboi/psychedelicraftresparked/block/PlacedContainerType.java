@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 public enum PlacedContainerType {
     // All sizes in pixels (1/16 block), measured from the container's centre/floor
     //   item          - the held item that can be set down as this container
-    //   hitHalfWidth  - half the width of the base square
+    //   hitHalfWidth  - half the width of the footprint square, models width and depth (decimals rounded up)
     //   height        - top of the selection/collision box
     //   fluid:
     //     halfWidth   - half the width of the body's fluid box (keep just inside the glass walls)
@@ -24,7 +24,8 @@ public enum PlacedContainerType {
     //     maxHeight   - how far up the neck the fluid reaches when full
     //   sound         - place/pick-up sound
     BOTTLE(() -> ItemInit.BOTTLE, 2.0F, 14.5F, 1.99F, 0.01F, 9.98F, 0.99F, 2.25F, SoundType.GLASS),
-    SHOT_GLASS(() -> ItemInit.SHOT_GLASS, 1.0F, 2.5F, 0.99F, 0.01F, 2.0F, 0.0F, 0.0F, SoundType.GLASS);
+    SHOT_GLASS(() -> ItemInit.SHOT_GLASS, 1.0F, 2.5F, 0.99F, 0.01F, 2.0F, 0.0F, 0.0F, SoundType.GLASS),
+    GLASS_CHALICE(() -> ItemInit.GLASS_CHALICE, 1.5F, 5.5F, 1.24F, 1.51F, 3.49F, 0.0F, 0.0F, SoundType.GLASS);
 
     private final Supplier<Item> item;
     public final float hitHalfWidth;
@@ -39,6 +40,9 @@ public enum PlacedContainerType {
 
     PlacedContainerType(Supplier<Item> item, float hitHalfWidth, float height, float fluidHalfWidth, float fluidBottom, float fluidMaxHeight,
                         float neckFluidHalfWidth, float neckFluidMaxHeight, SoundType soundType) {
+        if (hitHalfWidth * 2.0F != Math.round(hitHalfWidth * 2.0F)) {
+            throw new IllegalArgumentException(name() + ": footprint width must be whole pixels, got " + hitHalfWidth * 2.0F);
+        }
         this.item = item;
         this.hitHalfWidth = hitHalfWidth;
         this.height = height;

@@ -57,8 +57,9 @@ public class TileEntityPlacedContainers extends TileEntity {
     public static final float GAP = 1.0F;
 
     public static float snapToBlock(float pixel, PlacedContainerType type) {
-        float snapped = Math.round(pixel);
-        return Math.max(type.hitHalfWidth, Math.min(16.0F - type.hitHalfWidth, snapped));
+        float width = type.hitHalfWidth * 2.0F;
+        float minEdge = Math.round(pixel - type.hitHalfWidth);
+        return Math.max(0.0F, Math.min(16.0F - width, minEdge)) + type.hitHalfWidth;
     }
 
     public boolean canPlace(PlacedContainerType type, float x, float z) {

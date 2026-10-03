@@ -201,9 +201,8 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         Vec3d camera = ActiveRenderInfo.getCameraPosition();
         for (Pending pending : PENDING) {
             double dx = pending.placement.originX - camera.x;
-            double dy = pending.placement.originY + pending.entry.type.height / 32.0 - camera.y;
             double dz = pending.placement.originZ - camera.z;
-            pending.distanceSq = dx * dx + dy * dy + dz * dz;
+            pending.distanceSq = dx * dx + dz * dz;
         }
         PENDING.sort(Comparator.comparingDouble((Pending pending) -> pending.distanceSq).reversed());
 
