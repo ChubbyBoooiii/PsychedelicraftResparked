@@ -49,7 +49,7 @@ public class PlacementPreviewRenderer {
         double angle = Math.toRadians(-placement.rotation * 360.0F / TileEntityPlacedContainers.ROTATION_STEPS);
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
-        double halfWidth = placement.type.hitHalfWidth / 16.0;
+        double halfWidth = placement.shape.halfFootprint / 16.0;
         double originX = placement.target.getX() + placement.x / 16.0 - cameraX;
         double originY = placement.target.getY() + 0.002 - cameraY;
         double originZ = placement.target.getZ() + placement.z / 16.0 - cameraZ;

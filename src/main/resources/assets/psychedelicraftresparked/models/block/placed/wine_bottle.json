@@ -2,8 +2,8 @@
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "psychedelicraftresparked:blocks/placed/bottle",
-		"particle": "psychedelicraftresparked:blocks/placed/bottle"
+		"0": "psychedelicraftresparked:blocks/placed/wine_bottle",
+		"particle": "psychedelicraftresparked:blocks/placed/wine_bottle"
 	},
 	"elements": [
 		{

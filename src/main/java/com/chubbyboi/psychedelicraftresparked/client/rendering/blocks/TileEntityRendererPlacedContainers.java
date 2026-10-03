@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.client.rendering.blocks;
 
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
+import com.chubbyboi.psychedelicraftresparked.block.ContainerShape;
 import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
@@ -41,7 +42,6 @@ import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,12 +53,20 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         private final List<BakedQuad> seeThrough = new ArrayList<>();
     }
 
-    private static final Map<PlacedContainerType, SplitModel> MODELS = new EnumMap<>(PlacedContainerType.class);
+    private static final Map<ContainerShape, SplitModel> MODELS = new HashMap<>();
     private static final float GLASS_FILTER_STRENGTH = 0.85F;
 
-    public static void registerTextures(TextureMap map) {
+    private static List<ContainerShape> allShapes() {
+        List<ContainerShape> shapes = new ArrayList<>();
         for (PlacedContainerType type : PlacedContainerType.values()) {
-            for (ResourceLocation texture : ModelLoaderRegistry.getModelOrMissing(type.model).getTextures()) {
+            shapes.addAll(type.getShapes());
+        }
+        return shapes;
+    }
+
+    public static void registerTextures(TextureMap map) {
+        for (ContainerShape shape : allShapes()) {
+            for (ResourceLocation texture : ModelLoaderRegistry.getModelOrMissing(shape.model).getTextures()) {
                 map.registerSprite(texture);
             }
         }
@@ -67,9 +75,9 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     public static void bakeModels() {
         MODELS.clear();
         Map<String, BufferedImage> images = new HashMap<>();
-        for (PlacedContainerType type : PlacedContainerType.values()) {
+        for (ContainerShape shape : allShapes()) {
             try {
-                IModel model = ModelLoaderRegistry.getModel(type.model);
+                IModel model = ModelLoaderRegistry.getModel(shape.model);
                 IBakedModel baked = model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter());
                 List<BakedQuad> quads = new ArrayList<>();
                 for (EnumFacing side : EnumFacing.values()) {
@@ -81,9 +89,9 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
                 for (BakedQuad quad : quads) {
                     (isSolid(quad, images) ? split.solid : split.seeThrough).add(quad);
                 }
-                MODELS.put(type, split);
+                MODELS.put(shape, split);
             } catch (Exception e) {
-                PsychedelicraftResparked.LOGGER.error("Failed to load placed container model {}", type.model, e);
+                PsychedelicraftResparked.LOGGER.error("Failed to load placed container model {}", shape.model, e);
             }
         }
     }
@@ -225,26 +233,47 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (Pending pending : PENDING) {
-            SplitModel model = MODELS.get(pending.entry.type);
+            SplitModel model = MODELS.get(pending.entry.shape);
             FluidStack fluid = getFluid(pending.entry);
 
-            boolean hasNeck = pending.entry.type.neckFluidHalfWidth > 0.0F;
-            boolean cameraAboveNeckStart = camera.y > pending.placement.originY + getNeckStart(pending.entry.type) / 16.0;
-            boolean[] sections = !hasNeck ? new boolean[]{false} : cameraAboveNeckStart ? new boolean[]{false, true} : new boolean[]{true, false};
-            for (boolean neck : sections) {
+            for (int section : getSectionOrder(pending, camera)) {
                 if (model != null) {
-                    addModelQuads(buffer, pending, model.seeThrough, hasNeck, neck, false, camera);
+                    addModelQuads(buffer, pending, model.seeThrough, section, false, camera);
                 }
                 if (fluid != null) {
-                    addFluid(buffer, pending, fluid, neck, false, camera);
-                    addFluid(buffer, pending, fluid, neck, true, camera);
+                    addFluid(buffer, pending, fluid, section, false, camera);
+                    addFluid(buffer, pending, fluid, section, true, camera);
                 }
                 if (model != null) {
-                    addModelQuads(buffer, pending, model.seeThrough, hasNeck, neck, true, camera);
+                    addModelQuads(buffer, pending, model.seeThrough, section, true, camera);
                 }
             }
         }
         tessellator.draw();
+    }
+
+    private static List<Integer> getSectionOrder(Pending pending, Vec3d camera) {
+        List<ContainerShape.FluidBox> boxes = pending.entry.shape.fluid;
+        double cameraY = (camera.y - pending.placement.originY) * 16.0;
+        List<Integer> order = new ArrayList<>();
+        for (int i = 0; i < boxes.size(); i++) {
+            order.add(i);
+        }
+        order.sort(Comparator.comparingDouble((Integer i) -> {
+            ContainerShape.FluidBox box = boxes.get(i);
+            return Math.max(0.0, Math.max(box.bottom - cameraY, cameraY - box.top));
+        }).reversed());
+        return order;
+    }
+
+    private static int getQuadSection(ContainerShape shape, float centreY) {
+        int section = 0;
+        for (int i = 0; i < shape.fluid.size() - 1; i++) {
+            if (centreY > (shape.fluid.get(i).top + 0.25F) / 16.0F) {
+                section = i + 1;
+            }
+        }
+        return section;
     }
 
     private static final class Placement {
@@ -286,13 +315,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         }
     }
 
-    // Where the neck section of bottle starts
-    private static float getNeckStart(PlacedContainerType type) {
-        return type.fluidBottom + type.fluidMaxHeight;
-    }
-
-    private static void addModelQuads(BufferBuilder buffer, Pending pending, List<BakedQuad> quads, boolean hasNeck, boolean neckSection, boolean towardCamera, Vec3d camera) {
-        float neckStart = (getNeckStart(pending.entry.type) + 0.25F) / 16.0F;
+    private static void addModelQuads(BufferBuilder buffer, Pending pending, List<BakedQuad> quads, int section, boolean towardCamera, Vec3d camera) {
         Placement placement = pending.placement;
         float[] data = new float[4];
         float[][] positions = new float[4][3];
@@ -327,7 +350,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
                 uvs[vertex][1] = data[1];
             }
 
-            if (hasNeck && (centreY > neckStart) != neckSection) {
+            if (getQuadSection(pending.entry.shape, centreY) != section) {
                 continue;
             }
 
@@ -356,11 +379,19 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         }
     }
 
-    private static void addFluid(BufferBuilder buffer, Pending pending, FluidStack fluid, boolean neckSection, boolean towardCamera, Vec3d camera) {
-        PlacedContainerType type = pending.entry.type;
+    private static void addFluid(BufferBuilder buffer, Pending pending, FluidStack fluid, int section, boolean towardCamera, Vec3d camera) {
+        ContainerShape shape = pending.entry.shape;
         int capacity = ((ItemDrinkable) pending.entry.stack.getItem()).getCapacity();
         float fill = MathHelper.clamp((float) fluid.amount / capacity, 0.0F, 1.0F);
-        float level = (type.fluidMaxHeight + type.neckFluidMaxHeight) * fill;
+        // Level shared by height over all boxes, filled bottom to top
+        float level = shape.fluidHeight * fill;
+        for (int i = 0; i < section; i++) {
+            level -= shape.fluid.get(i).getHeight();
+        }
+        if (level <= 0.0F) {
+            return;
+        }
+        ContainerShape.FluidBox box = shape.fluid.get(section);
 
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
         int color = FluidHelper.getWorldRenderColor(fluid);
@@ -377,12 +408,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
             rgba[channel] = (int) (rgba[channel] + (filtered - rgba[channel]) * GLASS_FILTER_STRENGTH);
         }
 
-        if (!neckSection) {
-            float bodyTop = type.fluidBottom + Math.min(level, type.fluidMaxHeight);
-            addFluidBox(buffer, pending, sprite, rgba, type.fluidHalfWidth, type.fluidBottom, bodyTop, towardCamera, camera);
-        } else if (level > type.fluidMaxHeight) {
-            addFluidBox(buffer, pending, sprite, rgba, type.neckFluidHalfWidth, getNeckStart(type), type.fluidBottom + level, towardCamera, camera);
-        }
+        addFluidBox(buffer, pending, sprite, rgba, box.halfWidth, box.bottom, box.bottom + Math.min(level, box.getHeight()), towardCamera, camera);
     }
 
     private static void addFluidBox(BufferBuilder buffer, Pending pending, TextureAtlasSprite sprite, int[] rgba, float halfWidth, float bottom, float top, boolean towardCamera, Vec3d camera) {

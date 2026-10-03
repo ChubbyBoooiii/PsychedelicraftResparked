@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.recipes;
 
 import com.chubbyboi.psychedelicraftresparked.Tags;
+import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
@@ -110,7 +111,7 @@ public class CraftingRecipes {
         GameRegistry.addShapelessRecipe(new ResourceLocation(Tags.MOD_ID, "shot_glass"), null, new ItemStack(ItemInit.SHOT_GLASS, 1), Ingredient.fromStacks(new ItemStack(Blocks.GLASS)));
         for (EnumDyeColor color : EnumDyeColor.values()) {
             GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "bottle_" + color.getName()), null,
-                new ItemStack(ItemInit.BOTTLE, 8, color.getMetadata()),
+                PlacedContainerType.withShape(new ItemStack(ItemInit.BOTTLE, 8, color.getMetadata()), "wine_bottle"),
                 " # ", "# #", "###", '#', new ItemStack(Blocks.STAINED_GLASS, 1, color.getMetadata()));
         }
 

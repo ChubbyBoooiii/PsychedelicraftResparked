@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.tileentities;
 
+import com.chubbyboi.psychedelicraftresparked.block.ContainerShape;
 import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +23,7 @@ public class TileEntityPlacedContainers extends TileEntity {
     public static class Entry {
         public final ItemStack stack;
         public final PlacedContainerType type;
+        public final ContainerShape shape;
         public final float x;
         public final float z;
         public int rotation;
@@ -29,6 +31,7 @@ public class TileEntityPlacedContainers extends TileEntity {
         private Entry(ItemStack stack, PlacedContainerType type, float x, float z, int rotation) {
             this.stack = stack;
             this.type = type;
+            this.shape = type.getShape(stack);
             this.x = x;
             this.z = z;
             this.rotation = rotation;
@@ -36,8 +39,8 @@ public class TileEntityPlacedContainers extends TileEntity {
 
         public AxisAlignedBB getBox() {
             return new AxisAlignedBB(
-                (x - type.hitHalfWidth) / 16.0, 0.0, (z - type.hitHalfWidth) / 16.0,
-                (x + type.hitHalfWidth) / 16.0, type.height / 16.0, (z + type.hitHalfWidth) / 16.0);
+                (x - shape.halfFootprint) / 16.0, 0.0, (z - shape.halfFootprint) / 16.0,
+                (x + shape.halfFootprint) / 16.0, shape.height / 16.0, (z + shape.halfFootprint) / 16.0);
         }
     }
 
@@ -53,15 +56,14 @@ public class TileEntityPlacedContainers extends TileEntity {
 
     public static final float GAP = 1.0F;
 
-    public static float snapToBlock(float pixel, PlacedContainerType type) {
-        float width = type.hitHalfWidth * 2.0F;
-        float minEdge = Math.round(pixel - type.hitHalfWidth);
-        return Math.max(0.0F, Math.min(16.0F - width, minEdge)) + type.hitHalfWidth;
+    public static float snapToBlock(float pixel, ContainerShape shape) {
+        float minEdge = Math.round(pixel - shape.halfFootprint);
+        return Math.max(0.0F, Math.min(16.0F - shape.footprint, minEdge)) + shape.halfFootprint;
     }
 
-    public boolean canPlace(PlacedContainerType type, float x, float z) {
+    public boolean canPlace(ContainerShape shape, float x, float z) {
         for (Entry entry : entries) {
-            float minDistance = entry.type.hitHalfWidth + type.hitHalfWidth + GAP - 0.001F;
+            float minDistance = entry.shape.halfFootprint + shape.halfFootprint + GAP - 0.001F;
             if (Math.abs(entry.x - x) < minDistance && Math.abs(entry.z - z) < minDistance) {
                 return false;
             }

@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.item;
 
+import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -19,7 +20,7 @@ public class ItemBottle extends ItemDrinkable {
             return;
         }
         for (int meta = 0; meta < 16; meta++) {
-            items.add(new ItemStack(this, 1, meta));
+            items.add(PlacedContainerType.withShape(new ItemStack(this, 1, meta), "wine_bottle"));
         }
     }
 
