@@ -214,6 +214,10 @@ public class WorldShaderEffect {
         GL20.glUniform1i(uniform("colorMaterialMode"), colorMaterialEnabled ? colorMaterialMode : 0);
     }
 
+    public boolean isOwnProgram(int program) {
+        return program != 0 && program == shaderProgram;
+    }
+
     // Another mod's shader owns the GL program until it releases it; never bind over it or upload uniforms into it
     public void onExternalProgramChange(int program) {
         if (!active || shaderProgram == 0) {

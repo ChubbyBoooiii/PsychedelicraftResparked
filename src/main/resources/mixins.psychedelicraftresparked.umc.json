@@ -1,0 +1,13 @@
+{
+	"package": "com.chubbyboi.psychedelicraftresparked.util.compat.universalmodcore.mixins",
+	"required": true,
+	"refmap": "mixins.psychedelicraftresparked.refmap.json",
+	"target": "@env(DEFAULT)",
+	"minVersion": "0.8.5",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [],
+	"server": [],
+	"client": [
+		"MixinUmcShaderDetection"
+	]
+}
