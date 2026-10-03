@@ -9,10 +9,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,17 +104,6 @@ public class TileEntityPlacedContainers extends TileEntity {
             }
         }
         return best;
-    }
-
-    @Override
-    public boolean shouldRenderInPass(int pass) {
-        return pass == 0 || pass == 1;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean hasFastRenderer() {
-        return MinecraftForgeClient.getRenderPass() == 1;
     }
 
     private void sync() {

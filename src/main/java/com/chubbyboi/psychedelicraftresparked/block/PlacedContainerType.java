@@ -25,7 +25,8 @@ public enum PlacedContainerType {
     //   sound         - place/pick-up sound
     BOTTLE(() -> ItemInit.BOTTLE, 2.0F, 14.5F, 1.99F, 0.01F, 9.98F, 0.99F, 2.25F, SoundType.GLASS),
     SHOT_GLASS(() -> ItemInit.SHOT_GLASS, 1.0F, 2.5F, 0.99F, 0.01F, 2.0F, 0.0F, 0.0F, SoundType.GLASS),
-    GLASS_CHALICE(() -> ItemInit.GLASS_CHALICE, 1.5F, 5.5F, 1.24F, 1.51F, 3.49F, 0.0F, 0.0F, SoundType.GLASS);
+    GLASS_CHALICE(() -> ItemInit.GLASS_CHALICE, 1.5F, 5.5F, 1.24F, 1.51F, 3.49F, 0.0F, 0.0F, SoundType.GLASS),
+    WOODEN_MUG(() -> ItemInit.WOODEN_MUG, 1.5F, 4.5F, 0.99F, 0.26F, 3.74F, 0.0F, 0.0F, SoundType.WOOD);
 
     private final Supplier<Item> item;
     public final float hitHalfWidth;

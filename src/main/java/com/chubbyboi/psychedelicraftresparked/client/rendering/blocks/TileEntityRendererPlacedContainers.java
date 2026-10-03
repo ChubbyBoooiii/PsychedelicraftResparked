@@ -31,7 +31,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -146,11 +145,8 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
 
     @Override
     public void render(TileEntityPlacedContainers tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if (MinecraftForgeClient.getRenderPass() == 1) {
-            collect(tileEntity, x, y, z);
-            drawPending();
-            return;
-        }
+        // See-through parts are drawn together after all tile entities, sorted, before translucent terrain
+        collect(tileEntity, x, y, z);
 
         GlStateManager.disableCull();
         for (TileEntityPlacedContainers.Entry entry : tileEntity.getEntries()) {
@@ -163,11 +159,6 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         }
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
         GlStateManager.enableCull();
-    }
-
-    @Override
-    public void renderTileEntityFast(TileEntityPlacedContainers tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
-        collect(tileEntity, x, y, z);
     }
 
     private static final class Pending {
@@ -215,7 +206,21 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
         GlStateManager.depthMask(false);
         GlStateManager.disableCull();
+        addPending(camera);
 
+        // Depth-only repeat, so translucent terrain drawn later behind a container doesn't paint over it
+        GlStateManager.colorMask(false, false, false, false);
+        GlStateManager.depthMask(true);
+        addPending(camera);
+        GlStateManager.colorMask(true, true, true, true);
+        PENDING.clear();
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableCull();
+        RenderHelper.enableStandardItemLighting();
+    }
+
+    private static void addPending(Vec3d camera) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
@@ -240,10 +245,6 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
             }
         }
         tessellator.draw();
-        PENDING.clear();
-
-        GlStateManager.enableCull();
-        RenderHelper.enableStandardItemLighting();
     }
 
     private static final class Placement {
