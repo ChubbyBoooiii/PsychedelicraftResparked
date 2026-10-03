@@ -3,6 +3,7 @@ package com.chubbyboi.psychedelicraftresparked.item;
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.block.BlockPlacedContainers;
+import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.fluids.DrinkableFluid;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.fluids.InjectableFluid;
@@ -146,6 +147,9 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
         } else {
             tooltip.add(TextFormatting.GRAY + "" + fluidStack.amount + "mB/" + capacity + "mB");
             FluidHelper.appendPotencyTooltip(tooltip, fluidStack);
+        }
+        if (PlacedContainerType.of(stack) != null) {
+            tooltip.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + I18n.translateToLocal("psychedelicraftresparked.tooltip.placeable"));
         }
     }
 

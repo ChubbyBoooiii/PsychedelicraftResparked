@@ -194,6 +194,21 @@ public class BlockPlacedContainers extends Block implements ITileEntityProvider 
     }
 
     @Override
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        TileEntityPlacedContainers containers = getContainers(world, pos);
+        if (containers == null || containers.isEmpty()) {
+            return SoundType.GLASS;
+        }
+        SoundType shared = containers.getEntries().get(0).type.soundType;
+        for (TileEntityPlacedContainers.Entry entry : containers.getEntries()) {
+            if (entry.type.soundType != shared) {
+                return SoundType.GLASS;
+            }
+        }
+        return shared;
+    }
+
+    @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntityPlacedContainers containers = getContainers(world, pos);
         if (containers != null) {

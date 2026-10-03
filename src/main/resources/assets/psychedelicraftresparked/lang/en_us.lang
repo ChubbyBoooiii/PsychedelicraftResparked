@@ -257,6 +257,7 @@ death.attack.alcoholPoisoning=%1$s died of alcohol poisoning
 psychedelicraftresparked.sleep.blocked=The drugs in your body keep you awake
 psychedelicraftresparked.tooltip.fluid.empty=Empty
 psychedelicraftresparked.tooltip.fluid.potency=Potency: %s
+psychedelicraftresparked.tooltip.placeable=Placeable
 
 
 
