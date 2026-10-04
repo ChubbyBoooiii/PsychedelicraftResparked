@@ -5,6 +5,7 @@ import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -109,6 +110,9 @@ public class CraftingRecipes {
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "glass_chalice"), null, new ItemStack(ItemInit.GLASS_CHALICE, 4), "# #", " # ", " # ", '#', "blockGlassColorless");
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "wooden_mug"), null, new ItemStack(ItemInit.WOODEN_MUG, 8), "# #", "# #", "###", '#', "plankWood");
         GameRegistry.addShapelessRecipe(new ResourceLocation(Tags.MOD_ID, "shot_glass"), null, new ItemStack(ItemInit.SHOT_GLASS, 1), Ingredient.fromStacks(new ItemStack(Blocks.GLASS)));
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "bottle_clear"), null,
+            PlacedContainerType.withShape(new ItemStack(ItemInit.BOTTLE, 8, ItemBottle.CLEAR_META), "wine_bottle"),
+            " # ", "# #", "###", '#', "blockGlassColorless");
         for (EnumDyeColor color : EnumDyeColor.values()) {
             GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "bottle_" + color.getName()), null,
                 PlacedContainerType.withShape(new ItemStack(ItemInit.BOTTLE, 8, color.getMetadata()), "wine_bottle"),

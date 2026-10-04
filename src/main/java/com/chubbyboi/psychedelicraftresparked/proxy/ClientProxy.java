@@ -24,6 +24,7 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShad
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDistillery;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
@@ -32,7 +33,6 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPlacedContainers;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityRiftJar;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IItemColor;
@@ -120,9 +120,9 @@ public class ClientProxy extends CommonProxy {
         );
 
         event.getItemColors().registerItemColorHandler(
-            bottleColors(meta -> MapColor.getBlockColor(EnumDyeColor.byMetadata(meta)).colorValue), ItemInit.BOTTLE);
+            bottleColors(ItemBottle::getGlassColor), ItemInit.BOTTLE);
         event.getItemColors().registerItemColorHandler(
-            bottleColors(meta -> EnumDyeColor.byMetadata(meta).getColorValue()), ItemInit.MOLOTOV_COCKTAIL);
+            bottleColors(meta -> ItemBottle.isClear(meta) ? 0xFFFFFF : EnumDyeColor.byMetadata(meta).getColorValue()), ItemInit.MOLOTOV_COCKTAIL);
     }
 
     private static IItemColor bottleColors(IntUnaryOperator glassColor) {

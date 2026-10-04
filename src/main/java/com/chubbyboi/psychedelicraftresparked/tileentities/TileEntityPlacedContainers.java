@@ -82,6 +82,10 @@ public class TileEntityPlacedContainers extends TileEntity {
         return stack;
     }
 
+    public void clearForRemoval() {
+        entries.clear();
+    }
+
     public void rotate(int index) {
         Entry entry = entries.get(index);
         entry.rotation = (entry.rotation + 1) % ROTATION_STEPS;

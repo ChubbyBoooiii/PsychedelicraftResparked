@@ -211,6 +211,18 @@ public class BlockPlacedContainers extends Block implements ITileEntityProvider 
         return shared;
     }
 
+    // Creative breaks drop nothing
+    @Override
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        if (player.capabilities.isCreativeMode) {
+            TileEntityPlacedContainers containers = getContainers(world, pos);
+            if (containers != null) {
+                containers.clearForRemoval();
+            }
+        }
+        return super.removedByPlayer(state, world, pos, player, willHarvest);
+    }
+
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntityPlacedContainers containers = getContainers(world, pos);

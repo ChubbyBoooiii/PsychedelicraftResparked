@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public enum PlacedContainerType {
-    BOTTLE(() -> ItemInit.BOTTLE, SoundType.GLASS, "wine_bottle"),
+    BOTTLE(() -> ItemInit.BOTTLE, SoundType.GLASS, "wine_bottle", "round_bottle"),
     SHOT_GLASS(() -> ItemInit.SHOT_GLASS, SoundType.GLASS, "shot_glass"),
     GLASS_CHALICE(() -> ItemInit.GLASS_CHALICE, SoundType.GLASS, "glass_chalice"),
     WOODEN_MUG(() -> ItemInit.WOODEN_MUG, SoundType.WOOD, "wooden_mug");

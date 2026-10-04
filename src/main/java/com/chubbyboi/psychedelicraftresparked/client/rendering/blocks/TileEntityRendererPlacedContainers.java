@@ -4,9 +4,10 @@ import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.block.ContainerShape;
 import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
+import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPlacedContainers;
-import net.minecraft.block.material.MapColor;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -23,7 +24,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -54,6 +54,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     }
 
     private static final Map<ContainerShape, SplitModel> MODELS = new HashMap<>();
+    private static final Map<ContainerShape, SplitModel> CLEAR_MODELS = new HashMap<>();
     private static final float GLASS_FILTER_STRENGTH = 0.85F;
 
     private static List<ContainerShape> allShapes() {
@@ -69,31 +70,50 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
             for (ResourceLocation texture : ModelLoaderRegistry.getModelOrMissing(shape.model).getTextures()) {
                 map.registerSprite(texture);
             }
+            for (String texture : shape.clearTextures.values()) {
+                map.registerSprite(new ResourceLocation(texture));
+            }
         }
     }
 
     public static void bakeModels() {
         MODELS.clear();
+        CLEAR_MODELS.clear();
         Map<String, BufferedImage> images = new HashMap<>();
         for (ContainerShape shape : allShapes()) {
             try {
                 IModel model = ModelLoaderRegistry.getModel(shape.model);
-                IBakedModel baked = model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter());
-                List<BakedQuad> quads = new ArrayList<>();
-                for (EnumFacing side : EnumFacing.values()) {
-                    quads.addAll(baked.getQuads(null, side, 0L));
+                MODELS.put(shape, split(model, images));
+                if (!shape.clearTextures.isEmpty()) {
+                    CLEAR_MODELS.put(shape, split(model.retexture(ImmutableMap.copyOf(shape.clearTextures)), images));
                 }
-                quads.addAll(baked.getQuads(null, null, 0L));
-
-                SplitModel split = new SplitModel();
-                for (BakedQuad quad : quads) {
-                    (isSolid(quad, images) ? split.solid : split.seeThrough).add(quad);
-                }
-                MODELS.put(shape, split);
             } catch (Exception e) {
                 PsychedelicraftResparked.LOGGER.error("Failed to load placed container model {}", shape.model, e);
             }
         }
+    }
+
+    private static SplitModel split(IModel model, Map<String, BufferedImage> images) {
+        IBakedModel baked = model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter());
+        List<BakedQuad> quads = new ArrayList<>();
+        for (EnumFacing side : EnumFacing.values()) {
+            quads.addAll(baked.getQuads(null, side, 0L));
+        }
+        quads.addAll(baked.getQuads(null, null, 0L));
+
+        SplitModel split = new SplitModel();
+        for (BakedQuad quad : quads) {
+            (isSolid(quad, images) ? split.solid : split.seeThrough).add(quad);
+        }
+        return split;
+    }
+
+    @Nullable
+    private static SplitModel getModel(TileEntityPlacedContainers.Entry entry) {
+        if (entry.type == PlacedContainerType.BOTTLE && ItemBottle.isClear(entry.stack.getMetadata()) && CLEAR_MODELS.containsKey(entry.shape)) {
+            return CLEAR_MODELS.get(entry.shape);
+        }
+        return MODELS.get(entry.shape);
     }
 
     private static boolean isSolid(BakedQuad quad, Map<String, BufferedImage> images) {
@@ -233,7 +253,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (Pending pending : PENDING) {
-            SplitModel model = MODELS.get(pending.entry.shape);
+            SplitModel model = getModel(pending.entry);
             FluidStack fluid = getFluid(pending.entry);
 
             for (int section : getSectionOrder(pending, camera)) {
@@ -455,7 +475,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     }
 
     private void renderSolidQuads(TileEntityPlacedContainers.Entry entry) {
-        SplitModel model = MODELS.get(entry.type);
+        SplitModel model = getModel(entry);
         if (model == null || model.solid.isEmpty()) {
             return;
         }
@@ -484,7 +504,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
 
     private static int getTint(ItemStack stack, int tintIndex) {
         if (tintIndex == 0 && PlacedContainerType.of(stack) == PlacedContainerType.BOTTLE) {
-            return MapColor.getBlockColor(EnumDyeColor.byMetadata(stack.getMetadata())).colorValue;
+            return ItemBottle.getGlassColor(stack.getMetadata());
         }
         return 0xFFFFFF;
     }

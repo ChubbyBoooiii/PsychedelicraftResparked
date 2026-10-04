@@ -45,8 +45,10 @@ public final class ContainerShape {
     public final int capacity;
     public final List<FluidBox> fluid;
     public final float fluidHeight;
+    public final Map<String, String> clearTextures;
 
-    private ContainerShape(String name, ResourceLocation model, int footprint, float height, int capacity, List<FluidBox> fluid) {
+    private ContainerShape(String name, ResourceLocation model, int footprint, float height, int capacity, List<FluidBox> fluid,
+                           Map<String, String> clearTextures) {
         this.name = name;
         this.model = model;
         this.footprint = footprint;
@@ -54,6 +56,7 @@ public final class ContainerShape {
         this.height = height;
         this.capacity = capacity;
         this.fluid = Collections.unmodifiableList(fluid);
+        this.clearTextures = Collections.unmodifiableMap(clearTextures);
         float total = 0.0F;
         for (FluidBox box : fluid) {
             total += box.getHeight();
@@ -93,8 +96,15 @@ public final class ContainerShape {
                 throw new IllegalStateException("needs at least one fluid box");
             }
 
+            Map<String, String> clearTextures = new HashMap<>();
+            if (json.has("clearTextures")) {
+                for (Map.Entry<String, JsonElement> entry : JsonUtils.getJsonObject(json, "clearTextures").entrySet()) {
+                    clearTextures.put(entry.getKey(), entry.getValue().getAsString());
+                }
+            }
+
             return new ContainerShape(name, new ResourceLocation(JsonUtils.getString(json, "model")), footprint,
-                JsonUtils.getFloat(json, "height"), JsonUtils.getInt(json, "capacity", 0), fluid);
+                JsonUtils.getFloat(json, "height"), JsonUtils.getInt(json, "capacity", 0), fluid, clearTextures);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to load container shape " + path, e);
         }

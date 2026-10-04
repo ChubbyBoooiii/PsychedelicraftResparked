@@ -8,6 +8,7 @@ import com.chubbyboi.psychedelicraftresparked.init.AdvancementInit;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
+import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
 import com.chubbyboi.psychedelicraftresparked.init.OreDictionaryInit;
 import com.chubbyboi.psychedelicraftresparked.init.SoundInit;
 import com.chubbyboi.psychedelicraftresparked.init.VillagerInit;
@@ -86,8 +87,8 @@ public class RegistryHandler {
     public static void onModelRegister(ModelRegistryEvent event) {
         for (Item item : ItemInit.ITEMS) {
             if (item == ItemInit.HARMONIUM || item == ItemInit.BOTTLE || item == ItemInit.MOLOTOV_COCKTAIL) {
-                // 16 dye-coloured variants all share the one model (harmonium.json/bottle.json/molotov_cocktail.json). The tint handler (ClientProxy) is what actually differentiates them, not separate models.
-                for (int meta = 0; meta < 16; meta++) {
+                // 16 dye-coloured variants (+bottles clear) all share the one model (harmonium.json/bottle.json/molotov_cocktail.json). The tint handler (ClientProxy) is what actually differentiates them, not separate models.
+                for (int meta = 0; meta <= (item == ItemInit.HARMONIUM ? 15 : ItemBottle.CLEAR_META); meta++) {
                     PsychedelicraftResparked.proxy.registerItemRenderer(item, meta, "inventory");
                 }
             } else if (item == ItemInit.VAT) {
