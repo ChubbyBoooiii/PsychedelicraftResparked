@@ -26,7 +26,6 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShad
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
-import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDistillery;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
@@ -37,7 +36,6 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPlacedConta
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityRiftJar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -50,8 +48,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.util.function.IntUnaryOperator;
 
 public class ClientProxy extends CommonProxy {
 
@@ -125,26 +121,8 @@ public class ClientProxy extends CommonProxy {
 
         event.getItemColors().registerItemColorHandler(
             (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
-            ItemInit.WOODEN_MUG, ItemInit.GLASS_CHALICE, ItemInit.SHOT_GLASS, ItemInit.SYRINGE
+            ItemInit.SYRINGE
         );
-
-        event.getItemColors().registerItemColorHandler(
-            bottleColors(ItemBottle::getGlassColor), ItemInit.BOTTLE);
-        event.getItemColors().registerItemColorHandler(
-            bottleColors(meta -> ItemBottle.isClear(meta) ? 0xFFFFFF : EnumDyeColor.byMetadata(meta).getColorValue()), ItemInit.MOLOTOV_COCKTAIL);
-    }
-
-    private static IItemColor bottleColors(IntUnaryOperator glassColor) {
-        return (stack, tintIndex) -> {
-            boolean filled = FluidHelper.hasFluid(stack);
-            if (tintIndex == 0) {
-                return filled ? FluidHelper.getFluidColor(stack) : glassColor.applyAsInt(stack.getMetadata());
-            }
-            if (tintIndex == 1 && filled) {
-                return glassColor.applyAsInt(stack.getMetadata());
-            }
-            return 0xFFFFFF;
-        };
     }
 
     @SubscribeEvent

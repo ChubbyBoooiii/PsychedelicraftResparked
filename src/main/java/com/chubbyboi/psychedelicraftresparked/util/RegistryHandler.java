@@ -87,7 +87,7 @@ public class RegistryHandler {
     public static void onModelRegister(ModelRegistryEvent event) {
         for (Item item : ItemInit.ITEMS) {
             if (item == ItemInit.HARMONIUM || item == ItemInit.BOTTLE || item == ItemInit.MOLOTOV_COCKTAIL) {
-                // 16 dye-coloured variants (+bottles clear) all share the one model (harmonium.json/bottle.json/molotov_cocktail.json). The tint handler (ClientProxy) is what actually differentiates them, not separate models.
+                // 16 dye-coloured variants (+bottles clear) all share the one model (harmonium.json/bottle.json/molotov_cocktail.json). Harmonium: the tint handler (ClientProxy) differentiates them; bottles/molotovs: the item renderer reads the glass colour from the meta.
                 for (int meta = 0; meta <= (item == ItemInit.HARMONIUM ? 15 : ItemBottle.CLEAR_META); meta++) {
                     PsychedelicraftResparked.proxy.registerItemRenderer(item, meta, "inventory");
                 }
