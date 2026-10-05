@@ -7,6 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 
 public class ItemBottle extends ItemDrinkable {
 
@@ -16,6 +17,10 @@ public class ItemBottle extends ItemDrinkable {
         super(name, capacity, consumptionVolume, useDuration, ConsumptionType.DRINK);
         setHasSubtypes(true);
         setMaxDamage(0);
+
+        // Index into the bottle shapes, so the item model can override display transforms per shape
+        this.addPropertyOverride(new ResourceLocation("shape"), (stack, worldIn, entityIn) ->
+            PlacedContainerType.BOTTLE.getShapes().indexOf(PlacedContainerType.BOTTLE.getShape(stack)));
     }
 
     public static boolean isClear(int meta) {

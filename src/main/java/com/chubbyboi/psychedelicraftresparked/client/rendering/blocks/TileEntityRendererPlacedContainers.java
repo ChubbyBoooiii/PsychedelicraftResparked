@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -36,10 +37,14 @@ import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 
 import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -254,23 +259,85 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (Pending pending : PENDING) {
-            SplitModel model = getModel(pending.entry);
-            FluidStack fluid = getFluid(pending.entry);
-
-            for (int section : getSectionOrder(pending, camera)) {
-                if (model != null) {
-                    addModelQuads(buffer, pending, model.seeThrough, section, false, camera);
-                }
-                if (fluid != null && section != BELOW_FLUID) {
-                    addFluid(buffer, pending, fluid, section, false, camera);
-                    addFluid(buffer, pending, fluid, section, true, camera);
-                }
-                if (model != null) {
-                    addModelQuads(buffer, pending, model.seeThrough, section, true, camera);
-                }
-            }
+            addContainer(buffer, pending, camera);
         }
         tessellator.draw();
+    }
+
+    private static void addContainer(BufferBuilder buffer, Pending pending, Vec3d camera) {
+        SplitModel model = getModel(pending.entry);
+        FluidStack fluid = getFluid(pending.entry);
+
+        for (int section : getSectionOrder(pending, camera)) {
+            if (model != null) {
+                addModelQuads(buffer, pending, model.seeThrough, section, false, camera);
+            }
+            if (fluid != null && section != BELOW_FLUID) {
+                addFluid(buffer, pending, fluid, section, false, camera);
+                addFluid(buffer, pending, fluid, section, true, camera);
+            }
+            if (model != null) {
+                addModelQuads(buffer, pending, model.seeThrough, section, true, camera);
+            }
+        }
+    }
+
+    public static void renderItem(ItemStack stack) {
+        TileEntityPlacedContainers.Entry entry = TileEntityPlacedContainers.Entry.of(stack);
+        boolean lighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0.5, 0.0, 0.5);
+        GlStateManager.disableCull();
+        renderSolidQuads(entry);
+        GlStateManager.popMatrix();
+
+        Pending pending = new Pending(entry, new Placement(0.5, 0.0, 0.5, 0), (int) OpenGlHelper.lastBrightnessY, (int) OpenGlHelper.lastBrightnessX);
+        Vec3d camera = getLocalEye();
+
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        GlStateManager.disableLighting();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableAlpha();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        GlStateManager.depthMask(false);
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        addContainer(buffer, pending, camera);
+        tessellator.draw();
+
+        GlStateManager.colorMask(false, false, false, false);
+        GlStateManager.depthMask(true);
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        addContainer(buffer, pending, camera);
+        tessellator.draw();
+        GlStateManager.colorMask(true, true, true, true);
+
+        GlStateManager.enableCull();
+        if (lighting) {
+            GlStateManager.enableLighting();
+        }
+    }
+
+    private static Vec3d getLocalEye() {
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
+        Matrix4f modelView = new Matrix4f();
+        modelView.load(buffer);
+        buffer.clear();
+        GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, buffer);
+        boolean orthographic = buffer.get(11) == 0.0F;
+
+        Matrix4f inverse = Matrix4f.invert(modelView, null);
+        if (inverse == null) {
+            return new Vec3d(0.5, 100.0, 0.5);
+        }
+        Vector4f eye = Matrix4f.transform(inverse, orthographic ? new Vector4f(0.0F, 0.0F, 1000.0F, 1.0F) : new Vector4f(0.0F, 0.0F, 0.0F, 1.0F), null);
+        return new Vec3d(eye.x, eye.y, eye.z);
     }
 
     private static List<Integer> getSectionOrder(Pending pending, Vec3d camera) {
@@ -311,10 +378,14 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         private final float sin;
 
         private Placement(TileEntityPlacedContainers.Entry entry, double x, double y, double z) {
-            originX = x + entry.x / 16.0;
-            originY = y + 0.001;
-            originZ = z + entry.z / 16.0;
-            double angle = Math.toRadians(-entry.rotation * 360.0F / TileEntityPlacedContainers.ROTATION_STEPS);
+            this(x + entry.x / 16.0, y + 0.001, z + entry.z / 16.0, entry.rotation);
+        }
+
+        private Placement(double originX, double originY, double originZ, int rotation) {
+            this.originX = originX;
+            this.originY = originY;
+            this.originZ = originZ;
+            double angle = Math.toRadians(-rotation * 360.0F / TileEntityPlacedContainers.ROTATION_STEPS);
             cos = (float) Math.cos(angle);
             sin = (float) Math.sin(angle);
         }
@@ -481,13 +552,13 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         return fluid != null && fluid.amount > 0 ? fluid : null;
     }
 
-    private void renderSolidQuads(TileEntityPlacedContainers.Entry entry) {
+    private static void renderSolidQuads(TileEntityPlacedContainers.Entry entry) {
         SplitModel model = getModel(entry);
         if (model == null || model.solid.isEmpty()) {
             return;
         }
 
-        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.99F);

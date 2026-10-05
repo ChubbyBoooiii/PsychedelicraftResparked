@@ -37,6 +37,10 @@ public class TileEntityPlacedContainers extends TileEntity {
             this.rotation = rotation;
         }
 
+        public static Entry of(ItemStack stack) {
+            return new Entry(stack, PlacedContainerType.of(stack), 0.0F, 0.0F, 0);
+        }
+
         public AxisAlignedBB getBox() {
             return new AxisAlignedBB(
                 (x - shape.halfFootprint) / 16.0, 0.0, (z - shape.halfFootprint) / 16.0,

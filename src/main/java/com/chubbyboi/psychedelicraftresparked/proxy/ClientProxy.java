@@ -14,6 +14,7 @@ import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntity
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererDistillery;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererFlask;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererFlask;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererBottle;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererVat;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPlacedContainers;
@@ -90,6 +91,7 @@ public class ClientProxy extends CommonProxy {
         ItemInit.FLASK_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererFlask());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRiftJar.class, new TileEntityRendererRiftJar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlacedContainers.class, new TileEntityRendererPlacedContainers());
+        ItemInit.BOTTLE.setTileEntityItemStackRenderer(new TileEntityItemStackRendererBottle());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityMolotovCocktail.class,
             manager -> new RenderMolotovCocktail(manager, ItemInit.MOLOTOV_COCKTAIL, Minecraft.getMinecraft().getRenderItem()));
