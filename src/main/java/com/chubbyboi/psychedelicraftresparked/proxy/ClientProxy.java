@@ -98,6 +98,7 @@ public class ClientProxy extends CommonProxy {
         ItemInit.SHOT_GLASS.setTileEntityItemStackRenderer(placedContainerItemRenderer);
         ItemInit.GLASS_CHALICE.setTileEntityItemStackRenderer(placedContainerItemRenderer);
         ItemInit.WOODEN_MUG.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.MOLOTOV_COCKTAIL.setTileEntityItemStackRenderer(placedContainerItemRenderer);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityMolotovCocktail.class,
             manager -> new RenderMolotovCocktail(manager, ItemInit.MOLOTOV_COCKTAIL, Minecraft.getMinecraft().getRenderItem()));

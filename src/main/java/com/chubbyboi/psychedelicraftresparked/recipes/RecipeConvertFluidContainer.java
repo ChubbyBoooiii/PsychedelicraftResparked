@@ -1,11 +1,13 @@
 package com.chubbyboi.psychedelicraftresparked.recipes;
 
+import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -95,6 +97,10 @@ public class RecipeConvertFluidContainer extends IForgeRegistryEntry.Impl<IRecip
         }
 
         ItemStack result = new ItemStack(resultItem, 1, source.getMetadata());
+
+        if (source.hasTagCompound() && source.getTagCompound().hasKey(PlacedContainerType.SHAPE_TAG, Constants.NBT.TAG_STRING)) {
+            PlacedContainerType.withShape(result, source.getTagCompound().getString(PlacedContainerType.SHAPE_TAG));
+        }
 
         ItemStack sourceProbe = source.copy();
         sourceProbe.setCount(1);

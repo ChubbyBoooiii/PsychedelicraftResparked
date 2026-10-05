@@ -2,6 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.tileentities;
 
 import com.chubbyboi.psychedelicraftresparked.block.ContainerShape;
 import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
+import com.chubbyboi.psychedelicraftresparked.item.ItemMolotovCocktail;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -38,7 +39,8 @@ public class TileEntityPlacedContainers extends TileEntity {
         }
 
         public static Entry of(ItemStack stack) {
-            return new Entry(stack, PlacedContainerType.of(stack), 0.0F, 0.0F, 0);
+            PlacedContainerType type = stack.getItem() instanceof ItemMolotovCocktail ? PlacedContainerType.BOTTLE : PlacedContainerType.of(stack);
+            return new Entry(stack, type, 0.0F, 0.0F, 0);
         }
 
         public AxisAlignedBB getBox() {

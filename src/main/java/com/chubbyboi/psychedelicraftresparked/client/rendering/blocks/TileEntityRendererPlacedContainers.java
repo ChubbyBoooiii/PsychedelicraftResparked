@@ -6,6 +6,7 @@ import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
 import com.chubbyboi.psychedelicraftresparked.item.ItemDrinkable;
+import com.chubbyboi.psychedelicraftresparked.item.ItemMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPlacedContainers;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.Minecraft;
@@ -60,6 +61,8 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
 
     private static final Map<ContainerShape, SplitModel> MODELS = new HashMap<>();
     private static final Map<ContainerShape, SplitModel> CLEAR_MODELS = new HashMap<>();
+    private static final Map<ContainerShape, SplitModel> MOLOTOV_MODELS = new HashMap<>();
+    private static final Map<ContainerShape, SplitModel> CLEAR_MOLOTOV_MODELS = new HashMap<>();
     private static final float GLASS_FILTER_STRENGTH = 0.85F;
 
     private static List<ContainerShape> allShapes() {
@@ -75,6 +78,11 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
             for (ResourceLocation texture : ModelLoaderRegistry.getModelOrMissing(shape.model).getTextures()) {
                 map.registerSprite(texture);
             }
+            if (shape.molotovModel != null) {
+                for (ResourceLocation texture : ModelLoaderRegistry.getModelOrMissing(shape.molotovModel).getTextures()) {
+                    map.registerSprite(texture);
+                }
+            }
             for (String texture : shape.clearTextures.values()) {
                 map.registerSprite(new ResourceLocation(texture));
             }
@@ -84,17 +92,27 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     public static void bakeModels() {
         MODELS.clear();
         CLEAR_MODELS.clear();
+        MOLOTOV_MODELS.clear();
+        CLEAR_MOLOTOV_MODELS.clear();
         Map<String, BufferedImage> images = new HashMap<>();
         for (ContainerShape shape : allShapes()) {
-            try {
-                IModel model = ModelLoaderRegistry.getModel(shape.model);
-                MODELS.put(shape, split(model, images));
-                if (!shape.clearTextures.isEmpty()) {
-                    CLEAR_MODELS.put(shape, split(model.retexture(ImmutableMap.copyOf(shape.clearTextures)), images));
-                }
-            } catch (Exception e) {
-                PsychedelicraftResparked.LOGGER.error("Failed to load placed container model {}", shape.model, e);
+            bakeModel(shape, shape.model, MODELS, CLEAR_MODELS, images);
+            if (shape.molotovModel != null) {
+                bakeModel(shape, shape.molotovModel, MOLOTOV_MODELS, CLEAR_MOLOTOV_MODELS, images);
             }
+        }
+    }
+
+    private static void bakeModel(ContainerShape shape, ResourceLocation location, Map<ContainerShape, SplitModel> models,
+                                  Map<ContainerShape, SplitModel> clearModels, Map<String, BufferedImage> images) {
+        try {
+            IModel model = ModelLoaderRegistry.getModel(location);
+            models.put(shape, split(model, images));
+            if (!shape.clearTextures.isEmpty()) {
+                clearModels.put(shape, split(model.retexture(ImmutableMap.copyOf(shape.clearTextures)), images));
+            }
+        } catch (Exception e) {
+            PsychedelicraftResparked.LOGGER.error("Failed to load placed container model {}", location, e);
         }
     }
 
@@ -115,10 +133,13 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
 
     @Nullable
     private static SplitModel getModel(TileEntityPlacedContainers.Entry entry) {
-        if (entry.type == PlacedContainerType.BOTTLE && ItemBottle.isClear(entry.stack.getMetadata()) && CLEAR_MODELS.containsKey(entry.shape)) {
-            return CLEAR_MODELS.get(entry.shape);
+        boolean molotov = entry.stack.getItem() instanceof ItemMolotovCocktail;
+        Map<ContainerShape, SplitModel> models = molotov ? MOLOTOV_MODELS : MODELS;
+        Map<ContainerShape, SplitModel> clearModels = molotov ? CLEAR_MOLOTOV_MODELS : CLEAR_MODELS;
+        if (entry.type == PlacedContainerType.BOTTLE && ItemBottle.isClear(entry.stack.getMetadata()) && clearModels.containsKey(entry.shape)) {
+            return clearModels.get(entry.shape);
         }
-        return MODELS.get(entry.shape);
+        return models.get(entry.shape);
     }
 
     private static boolean isSolid(BakedQuad quad, Map<String, BufferedImage> images) {
@@ -581,7 +602,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     }
 
     private static int getTint(ItemStack stack, int tintIndex) {
-        if (tintIndex == 0 && PlacedContainerType.of(stack) == PlacedContainerType.BOTTLE) {
+        if (tintIndex == 0 && stack.getItem() instanceof ItemBottle) {
             return ItemBottle.getGlassColor(stack.getMetadata());
         }
         return 0xFFFFFF;

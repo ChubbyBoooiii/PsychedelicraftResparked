@@ -1,5 +1,6 @@
 {
   "model": "psychedelicraftresparked:block/placed/round_bottle",
+  "molotovModel": "psychedelicraftresparked:block/placed/round_bottle_molotov",
   "footprint": 6,
   "height": 13.5,
   "capacity": 1000,
