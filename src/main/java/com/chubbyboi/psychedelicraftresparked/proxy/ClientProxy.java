@@ -10,6 +10,7 @@ import com.chubbyboi.psychedelicraftresparked.entities.EntityMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityRealityRift;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererBarrel;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererBarrel;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDistillery;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererDistillery;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererFlask;
@@ -85,6 +86,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPeyote.class, new TileEntityRendererPeyote());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVat.class, new TileEntityRendererVat());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new TileEntityRendererBarrel());
+        ItemInit.BARREL_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererBarrel());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDistillery.class, new TileEntityRendererDistillery());
         ItemInit.DISTILLERY_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererDistillery());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlask.class, new TileEntityRendererFlask());
@@ -169,10 +171,12 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_bubble"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_splash"));
         TileEntityRendererPlacedContainers.registerTextures(event.getMap());
+        TileEntityRendererBarrel.registerTextures(event.getMap());
     }
 
     @SubscribeEvent
     public void onModelBake(ModelBakeEvent event) {
         TileEntityRendererPlacedContainers.bakeModels();
+        TileEntityRendererBarrel.bakeModels();
     }
 }

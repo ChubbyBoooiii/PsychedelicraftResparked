@@ -1,0 +1,19 @@
+{
+	"credit": "Converted from 1.7.10 ModelBarrel",
+	"texture_size": [128, 128],
+	"textures": {
+		"0": "psychedelicraftresparked:blocks/barrel_oak",
+		"particle": "psychedelicraftresparked:blocks/barrel_oak"
+	},
+	"elements": [
+		{
+			"name": "tap3",
+			"from": [6.5, 7.21, -1.5],
+			"to": [9.5, 7.21, -0.5],
+			"faces": {
+				"up": {"uv": [1.625, 6.375, 2, 6.25], "texture": "#0"},
+				"down": {"uv": [2, 6.25, 2.375, 6.375], "texture": "#0"}
+			}
+		}
+	]
+}
