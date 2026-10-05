@@ -205,6 +205,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     }
 
     private static final List<Pending> PENDING = new ArrayList<>();
+    private static final int BELOW_FLUID = -1;
 
     private static void collect(TileEntityPlacedContainers tileEntity, double x, double y, double z) {
         int light = tileEntity.getWorld().getCombinedLight(tileEntity.getPos(), 0);
@@ -260,7 +261,7 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
                 if (model != null) {
                     addModelQuads(buffer, pending, model.seeThrough, section, false, camera);
                 }
-                if (fluid != null) {
+                if (fluid != null && section != BELOW_FLUID) {
                     addFluid(buffer, pending, fluid, section, false, camera);
                     addFluid(buffer, pending, fluid, section, true, camera);
                 }
@@ -276,17 +277,23 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         List<ContainerShape.FluidBox> boxes = pending.entry.shape.fluid;
         double cameraY = (camera.y - pending.placement.originY) * 16.0;
         List<Integer> order = new ArrayList<>();
+        order.add(BELOW_FLUID);
         for (int i = 0; i < boxes.size(); i++) {
             order.add(i);
         }
         order.sort(Comparator.comparingDouble((Integer i) -> {
-            ContainerShape.FluidBox box = boxes.get(i);
-            return Math.max(0.0, Math.max(box.bottom - cameraY, cameraY - box.top));
+            double bottom = i == BELOW_FLUID ? 0.0 : boxes.get(i).bottom;
+            double top = i == BELOW_FLUID ? boxes.get(0).bottom : boxes.get(i).top;
+            return Math.max(0.0, Math.max(bottom - cameraY, cameraY - top));
         }).reversed());
         return order;
     }
 
     private static int getQuadSection(ContainerShape shape, float centreY) {
+        // Glass under the fluid (chalice stem/base, bottle bottoms) sorts on its own, or it would draw over the fluid from above
+        if (centreY < shape.fluid.get(0).bottom / 16.0F) {
+            return BELOW_FLUID;
+        }
         int section = 0;
         for (int i = 0; i < shape.fluid.size() - 1; i++) {
             if (centreY > (shape.fluid.get(i).top + 0.25F) / 16.0F) {
