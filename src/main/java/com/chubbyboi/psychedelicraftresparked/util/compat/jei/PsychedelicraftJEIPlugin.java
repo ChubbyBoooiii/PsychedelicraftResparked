@@ -6,6 +6,7 @@ import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelGuiHa
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.bottleworkbench.BottleSubtypeInterpreter;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.bottleworkbench.BottleWorkbenchGuiHandler;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.bottleworkbench.BottleWorkbenchRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.bottleworkbench.BottleWorkbenchRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.containers.ContainerCraftingRecipeMaker;
@@ -75,6 +76,7 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
 
         registry.addRecipes(BottleWorkbenchRecipeMaker.getRecipes(), PsychedelicraftRecipeCategoryUid.BOTTLE_WORKBENCH);
         registry.addRecipeCatalyst(new ItemStack(BlockInit.BOTTLE_WORKBENCH), PsychedelicraftRecipeCategoryUid.BOTTLE_WORKBENCH);
+        registry.addAdvancedGuiHandlers(new BottleWorkbenchGuiHandler());
 
         registry.addRecipes(ContainerCraftingRecipeMaker.getRecipes(), VanillaRecipeCategoryUid.CRAFTING);
     }

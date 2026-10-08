@@ -13,6 +13,7 @@ import com.chubbyboi.psychedelicraftresparked.gui.FlaskGui;
 import com.chubbyboi.psychedelicraftresparked.gui.VatContainer;
 import com.chubbyboi.psychedelicraftresparked.gui.VatGui;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBottleWorkbench;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDistillery;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
@@ -38,7 +39,7 @@ public class GuiHandler implements IGuiHandler {
         if (ID == BARREL_ID) return new BarrelContainer(player.inventory, (TileEntityBarrel)world.getTileEntity(new BlockPos(x, y, z)));
         if (ID == DISTILLERY_ID) return new DistilleryContainer(player.inventory, (TileEntityDistillery)world.getTileEntity(new BlockPos(x, y, z)));
         if (ID == FLASK_ID) return new FlaskContainer(player.inventory, (TileEntityFlask)world.getTileEntity(new BlockPos(x, y, z)));
-        if (ID == BOTTLE_WORKBENCH_ID) return new BottleWorkbenchContainer(player.inventory, world, new BlockPos(x, y, z));
+        if (ID == BOTTLE_WORKBENCH_ID) return new BottleWorkbenchContainer(player.inventory, (TileEntityBottleWorkbench)world.getTileEntity(new BlockPos(x, y, z)));
         return null;
     }
 
@@ -49,7 +50,7 @@ public class GuiHandler implements IGuiHandler {
         if (ID == BARREL_ID) return new BarrelGui(player.inventory, (TileEntityBarrel)world.getTileEntity(new BlockPos(x, y, z)));
         if (ID == DISTILLERY_ID) return new DistilleryGui(player.inventory, (TileEntityDistillery)world.getTileEntity(new BlockPos(x, y, z)));
         if (ID == FLASK_ID) return new FlaskGui(player.inventory, (TileEntityFlask)world.getTileEntity(new BlockPos(x, y, z)));
-        if (ID == BOTTLE_WORKBENCH_ID) return new BottleWorkbenchGui(player.inventory, world, new BlockPos(x, y, z));
+        if (ID == BOTTLE_WORKBENCH_ID) return new BottleWorkbenchGui(player.inventory, (TileEntityBottleWorkbench)world.getTileEntity(new BlockPos(x, y, z)));
         return null;
     }
 }

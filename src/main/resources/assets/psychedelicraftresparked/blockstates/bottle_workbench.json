@@ -1,14 +1,21 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "psychedelicraftresparked:bottle_workbench"
+    "model": "forge:multi-layer",
+    "custom": {
+      "base": "psychedelicraftresparked:bottle_workbench_wood#normal",
+      "Solid": "psychedelicraftresparked:bottle_workbench_wood#normal",
+      "Translucent": "psychedelicraftresparked:bottle_workbench_bottles#normal"
+    }
   },
   "variants": {
     "normal": [
       {}
     ],
     "inventory": [
-      {}
+      {
+        "model": "psychedelicraftresparked:bottle_workbench"
+      }
     ]
   }
 }
