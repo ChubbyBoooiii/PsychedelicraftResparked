@@ -5,6 +5,10 @@ import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelGuiHandler;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.barrel.BarrelRecipeMaker;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.bottleworkbench.BottleSubtypeInterpreter;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.bottleworkbench.BottleWorkbenchGuiHandler;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.bottleworkbench.BottleWorkbenchRecipeCategory;
+import com.chubbyboi.psychedelicraftresparked.util.compat.jei.bottleworkbench.BottleWorkbenchRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.containers.ContainerCraftingRecipeMaker;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.distillery.DistilleryRecipeCategory;
 import com.chubbyboi.psychedelicraftresparked.util.compat.jei.distillery.DistilleryRecipeMaker;
@@ -16,6 +20,7 @@ import com.chubbyboi.psychedelicraftresparked.util.compat.jei.vat.VatRecipeMaker
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
+import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
@@ -33,11 +38,19 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
     private static IJeiRuntime runtime;
 
     @Override
+    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+        BottleSubtypeInterpreter bottles = new BottleSubtypeInterpreter();
+        subtypeRegistry.registerSubtypeInterpreter(ItemInit.BOTTLE, bottles);
+        subtypeRegistry.registerSubtypeInterpreter(ItemInit.MOLOTOV_COCKTAIL, bottles);
+    }
+
+    @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(new DryingTableRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new VatRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new DistilleryRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new BarrelRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new BottleWorkbenchRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -60,6 +73,10 @@ public class PsychedelicraftJEIPlugin implements IModPlugin {
             registry.addRecipeCatalyst(new ItemStack(ItemInit.BARREL_ITEM, 1, woodType.getMetadata()), PsychedelicraftRecipeCategoryUid.BARREL);
         }
         registry.addAdvancedGuiHandlers(new BarrelGuiHandler());
+
+        registry.addRecipes(BottleWorkbenchRecipeMaker.getRecipes(), PsychedelicraftRecipeCategoryUid.BOTTLE_WORKBENCH);
+        registry.addRecipeCatalyst(new ItemStack(BlockInit.BOTTLE_WORKBENCH), PsychedelicraftRecipeCategoryUid.BOTTLE_WORKBENCH);
+        registry.addAdvancedGuiHandlers(new BottleWorkbenchGuiHandler());
 
         registry.addRecipes(ContainerCraftingRecipeMaker.getRecipes(), VanillaRecipeCategoryUid.CRAFTING);
     }

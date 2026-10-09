@@ -21,6 +21,14 @@ uniform ivec4 texGenMode;
 uniform int lightingEnabled;
 uniform int lightEnabled[8];
 uniform int colorMaterialMode;
+uniform int normalMode;
+
+vec3 eyeNormal() {
+    vec3 normal = gl_NormalMatrix * gl_Normal;
+    if (normalMode == 2) return normalize(normal);
+    if (normalMode == 1) return normal * gl_NormalScale;
+    return normal;
+}
 
 float texGen(int mode, vec4 objectPlane, vec4 eyePlane, vec4 eyeVertex, float current) {
     if (mode == 1) return dot(objectPlane, gl_Vertex);
@@ -96,7 +104,7 @@ void main() {
     gl_ClipVertex = eyeVertex;
 
     if (lightingEnabled == 1) {
-        gl_FrontColor = computeLighting(eyeVertex.xyz / eyeVertex.w, normalize(gl_NormalMatrix * gl_Normal));
+        gl_FrontColor = computeLighting(eyeVertex.xyz / eyeVertex.w, eyeNormal());
     } else {
         gl_FrontColor = gl_Color;
     }

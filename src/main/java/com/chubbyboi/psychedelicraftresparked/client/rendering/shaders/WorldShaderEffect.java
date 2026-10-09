@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL20;
 
 public class WorldShaderEffect {
@@ -33,6 +34,8 @@ public class WorldShaderEffect {
     private final int[] lightEnabledUniforms = new int[MAX_LIGHTS];
     private boolean colorMaterialEnabled = false;
     private int colorMaterialMode = GL11.GL_AMBIENT_AND_DIFFUSE;
+    // 0 = raw, 1 = GL_RESCALE_NORMAL, 2 = GL_NORMALIZE, as fixed-function lighting treats the normal
+    private int normalMode = 2;
     // S, T, R, Q
     private static final int[] TEX_GEN_COORDS = {GL11.GL_S, GL11.GL_T, GL11.GL_R, GL11.GL_Q};
     private static final int[] TEX_GEN_ENABLE_CAPS = {GL11.GL_TEXTURE_GEN_S, GL11.GL_TEXTURE_GEN_T, GL11.GL_TEXTURE_GEN_R, GL11.GL_TEXTURE_GEN_Q};
@@ -75,16 +78,7 @@ public class WorldShaderEffect {
         foreignProgram = false;
         pausedForTexGen = false;
 
-        lightingEnabled = GL11.glIsEnabled(GL11.GL_LIGHTING);
-        for (int i = 0; i < MAX_LIGHTS; i++) {
-            lightEnabled[i] = GL11.glIsEnabled(GL11.GL_LIGHT0 + i);
-        }
-        colorMaterialEnabled = GL11.glIsEnabled(GL11.GL_COLOR_MATERIAL);
-        colorMaterialMode = GL11.glGetInteger(GL11.GL_COLOR_MATERIAL_PARAMETER);
-        for (int i = 0; i < 4; i++) {
-            texGenEnabled[i] = GL11.glIsEnabled(TEX_GEN_ENABLE_CAPS[i]);
-            texGenMode[i] = GL11.glGetTexGeni(TEX_GEN_COORDS[i], GL11.GL_TEXTURE_GEN_MODE);
-        }
+        readGlState();
 
         bind();
 
@@ -99,6 +93,51 @@ public class WorldShaderEffect {
         GL20.glUniform1f(uniform("wiggleWaves"), manager.getWiggleWaveStrength());
         GL20.glUniform1f(uniform("distantWorldDeformation"), manager.getDistantWorldDeformationStrength());
 
+        updateTexGen();
+    }
+
+    private void readGlState() {
+        lightingEnabled = GL11.glIsEnabled(GL11.GL_LIGHTING);
+        for (int i = 0; i < MAX_LIGHTS; i++) {
+            lightEnabled[i] = GL11.glIsEnabled(GL11.GL_LIGHT0 + i);
+        }
+        colorMaterialEnabled = GL11.glIsEnabled(GL11.GL_COLOR_MATERIAL);
+        colorMaterialMode = GL11.glGetInteger(GL11.GL_COLOR_MATERIAL_PARAMETER);
+        for (int i = 0; i < 4; i++) {
+            texGenEnabled[i] = GL11.glIsEnabled(TEX_GEN_ENABLE_CAPS[i]);
+            texGenMode[i] = GL11.glGetTexGeni(TEX_GEN_COORDS[i], GL11.GL_TEXTURE_GEN_MODE);
+        }
+        readNormalMode();
+    }
+
+    private void readNormalMode() {
+        if (GL11.glIsEnabled(GL11.GL_NORMALIZE)) {
+            normalMode = 2;
+        } else if (GL11.glIsEnabled(GL12.GL_RESCALE_NORMAL)) {
+            normalMode = 1;
+        } else {
+            normalMode = 0;
+        }
+    }
+
+    public void onNormalStateChange() {
+        if (shaderProgram == 0 || !active) {
+            return;
+        }
+        readNormalMode();
+        if (bound) {
+            GL20.glUniform1i(uniform("normalMode"), normalMode);
+        }
+    }
+
+    public void onPopAttrib() {
+        if (shaderProgram == 0 || !active) {
+            return;
+        }
+        readGlState();
+        if (bound) {
+            uploadState();
+        }
         updateTexGen();
     }
 
@@ -214,12 +253,21 @@ public class WorldShaderEffect {
         GL20.glUniform1i(uniform("colorMaterialMode"), colorMaterialEnabled ? colorMaterialMode : 0);
     }
 
+    public boolean isOwnProgram(int program) {
+        return program != 0 && program == shaderProgram;
+    }
+
     // Another mod's shader owns the GL program until it releases it; never bind over it or upload uniforms into it
     public void onExternalProgramChange(int program) {
-        if (!active || shaderProgram == 0 || program == shaderProgram) {
+        if (!active || shaderProgram == 0) {
             return;
         }
-        if (program != 0) {
+        if (program == shaderProgram) {
+            foreignProgram = false;
+            if (wantBound) {
+                bind();
+            }
+        } else if (program != 0) {
             foreignProgram = true;
             bound = false;
         } else if (foreignProgram) {
@@ -235,11 +283,16 @@ public class WorldShaderEffect {
     private void bind() {
         GL20.glUseProgram(shaderProgram);
         bound = true;
+        uploadState();
+    }
+
+    private void uploadState() {
         GL20.glUniform1i(uniform("lightingEnabled"), lightingEnabled ? 1 : 0);
         for (int i = 0; i < MAX_LIGHTS; i++) {
             GL20.glUniform1i(lightEnabledUniforms[i], lightEnabled[i] ? 1 : 0);
         }
         uploadColorMaterial();
+        GL20.glUniform1i(uniform("normalMode"), normalMode);
         uploadTexGen();
     }
 

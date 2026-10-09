@@ -1,0 +1,36 @@
+{
+	"credit": "Converted from 1.7.10 ModelBarrel",
+	"texture_size": [128, 128],
+	"textures": {
+		"0": "psychedelicraftresparked:blocks/barrel_oak",
+		"particle": "psychedelicraftresparked:blocks/barrel_oak"
+	},
+	"elements": [
+		{
+			"name": "tap1",
+			"from": [7.5, 6, -0.5],
+			"to": [8.5, 7, 1.5],
+			"faces": {
+				"east": {"uv": [0.625, 6.5, 0.375, 6.625], "texture": "#0"},
+				"west": {"uv": [0.25, 6.5, 0, 6.625], "texture": "#0"},
+				"up": {"uv": [0.25, 6.5, 0.375, 6.25], "texture": "#0"},
+				"down": {"uv": [0.375, 6.25, 0.5, 6.5], "texture": "#0"},
+				"north": {"uv": [0.375, 6.5, 0.25, 6.625], "texture": "#0"},
+				"south": {"uv": [0.75, 6.5, 0.625, 6.625], "texture": "#0"}
+			}
+		},
+		{
+			"name": "tap2",
+			"from": [7.5, 5.2, -1.5],
+			"to": [8.5, 7.2, -0.5],
+			"faces": {
+				"east": {"uv": [1.25, 6.375, 1.125, 6.625], "texture": "#0"},
+				"west": {"uv": [1, 6.375, 0.875, 6.625], "texture": "#0"},
+				"up": {"uv": [1, 6.375, 1.125, 6.25], "texture": "#0"},
+				"down": {"uv": [1.125, 6.25, 1.25, 6.375], "texture": "#0"},
+				"north": {"uv": [1.125, 6.375, 1, 6.625], "texture": "#0"},
+				"south": {"uv": [1.375, 6.375, 1.25, 6.625], "texture": "#0"}
+			}
+		}
+	]
+}

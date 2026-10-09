@@ -25,4 +25,8 @@ public interface ShaderEffect {
     default boolean isAdvanced() {
         return false;
     }
+
+    default boolean isAmbient() {
+        return false;
+    }
 }

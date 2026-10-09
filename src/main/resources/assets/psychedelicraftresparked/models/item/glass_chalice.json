@@ -1,12 +1,29 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "psychedelicraftresparked:items/glass_chalice"
-  },
-  "overrides": [
-    {
-      "predicate": { "filled": 1 },
-      "model": "psychedelicraftresparked:item/glass_chalice_filled"
-    }
-  ]
+	"parent": "builtin/entity",
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [-0.5, 7.25, 0]
+		},
+		"thirdperson_lefthand": {
+			"translation": [-0.5, 7.25, 0]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 7.75, 1]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 7.75, 1]
+		},
+		"ground": {
+			"translation": [0, 4.25, 0]
+		},
+		"gui": {
+			"rotation": [16, -16, 0],
+			"translation": [0, 10, 0],
+			"scale": [2, 2, 2]
+		},
+		"fixed": {
+			"translation": [0, 10.5, -2.25],
+			"scale": [2, 2, 2]
+		}
+	}
 }

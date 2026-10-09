@@ -1,0 +1,8 @@
+{
+  "model": "psychedelicraftresparked:block/placed/shot_glass",
+  "footprint": 2,
+  "height": 2.5,
+  "fluid": [
+    { "halfWidth": 0.99, "bottom": 0.01, "top": 2.01 }
+  ]
+}

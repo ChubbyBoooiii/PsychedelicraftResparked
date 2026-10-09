@@ -1,6 +1,10 @@
 package com.chubbyboi.psychedelicraftresparked.util.compat.jei.containers;
 
+import com.chubbyboi.psychedelicraftresparked.block.ContainerShape;
+import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
+import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
+import com.chubbyboi.psychedelicraftresparked.item.ItemMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.recipes.RecipeConvertFluidContainer;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -68,6 +72,15 @@ public class ConvertContainerRecipeWrapper implements IRecipeWrapper {
     }
 
     private static List<ItemStack> baseVariants(Item item) {
+        if (item instanceof ItemMolotovCocktail) {
+            List<ItemStack> molotovs = new ArrayList<>();
+            for (ContainerShape shape : PlacedContainerType.BOTTLE.getShapes()) {
+                for (int meta = 0; meta <= ItemBottle.CLEAR_META; meta++) {
+                    molotovs.add(PlacedContainerType.withShape(new ItemStack(item, 1, meta), shape.name));
+                }
+            }
+            return molotovs;
+        }
         NonNullList<ItemStack> variants = NonNullList.create();
         item.getSubItems(CreativeTabs.SEARCH, variants);
         if (!variants.isEmpty()) {

@@ -10,16 +10,19 @@ import com.chubbyboi.psychedelicraftresparked.entities.EntityMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityRealityRift;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererBarrel;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererBarrel;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDistillery;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererDistillery;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererFlask;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererFlask;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererPlacedContainer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererVat;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPlacedContainers;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.placedcontainers.PlacementPreviewRenderer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererRiftJar;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.ShaderPipeline;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.WorldShaderEffect;
-import com.chubbyboi.psychedelicraftresparked.commands.CommandHallucinationDebug;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.init.BlockInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
@@ -29,14 +32,15 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPlacedContainers;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityRiftJar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -78,11 +82,19 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPeyote.class, new TileEntityRendererPeyote());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVat.class, new TileEntityRendererVat());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new TileEntityRendererBarrel());
+        ItemInit.BARREL_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererBarrel());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDistillery.class, new TileEntityRendererDistillery());
         ItemInit.DISTILLERY_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererDistillery());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlask.class, new TileEntityRendererFlask());
         ItemInit.FLASK_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererFlask());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRiftJar.class, new TileEntityRendererRiftJar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlacedContainers.class, new TileEntityRendererPlacedContainers());
+        TileEntityItemStackRendererPlacedContainer placedContainerItemRenderer = new TileEntityItemStackRendererPlacedContainer();
+        ItemInit.BOTTLE.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.SHOT_GLASS.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.GLASS_CHALICE.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.WOODEN_MUG.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.MOLOTOV_COCKTAIL.setTileEntityItemStackRenderer(placedContainerItemRenderer);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityMolotovCocktail.class,
             manager -> new RenderMolotovCocktail(manager, ItemInit.MOLOTOV_COCKTAIL, Minecraft.getMinecraft().getRenderItem()));
@@ -95,7 +107,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new DrugVisualRenderer());
         MinecraftForge.EVENT_BUS.register(new HallucinationEntitySpawner());
         MinecraftForge.EVENT_BUS.register(SmokeMonsterSpawner.getInstance());
-        ClientCommandHandler.instance.registerCommand(new CommandHallucinationDebug());
+        MinecraftForge.EVENT_BUS.register(new PlacementPreviewRenderer());
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -109,21 +121,7 @@ public class ClientProxy extends CommonProxy {
 
         event.getItemColors().registerItemColorHandler(
             (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
-            ItemInit.WOODEN_MUG, ItemInit.GLASS_CHALICE, ItemInit.SHOT_GLASS, ItemInit.SYRINGE
-        );
-
-        event.getItemColors().registerItemColorHandler(
-            (stack, tintIndex) -> {
-                boolean filled = FluidHelper.hasFluid(stack);
-                if (tintIndex == 0) {
-                    return filled ? FluidHelper.getFluidColor(stack) : EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
-                }
-                if (tintIndex == 1 && filled) {
-                    return EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
-                }
-                return 0xFFFFFF;
-            },
-            ItemInit.BOTTLE, ItemInit.MOLOTOV_COCKTAIL
+            ItemInit.SYRINGE
         );
     }
 
@@ -151,5 +149,13 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:blocks/mead_flow"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_bubble"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_splash"));
+        TileEntityRendererPlacedContainers.registerTextures(event.getMap());
+        TileEntityRendererBarrel.registerTextures(event.getMap());
+    }
+
+    @SubscribeEvent
+    public void onModelBake(ModelBakeEvent event) {
+        TileEntityRendererPlacedContainers.bakeModels();
+        TileEntityRendererBarrel.bakeModels();
     }
 }

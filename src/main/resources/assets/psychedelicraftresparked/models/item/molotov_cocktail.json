@@ -1,13 +1,9 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "psychedelicraftresparked:items/bottle",
-    "layer1": "psychedelicraftresparked:items/molotov_cocktail_overlay"
-  },
+  "parent": "psychedelicraftresparked:item/molotov_cocktail_wine",
   "overrides": [
     {
-      "predicate": { "filled": 1 },
-      "model": "psychedelicraftresparked:item/molotov_cocktail_filled"
+      "predicate": { "shape": 1 },
+      "model": "psychedelicraftresparked:item/molotov_cocktail_round"
     }
   ]
 }

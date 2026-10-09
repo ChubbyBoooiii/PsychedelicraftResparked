@@ -140,6 +140,8 @@ public class BloomEffect implements ShaderEffect {
             }
         }
 
+        buffer.swap();
+
         GL20.glUseProgram(0);
 
         GL11.glDepthMask(true);

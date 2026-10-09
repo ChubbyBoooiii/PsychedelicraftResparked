@@ -40,6 +40,7 @@ public class ItemInit {
     public static final ItemFlask FLASK_ITEM = new ItemFlask(BlockInit.FLASK);
     public static final Item LATTICE_ITEM = createItemBlock(BlockInit.LATTICE);
     public static final ItemRiftJar RIFT_JAR_ITEM = new ItemRiftJar(BlockInit.RIFT_JAR);
+    public static final Item BOTTLE_WORKBENCH_ITEM = createItemBlock(BlockInit.BOTTLE_WORKBENCH);
 
 
 

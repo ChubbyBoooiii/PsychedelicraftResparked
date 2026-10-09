@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.tabs;
 
+import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidAlcohol;
 import com.chubbyboi.psychedelicraftresparked.init.FluidInit;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
@@ -92,6 +93,9 @@ public class PsychedelicraftResparkedDrinksTab extends CreativeTabs {
 
     private static ItemStack filledStack(Item item, int amount, FluidStack fluid) {
         ItemStack stack = new ItemStack(item);
+        if (item == ItemInit.BOTTLE) {
+            PlacedContainerType.withShape(stack, "wine_bottle");
+        }
         fluid.amount = amount;
         IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
         if (handler != null) {

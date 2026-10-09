@@ -2,6 +2,8 @@ package com.chubbyboi.psychedelicraftresparked.item;
 
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
 import com.chubbyboi.psychedelicraftresparked.Tags;
+import com.chubbyboi.psychedelicraftresparked.block.BlockPlacedContainers;
+import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.fluids.DrinkableFluid;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
 import com.chubbyboi.psychedelicraftresparked.fluids.InjectableFluid;
@@ -14,11 +16,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -72,6 +76,10 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
 
     public ConsumptionType getConsumptionType() {
         return consumptionType;
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 
     public ItemDrinkable setFinishSound(SoundEvent finishSound) {
@@ -140,6 +148,9 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
             tooltip.add(TextFormatting.GRAY + "" + fluidStack.amount + "mB/" + capacity + "mB");
             FluidHelper.appendPotencyTooltip(tooltip, fluidStack);
         }
+        if (PlacedContainerType.of(stack) != null) {
+            tooltip.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + I18n.translateToLocal("psychedelicraftresparked.tooltip.placeable"));
+        }
     }
 
     @Nullable
@@ -177,6 +188,14 @@ public class ItemDrinkable extends net.minecraftforge.fluids.capability.ItemFlui
             }
         }
         return stack;
+    }
+
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!player.isSneaking()) {
+            return EnumActionResult.PASS;
+        }
+        return BlockPlacedContainers.tryPlace(worldIn, pos, facing, player, hand, hitX, hitZ);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.client.rendering.shaders;
 
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.ambient.AmbientEnvironment;
 import com.chubbyboi.psychedelicraftresparked.config.PSConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -49,11 +50,16 @@ public class ShaderPipeline {
 
         try {
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.WorldColorEffect());
+            registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.HeatDistortionEffect("Heat Distortion Effect", 0.15f,
+                () -> PSConfig.biomeHeatDistortion ? AmbientEnvironment.getInstance().getCurrentHeatDistortion() : 0.0f));
+            registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.HeatDistortionEffect("Underwater Distortion Effect", 0.03f,
+                () -> PSConfig.waterDistortion ? AmbientEnvironment.getInstance().getCurrentWaterDistortion() : 0.0f));
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.SimpleEffectsShader());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.BloomEffect());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.MotionBlurEffect());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.DoubleVisionEffect());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.ColorBloomEffect());
+            registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.BlurNoiseEffect());
             registerEffect(new com.chubbyboi.psychedelicraftresparked.client.rendering.shaders.effects.DigitalEffect());
 
             for (ShaderEffect effect : effects) {
@@ -211,6 +217,9 @@ public class ShaderPipeline {
     }
 
     private boolean isCategoryEnabled(ShaderEffect effect) {
+        if (effect.isAmbient()) {
+            return true;
+        }
         return effect.isAdvanced() ? PSConfig.advancedShadersEnabled : PSConfig.simpleShadersEnabled;
     }
 }

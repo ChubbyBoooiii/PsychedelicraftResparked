@@ -12,6 +12,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Mod.EventBusSubscriber
 public class PSConfig {
@@ -35,7 +37,10 @@ public class PSConfig {
 
     public static boolean simpleShadersEnabled;
     public static boolean advancedShadersEnabled;
+    public static boolean skyDrugEffects;
     public static boolean hallucinationEntitiesEnabled;
+    public static boolean biomeHeatDistortion;
+    public static boolean waterDistortion;
     public static boolean drugEffectsEnabled;
     public static boolean enableHarmonium;
     public static boolean distortOutgoingMessages;
@@ -48,6 +53,9 @@ public class PSConfig {
 
     public static float digitalEffectPixelRescaleX;
     public static float digitalEffectPixelRescaleY;
+
+    public static float sunFlareIntensity;
+    public static int[] sunFlareDisabledDimensions;
 
     public static boolean enableRiftJars;
     public static boolean riftJarOverfillingEnabled;
@@ -77,8 +85,23 @@ public class PSConfig {
             "Enables and disables advanced/complex drug shader effects, e.g. 3D world geometry (waves, fractals, colour contrast)\n"
                 + "and Zero's digital/glitch effect. These are the most likely to conflict with OptiFine shaderpacks - disable this\n"
                 + "first if you're seeing rendering glitches with a shaderpack active. Default: true").getBoolean();
+        skyDrugEffects = config.get(CATEGORY_CLIENT, "skyDrugEffects", true,
+            "Whether the advanced world effects (pulses, fractals, colour contrast) also reach the sky. Turn this off if a mod\n"
+                + "with its own sky renderer looks wrong with them. Needs advancedShadersEnabled. Default: true").getBoolean();
         hallucinationEntitiesEnabled = config.get(CATEGORY_CLIENT, "hallucinationEntitiesEnabled", true,
             "Enables and disables the fake hallucinated mobs (and the Rasta-Head easter egg) some drugs can spawn. Default: true").getBoolean();
+        biomeHeatDistortion = config.get(CATEGORY_CLIENT, "biomeHeatDistortion", true,
+            "Enables and disables the heat shimmer on distant terrain in hot biomes (desert, mesa, Nether). Not a drug effect,\n"
+                + "unaffected by simpleShadersEnabled/advancedShadersEnabled. Default: true").getBoolean();
+        waterDistortion = config.get(CATEGORY_CLIENT, "waterDistortion", true,
+            "Enables and disables the wobble distortion while your view is underwater. Not a drug effect,\n"
+                + "unaffected by simpleShadersEnabled/advancedShadersEnabled. Default: true").getBoolean();
+        sunFlareIntensity = (float) config.get(CATEGORY_CLIENT, "sunFlareIntensity", 0.25,
+            "Intensity of the lens flare and glare when looking at the sun. Set to 0 to disable it entirely. Not a drug effect,\n"
+                + "unaffected by simpleShadersEnabled/advancedShadersEnabled. Default: 0.25").getDouble();
+        sunFlareDisabledDimensions = config.get(CATEGORY_CLIENT, "sunFlareDisabledDimensions", new int[0],
+            "Dimension IDs where the sun flare never shows, e.g. modded dimensions without a sun. Not needed for the\n"
+                + "Nether or End, which never show one. Default: none").getIntList();
 
         digitalEffectPixelRescaleX = (float) config.get(CATEGORY_CLIENT, "digitalEffectPixelRescaleX", 0.05,
             "Maximum horizontal pixelation of Zero's digital shader at full strength (1.0 = no pixelation, smaller = blockier). Default: 0.05").getDouble();
@@ -113,7 +136,7 @@ public class PSConfig {
             "Wild Peyote. Found in: Sandy+Hot biomes (4% chance), Mountain+Hot biomes (4%). Default: true").getBoolean();
 
         drugEffectsEnabled = config.get(CATEGORY_SERVER, "drugEffectsEnabled", true,
-            "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /druglevels set. Default: true").getBoolean();
+            "Enables and disables all drug effects server-wide, making every drug item purely cosmetic.\nAlso wipes and blocks any existing/incoming drug levels, including via /psyche druglevels set. Default: true").getBoolean();
 
         enableHarmonium = config.get(CATEGORY_SERVER, "enableHarmonium", true,
             "Enables and disables the fictional drug Harmonium's crafting recipes (16 dye colours). Default: true").getBoolean();
@@ -122,7 +145,7 @@ public class PSConfig {
             "Whether a player's own chat messages get slurred/glitched (Alcohol/Zero) or padded with filler words (Cannabis)\n"
                 + "based on their own drug levels, visible to everyone. Default: true").getBoolean();
 
-        int defaultDryingTableTickDuration = 2000;
+        int defaultDryingTableTickDuration = 3600;
         dryingTableTickDuration = config.get(CATEGORY_SERVER, "dryingTableTickDuration", defaultDryingTableTickDuration,
             "Base number of ticks the Drying Table takes to dry a full stack of items (actual time also depends on light and biome temperature). Default: "
                 + defaultDryingTableTickDuration).getInt();
@@ -161,9 +184,21 @@ public class PSConfig {
             readOreDictNames(recipe);
         }
 
-        if (config.hasChanged()) {
-            config.save();
-        }
+        config.setCategoryPropertyOrder(CATEGORY_CLIENT, new ArrayList<>(Arrays.asList(
+            "simpleShadersEnabled", "advancedShadersEnabled", "skyDrugEffects",
+            "digitalEffectPixelRescaleX", "digitalEffectPixelRescaleY",
+            "biomeHeatDistortion", "waterDistortion",
+            "sunFlareIntensity", "sunFlareDisabledDimensions",
+            "hallucinationEntitiesEnabled")));
+        config.setCategoryPropertyOrder(CATEGORY_SERVER, new ArrayList<>(Arrays.asList(
+            "drugEffectsEnabled", "distortOutgoingMessages",
+            "enableHarmonium",
+            "dryingTableTickDuration", "vatMixingTime", "slurryHardeningTime",
+            "enableRiftJars", "riftJarOverfillingEnabled", "randomTicksUntilRiftSpawn")));
+        config.setCategoryPropertyOrder(CATEGORY_WORLDGEN, new ArrayList<>(Arrays.asList(
+            "generateJuniper", "generateCannabis", "generateHop", "generateTobacco",
+            "generateCoffea", "generateCoca", "generatePeyote")));
+        config.save();
     }
 
     private static void readTickInfo(FluidAlcohol fluid) {

@@ -1,12 +1,29 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "psychedelicraftresparked:items/shot_glass"
-  },
-  "overrides": [
-    {
-      "predicate": { "filled": 1 },
-      "model": "psychedelicraftresparked:item/shot_glass_filled"
-    }
-  ]
+	"parent": "builtin/entity",
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [-0.5, 7.75, 0]
+		},
+		"thirdperson_lefthand": {
+			"translation": [-0.5, 7.75, 0]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 9, 1]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 9, 1]
+		},
+		"ground": {
+			"translation": [0, 4.25, 0]
+		},
+		"gui": {
+			"rotation": [16, -16, 0],
+			"translation": [0, 11.25, 0],
+			"scale": [2, 2, 2]
+		},
+		"fixed": {
+			"translation": [0, 13.25, -1],
+			"scale": [2, 2, 2]
+		}
+	}
 }
