@@ -1,4 +1,10 @@
 # Changelog
+## [0.3.1b] - 2026-10-09
+### Fixed
+- Dropped blocks showing unlit and grass showing grey on top in your hand with advanced shaders on (from the Storage Drawers fix in 0.3.0b).
+- Bottle Workbench now faces you when placed, instead of always facing the same way.
+- Bottles displayed on the Bottle Workbench using the old bottle texture layout.
+
 ## [0.3.0b] - 2026-10-09
 ### Added
 - Placeable drink containers: shift-right-click a Bottle, Shot Glass, Glass Chalice or Wooden Mug onto a block top to place it (empty or filled, contents kept), right-click to pick it back up, shift-right-click with an empty hand to rotate it. Several fit on one block, and you can see the drink inside.
