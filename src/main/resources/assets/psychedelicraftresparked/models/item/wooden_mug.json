@@ -1,12 +1,33 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "psychedelicraftresparked:items/wooden_mug"
-  },
-  "overrides": [
-    {
-      "predicate": { "filled": 1 },
-      "model": "psychedelicraftresparked:item/wooden_mug_filled"
-    }
-  ]
+	"parent": "builtin/entity",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, -90, 0],
+			"translation": [-0.5, 4.5, -2]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, 90, 0],
+			"translation": [-0.5, 4.5, -2]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -90, 0],
+			"translation": [0, 7.75, 1]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 90, 0],
+			"translation": [0, 7.75, 1]
+		},
+		"ground": {
+			"translation": [0, 4.25, 0]
+		},
+		"gui": {
+			"rotation": [16, -16, 0],
+			"translation": [0, 10, 0],
+			"scale": [2, 2, 2]
+		},
+		"fixed": {
+			"translation": [0, 11, -1.75],
+			"scale": [2, 2, 2]
+		}
+	}
 }

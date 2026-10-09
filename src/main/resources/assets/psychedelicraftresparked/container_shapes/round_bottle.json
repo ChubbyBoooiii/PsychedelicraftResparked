@@ -1,0 +1,15 @@
+{
+  "model": "psychedelicraftresparked:block/placed/round_bottle",
+  "molotovModel": "psychedelicraftresparked:block/placed/round_bottle_molotov",
+  "footprint": 6,
+  "height": 13.5,
+  "capacity": 1000,
+  "clearTextures": { "0": "psychedelicraftresparked:blocks/placed/round_bottle_clear" },
+  "fluid": [
+    { "halfWidth": 2.49, "bottom": 0.01, "top": 0.49 },
+    { "halfWidth": 2.99, "bottom": 0.5, "top": 5.99 },
+    { "halfWidth": 2.49, "bottom": 6.0, "top": 6.49 },
+    { "halfWidth": 1.99, "bottom": 6.5, "top": 6.99 },
+    { "halfWidth": 0.99, "bottom": 7.0, "top": 10.75 }
+  ]
+}

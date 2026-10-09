@@ -1,25 +1,9 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "psychedelicraftresparked:items/bottle",
-    "layer1": "psychedelicraftresparked:items/bottle_overlay"
-  },
-  "display": {
-    "firstperson_righthand": {
-      "rotation": [ 45, -90, 25 ],
-      "translation": [ 1.13, 0, 1.13 ],
-      "scale": [ 0.68, 0.68, 0.68 ]
-    },
-    "firstperson_lefthand": {
-      "rotation": [ -45, -90, 25 ],
-      "translation": [ 1.13, 0, 1.13 ],
-      "scale": [ 0.68, 0.68, 0.68 ]
-    }
-  },
+  "parent": "psychedelicraftresparked:item/bottle_wine",
   "overrides": [
     {
-      "predicate": { "filled": 1 },
-      "model": "psychedelicraftresparked:item/bottle_filled"
+      "predicate": { "shape": 1 },
+      "model": "psychedelicraftresparked:item/bottle_round"
     }
   ]
 }

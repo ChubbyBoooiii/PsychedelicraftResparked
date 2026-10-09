@@ -1,0 +1,8 @@
+{
+  "model": "psychedelicraftresparked:block/placed/wooden_mug",
+  "footprint": 3,
+  "height": 4.5,
+  "fluid": [
+    { "halfWidth": 0.99, "bottom": 0.26, "top": 4.0 }
+  ]
+}

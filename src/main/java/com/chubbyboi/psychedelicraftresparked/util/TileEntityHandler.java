@@ -2,6 +2,7 @@ package com.chubbyboi.psychedelicraftresparked.util;
 
 import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBarrel;
+import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityBottleWorkbench;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDistillery;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityDryingTable;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityFlask;
@@ -25,5 +26,6 @@ public class TileEntityHandler {
         GameRegistry.registerTileEntity(TileEntityFlask.class, new ResourceLocation(Tags.MOD_ID, "flask"));
         GameRegistry.registerTileEntity(TileEntityRiftJar.class, new ResourceLocation(Tags.MOD_ID, "rift_jar"));
         GameRegistry.registerTileEntity(TileEntityPlacedContainers.class, new ResourceLocation(Tags.MOD_ID, "placed_containers"));
+        GameRegistry.registerTileEntity(TileEntityBottleWorkbench.class, new ResourceLocation(Tags.MOD_ID, "bottle_workbench"));
     }
 }

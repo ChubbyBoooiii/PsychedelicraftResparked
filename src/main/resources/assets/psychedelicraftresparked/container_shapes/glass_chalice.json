@@ -1,0 +1,8 @@
+{
+  "model": "psychedelicraftresparked:block/placed/glass_chalice",
+  "footprint": 3,
+  "height": 5.5,
+  "fluid": [
+    { "halfWidth": 1.24, "bottom": 1.51, "top": 5.0 }
+  ]
+}

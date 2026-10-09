@@ -35,6 +35,8 @@ item.glass_chalice.name=Glass Chalice
 item.glass_chalice.full.name=Glass Chalice of %s
 item.shot_glass.name=Shot Glass
 item.shot_glass.full.name=Shot Glass of %s
+item.bottle.name=Bottle
+item.bottle.full.name=Bottle of %s
 item.bottle.white.name=White Bottle
 item.bottle.white.full.name=White Bottle of %s
 item.bottle.orange.name=Orange Bottle
@@ -242,6 +244,18 @@ psychedelicraftresparked.tooltip.rift_jar.slightly_filled=Slightly Filled
 psychedelicraftresparked.tooltip.rift_jar.half_filled=Half Filled
 psychedelicraftresparked.tooltip.rift_jar.full=Full
 psychedelicraftresparked.tooltip.rift_jar.overflowing=Overflowing
+
+# Bottle Workbench
+tile.bottle_workbench.name=Bottle Workbench
+container.bottle_workbench=Bottle Workbench
+container.bottle_workbench.tab.bottles=Bottle Crafting
+container.bottle_workbench.tab.labels=Labelling
+psychedelicraftresparked.shape.wine_bottle=Wine Bottle
+psychedelicraftresparked.shape.round_bottle=Round Bottle
+psychedelicraftresparked.label.band=Band
+psychedelicraftresparked.label.sticker=Sticker
+psychedelicraftresparked.label.none=No Label
+psychedelicraftresparked.jei.bottle_workbench.any_glass=Any glass block, the dye sets the colour
 
 
 

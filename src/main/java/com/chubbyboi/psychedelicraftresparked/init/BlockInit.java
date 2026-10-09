@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.init;
 
 import com.chubbyboi.psychedelicraftresparked.block.BlockBarrel;
+import com.chubbyboi.psychedelicraftresparked.block.BlockBottleWorkbench;
 import com.chubbyboi.psychedelicraftresparked.block.BlockDistillery;
 import com.chubbyboi.psychedelicraftresparked.block.BlockFlask;
 import com.chubbyboi.psychedelicraftresparked.block.BlockLattice;
@@ -31,6 +32,7 @@ public class BlockInit {
     public static final BlockFlask FLASK = new BlockFlask("flask");
     public static final BlockLattice LATTICE = new BlockLattice("lattice");
     public static final BlockRiftJar RIFT_JAR = new BlockRiftJar("rift_jar");
+    public static final BlockBottleWorkbench BOTTLE_WORKBENCH = new BlockBottleWorkbench("bottle_workbench");
     public static final BlockPlacedContainers PLACED_CONTAINERS = new BlockPlacedContainers("placed_containers");
 
     // Other Blocks

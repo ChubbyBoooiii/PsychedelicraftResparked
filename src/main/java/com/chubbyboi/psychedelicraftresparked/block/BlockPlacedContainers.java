@@ -51,6 +51,7 @@ public class BlockPlacedContainers extends Block implements ITileEntityProvider 
 
     public static final class Placement {
         public final PlacedContainerType type;
+        public final ContainerShape shape;
         public final BlockPos target;
         public final boolean existing;
         public final float x;
@@ -58,8 +59,9 @@ public class BlockPlacedContainers extends Block implements ITileEntityProvider 
         public final int rotation;
         public final boolean fits;
 
-        private Placement(PlacedContainerType type, BlockPos target, boolean existing, float x, float z, int rotation, boolean fits) {
+        private Placement(PlacedContainerType type, ContainerShape shape, BlockPos target, boolean existing, float x, float z, int rotation, boolean fits) {
             this.type = type;
+            this.shape = shape;
             this.target = target;
             this.existing = existing;
             this.x = x;
@@ -95,17 +97,18 @@ public class BlockPlacedContainers extends Block implements ITileEntityProvider 
             return null;
         }
 
-        float x = TileEntityPlacedContainers.snapToBlock(hitX * 16.0F, type);
-        float z = TileEntityPlacedContainers.snapToBlock(hitZ * 16.0F, type);
+        ContainerShape shape = type.getShape(stack);
+        float x = TileEntityPlacedContainers.snapToBlock(hitX * 16.0F, shape);
+        float z = TileEntityPlacedContainers.snapToBlock(hitZ * 16.0F, shape);
         int rotation = MathHelper.floor((180.0F + player.rotationYaw) * TileEntityPlacedContainers.ROTATION_STEPS / 360.0F + 0.5F)
             & (TileEntityPlacedContainers.ROTATION_STEPS - 1);
 
         boolean fits = true;
         if (existing) {
             TileEntity tileEntity = world.getTileEntity(target);
-            fits = tileEntity instanceof TileEntityPlacedContainers && ((TileEntityPlacedContainers) tileEntity).canPlace(type, x, z);
+            fits = tileEntity instanceof TileEntityPlacedContainers && ((TileEntityPlacedContainers) tileEntity).canPlace(shape, x, z);
         }
-        return new Placement(type, target, existing, x, z, rotation, fits);
+        return new Placement(type, shape, target, existing, x, z, rotation, fits);
     }
 
     public static EnumActionResult tryPlace(World world, BlockPos clicked, EnumFacing facing, EntityPlayer player, EnumHand hand, float hitX, float hitZ) {
@@ -206,6 +209,18 @@ public class BlockPlacedContainers extends Block implements ITileEntityProvider 
             }
         }
         return shared;
+    }
+
+    // Creative breaks drop nothing
+    @Override
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        if (player.capabilities.isCreativeMode) {
+            TileEntityPlacedContainers containers = getContainers(world, pos);
+            if (containers != null) {
+                containers.clearForRemoval();
+            }
+        }
+        return super.removedByPlayer(state, world, pos, player, willHarvest);
     }
 
     @Override

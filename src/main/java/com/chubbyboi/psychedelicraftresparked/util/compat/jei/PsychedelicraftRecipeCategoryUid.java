@@ -8,6 +8,7 @@ public final class PsychedelicraftRecipeCategoryUid {
     public static final String VAT = Tags.MOD_ID + ".vat";
     public static final String DISTILLERY = Tags.MOD_ID + ".distillery";
     public static final String BARREL = Tags.MOD_ID + ".barrel";
+    public static final String BOTTLE_WORKBENCH = Tags.MOD_ID + ".bottle_workbench";
 
     private PsychedelicraftRecipeCategoryUid() {
     }

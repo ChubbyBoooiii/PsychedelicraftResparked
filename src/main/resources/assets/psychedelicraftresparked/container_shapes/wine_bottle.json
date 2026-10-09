@@ -1,0 +1,12 @@
+{
+  "model": "psychedelicraftresparked:block/placed/wine_bottle",
+  "molotovModel": "psychedelicraftresparked:block/placed/wine_bottle_molotov",
+  "footprint": 4,
+  "height": 14.5,
+  "capacity": 1000,
+  "clearTextures": { "0": "psychedelicraftresparked:blocks/placed/wine_bottle_clear" },
+  "fluid": [
+    { "halfWidth": 1.99, "bottom": 0.01, "top": 9.99 },
+    { "halfWidth": 0.99, "bottom": 9.99, "top": 12.24 }
+  ]
+}

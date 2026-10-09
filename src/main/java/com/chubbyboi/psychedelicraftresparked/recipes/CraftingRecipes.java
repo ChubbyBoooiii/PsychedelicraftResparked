@@ -63,6 +63,10 @@ public class CraftingRecipes {
             new ItemStack(Blocks.PLANKS, 4, BlockPlanks.EnumType.SPRUCE.getMetadata()),
             Ingredient.fromItem(ItemInit.JUNIPER_LOG_ITEM));
 
+        // Bottle Workbench
+        GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "bottle_workbench"), null, new ItemStack(ItemInit.BOTTLE_WORKBENCH_ITEM),
+            "G", "C", 'G', "blockGlass", 'C', Blocks.CRAFTING_TABLE);
+
 
 
         // ==================== ITEMS ====================
@@ -108,11 +112,6 @@ public class CraftingRecipes {
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "glass_chalice"), null, new ItemStack(ItemInit.GLASS_CHALICE, 4), "# #", " # ", " # ", '#', "blockGlassColorless");
         GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "wooden_mug"), null, new ItemStack(ItemInit.WOODEN_MUG, 8), "# #", "# #", "###", '#', "plankWood");
         GameRegistry.addShapelessRecipe(new ResourceLocation(Tags.MOD_ID, "shot_glass"), null, new ItemStack(ItemInit.SHOT_GLASS, 1), Ingredient.fromStacks(new ItemStack(Blocks.GLASS)));
-        for (EnumDyeColor color : EnumDyeColor.values()) {
-            GameRegistry.addShapedRecipe(new ResourceLocation(Tags.MOD_ID, "bottle_" + color.getName()), null,
-                new ItemStack(ItemInit.BOTTLE, 8, color.getMetadata()),
-                " # ", "# #", "###", '#', new ItemStack(Blocks.STAINED_GLASS, 1, color.getMetadata()));
-        }
 
         ForgeRegistries.RECIPES.register(new RecipeConvertFluidContainer(ItemInit.BOTTLE, ItemInit.MOLOTOV_COCKTAIL,
             Ingredient.fromStacks(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)))

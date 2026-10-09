@@ -10,10 +10,12 @@ import com.chubbyboi.psychedelicraftresparked.entities.EntityMolotovCocktail;
 import com.chubbyboi.psychedelicraftresparked.entities.EntityRealityRift;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDryingTable;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererBarrel;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererBarrel;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererDistillery;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererDistillery;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererFlask;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererFlask;
+import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityItemStackRendererPlacedContainer;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererVat;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPeyote;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPlacedContainers;
@@ -32,10 +34,8 @@ import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityVat;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPeyote;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityPlacedContainers;
 import com.chubbyboi.psychedelicraftresparked.tileentities.TileEntityRiftJar;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -48,8 +48,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.util.function.IntUnaryOperator;
 
 public class ClientProxy extends CommonProxy {
 
@@ -84,12 +82,19 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPeyote.class, new TileEntityRendererPeyote());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVat.class, new TileEntityRendererVat());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new TileEntityRendererBarrel());
+        ItemInit.BARREL_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererBarrel());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDistillery.class, new TileEntityRendererDistillery());
         ItemInit.DISTILLERY_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererDistillery());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlask.class, new TileEntityRendererFlask());
         ItemInit.FLASK_ITEM.setTileEntityItemStackRenderer(new TileEntityItemStackRendererFlask());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRiftJar.class, new TileEntityRendererRiftJar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlacedContainers.class, new TileEntityRendererPlacedContainers());
+        TileEntityItemStackRendererPlacedContainer placedContainerItemRenderer = new TileEntityItemStackRendererPlacedContainer();
+        ItemInit.BOTTLE.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.SHOT_GLASS.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.GLASS_CHALICE.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.WOODEN_MUG.setTileEntityItemStackRenderer(placedContainerItemRenderer);
+        ItemInit.MOLOTOV_COCKTAIL.setTileEntityItemStackRenderer(placedContainerItemRenderer);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityMolotovCocktail.class,
             manager -> new RenderMolotovCocktail(manager, ItemInit.MOLOTOV_COCKTAIL, Minecraft.getMinecraft().getRenderItem()));
@@ -116,26 +121,8 @@ public class ClientProxy extends CommonProxy {
 
         event.getItemColors().registerItemColorHandler(
             (stack, tintIndex) -> tintIndex == 1 ? FluidHelper.getFluidColor(stack) : 0xFFFFFF,
-            ItemInit.WOODEN_MUG, ItemInit.GLASS_CHALICE, ItemInit.SHOT_GLASS, ItemInit.SYRINGE
+            ItemInit.SYRINGE
         );
-
-        event.getItemColors().registerItemColorHandler(
-            bottleColors(meta -> MapColor.getBlockColor(EnumDyeColor.byMetadata(meta)).colorValue), ItemInit.BOTTLE);
-        event.getItemColors().registerItemColorHandler(
-            bottleColors(meta -> EnumDyeColor.byMetadata(meta).getColorValue()), ItemInit.MOLOTOV_COCKTAIL);
-    }
-
-    private static IItemColor bottleColors(IntUnaryOperator glassColor) {
-        return (stack, tintIndex) -> {
-            boolean filled = FluidHelper.hasFluid(stack);
-            if (tintIndex == 0) {
-                return filled ? FluidHelper.getFluidColor(stack) : glassColor.applyAsInt(stack.getMetadata());
-            }
-            if (tintIndex == 1 && filled) {
-                return glassColor.applyAsInt(stack.getMetadata());
-            }
-            return 0xFFFFFF;
-        };
     }
 
     @SubscribeEvent
@@ -163,10 +150,12 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_bubble"));
         event.getMap().registerSprite(new ResourceLocation("psychedelicraftresparked:particles/fluid_splash"));
         TileEntityRendererPlacedContainers.registerTextures(event.getMap());
+        TileEntityRendererBarrel.registerTextures(event.getMap());
     }
 
     @SubscribeEvent
     public void onModelBake(ModelBakeEvent event) {
         TileEntityRendererPlacedContainers.bakeModels();
+        TileEntityRendererBarrel.bakeModels();
     }
 }

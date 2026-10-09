@@ -1,59 +1,59 @@
 package com.chubbyboi.psychedelicraftresparked.block;
 
-import com.chubbyboi.psychedelicraftresparked.Tags;
 import com.chubbyboi.psychedelicraftresparked.init.ItemInit;
 import net.minecraft.block.SoundType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 public enum PlacedContainerType {
-    // All sizes in pixels (1/16 block), measured from the container's centre/floor
-    //   item          - the held item that can be set down as this container
-    //   hitHalfWidth  - half the width of the footprint square, models width and depth (decimals rounded up)
-    //   height        - top of the selection/collision box
-    //   fluid:
-    //     halfWidth   - half the width of the body's fluid box (keep just inside the glass walls)
-    //     bottom      - where the fluid starts, above the floor
-    //     maxHeight   - fluid height in the body when full
-    //   neck:
-    //     halfWidth   - half the width of the neck's fluid box; 0 = no neck (body only)
-    //     maxHeight   - how far up the neck the fluid reaches when full
-    //   sound         - place/pick-up sound
-    BOTTLE(() -> ItemInit.BOTTLE, 2.0F, 14.5F, 1.99F, 0.01F, 9.98F, 0.99F, 2.25F, SoundType.GLASS),
-    SHOT_GLASS(() -> ItemInit.SHOT_GLASS, 1.0F, 2.5F, 0.99F, 0.01F, 2.0F, 0.0F, 0.0F, SoundType.GLASS),
-    GLASS_CHALICE(() -> ItemInit.GLASS_CHALICE, 1.5F, 5.5F, 1.24F, 1.51F, 3.49F, 0.0F, 0.0F, SoundType.GLASS),
-    WOODEN_MUG(() -> ItemInit.WOODEN_MUG, 1.5F, 4.5F, 0.99F, 0.26F, 3.74F, 0.0F, 0.0F, SoundType.WOOD);
+    BOTTLE(() -> ItemInit.BOTTLE, SoundType.GLASS, "wine_bottle", "round_bottle"),
+    SHOT_GLASS(() -> ItemInit.SHOT_GLASS, SoundType.GLASS, "shot_glass"),
+    GLASS_CHALICE(() -> ItemInit.GLASS_CHALICE, SoundType.GLASS, "glass_chalice"),
+    WOODEN_MUG(() -> ItemInit.WOODEN_MUG, SoundType.WOOD, "wooden_mug");
+
+    public static final String SHAPE_TAG = "Shape";
 
     private final Supplier<Item> item;
-    public final float hitHalfWidth;
-    public final float height;
-    public final float fluidHalfWidth;
-    public final float fluidBottom;
-    public final float fluidMaxHeight;
-    public final float neckFluidHalfWidth;
-    public final float neckFluidMaxHeight;
     public final SoundType soundType;
-    public final ResourceLocation model;
+    private final List<String> shapeNames;
 
-    PlacedContainerType(Supplier<Item> item, float hitHalfWidth, float height, float fluidHalfWidth, float fluidBottom, float fluidMaxHeight,
-                        float neckFluidHalfWidth, float neckFluidMaxHeight, SoundType soundType) {
-        if (hitHalfWidth * 2.0F != Math.round(hitHalfWidth * 2.0F)) {
-            throw new IllegalArgumentException(name() + ": footprint width must be whole pixels, got " + hitHalfWidth * 2.0F);
-        }
+    PlacedContainerType(Supplier<Item> item, SoundType soundType, String... shapeNames) {
         this.item = item;
-        this.hitHalfWidth = hitHalfWidth;
-        this.height = height;
-        this.fluidHalfWidth = fluidHalfWidth;
-        this.fluidBottom = fluidBottom;
-        this.fluidMaxHeight = fluidMaxHeight;
-        this.neckFluidHalfWidth = neckFluidHalfWidth;
-        this.neckFluidMaxHeight = neckFluidMaxHeight;
         this.soundType = soundType;
-        this.model = new ResourceLocation(Tags.MOD_ID, "block/placed/" + name().toLowerCase());
+        this.shapeNames = Collections.unmodifiableList(Arrays.asList(shapeNames));
+    }
+
+    public List<ContainerShape> getShapes() {
+        List<ContainerShape> shapes = new ArrayList<>();
+        for (String name : shapeNames) {
+            shapes.add(ContainerShape.get(name));
+        }
+        return shapes;
+    }
+
+    public ContainerShape getShape(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null && tag.hasKey(SHAPE_TAG, Constants.NBT.TAG_STRING) && shapeNames.contains(tag.getString(SHAPE_TAG))) {
+            return ContainerShape.get(tag.getString(SHAPE_TAG));
+        }
+        return ContainerShape.get(shapeNames.get(0));
+    }
+
+    public static ItemStack withShape(ItemStack stack, String shape) {
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        stack.getTagCompound().setString(SHAPE_TAG, shape);
+        return stack;
     }
 
     @Nullable
