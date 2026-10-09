@@ -26,7 +26,8 @@ uniform int normalMode;
 vec3 eyeNormal() {
     vec3 normal = gl_NormalMatrix * gl_Normal;
     if (normalMode == 2) return normalize(normal);
-    if (normalMode == 1) return normal * gl_NormalScale;
+    // GL spec rescale factor: 1 / length of the inverse modelview's third row (gl_NormalScale isn't reliable across drivers)
+    if (normalMode == 1) return normal / length(gl_NormalMatrix[2]);
     return normal;
 }
 
