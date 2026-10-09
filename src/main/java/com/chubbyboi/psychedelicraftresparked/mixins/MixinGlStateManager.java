@@ -59,4 +59,14 @@ public class MixinGlStateManager {
     private static void onEnableLighting(CallbackInfo ci) {
         WorldShaderEffect.getInstance().setLightingEnabled(true);
     }
+
+    @Inject(method = {"enableNormalize", "disableNormalize", "enableRescaleNormal", "disableRescaleNormal"}, at = @At("TAIL"))
+    private static void onNormalStateChange(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().onNormalStateChange();
+    }
+
+    @Inject(method = "popAttrib", at = @At("TAIL"))
+    private static void onPopAttrib(CallbackInfo ci) {
+        WorldShaderEffect.getInstance().onPopAttrib();
+    }
 }
