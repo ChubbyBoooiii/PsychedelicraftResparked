@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.gui;
 
+import com.chubbyboi.psychedelicraftresparked.block.BottleLabel;
 import com.chubbyboi.psychedelicraftresparked.block.ContainerShape;
 import com.chubbyboi.psychedelicraftresparked.item.ItemBottle;
 import com.chubbyboi.psychedelicraftresparked.recipes.BottleWorkbenchRecipes;
@@ -11,6 +12,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,10 +30,13 @@ public class BottleWorkbenchContainer extends Container {
     public static final int OUTPUT_SLOT = 5;
     private static final int PLAYER_START = 6;
     private static final int PLAYER_END = PLAYER_START + 36;
-    public static final int MAX_LABELLED_BOTTLES = 8;
+    public static final int LABEL_BATCH_SIZE = 8;
 
     public static final int TAB_BOTTLES_ID = 100;
     public static final int TAB_LABELS_ID = 101;
+    public static final int NO_LABEL_ID = 102;
+    public static final int LABEL_SHAPE_ID_START = 200;
+    public static final int NO_LABEL = -2;
 
     private final TileEntityBottleWorkbench tileentity;
     private final InventoryBasic output = new InventoryBasic("bottle_workbench_output", false, 1);
@@ -42,7 +47,7 @@ public class BottleWorkbenchContainer extends Container {
 
         addSlotToContainer(new InputSlot(GLASS_SLOT, 13, 32, TileEntityBottleWorkbench.MODE_BOTTLES, BottleWorkbenchRecipes::isGlass, 64));
         addSlotToContainer(new InputSlot(BOTTLE_DYE_SLOT, 33, 32, TileEntityBottleWorkbench.MODE_BOTTLES, BottleWorkbenchRecipes::isDye, 64));
-        addSlotToContainer(new InputSlot(BOTTLES_SLOT, 23, 18, TileEntityBottleWorkbench.MODE_LABELS, stack -> stack.getItem() instanceof ItemBottle, MAX_LABELLED_BOTTLES));
+        addSlotToContainer(new InputSlot(BOTTLES_SLOT, 23, 18, TileEntityBottleWorkbench.MODE_LABELS, stack -> stack.getItem() instanceof ItemBottle, 64));
         addSlotToContainer(new InputSlot(PAPER_SLOT, 13, 48, TileEntityBottleWorkbench.MODE_LABELS, stack -> stack.getItem() == Items.PAPER, 64));
         addSlotToContainer(new InputSlot(LABEL_DYE_SLOT, 33, 48, TileEntityBottleWorkbench.MODE_LABELS, BottleWorkbenchRecipes::isDye, 64));
         addSlotToContainer(new Slot(output, 0, 143, 57) {
@@ -90,12 +95,31 @@ public class BottleWorkbenchContainer extends Container {
         return tileentity.getStackInSlot(index);
     }
 
+    public int getSelectedLabel() {
+        return tileentity.getLabelShape();
+    }
+
+    public ItemStack getBottles() {
+        return tileentity.getStackInSlot(BOTTLES_SLOT);
+    }
+
+    public EnumDyeColor getLabelColor() {
+        EnumDyeColor color = BottleWorkbenchRecipes.getDyeColour(tileentity.getStackInSlot(LABEL_DYE_SLOT));
+        return color != null ? color : EnumDyeColor.WHITE;
+    }
+
     @Override
     public boolean enchantItem(EntityPlayer playerIn, int id) {
+        boolean labelMode = getMode() == TileEntityBottleWorkbench.MODE_LABELS;
+        int labelIndex = id - LABEL_SHAPE_ID_START;
         if (id == TAB_BOTTLES_ID || id == TAB_LABELS_ID) {
             tileentity.setMode(id == TAB_BOTTLES_ID ? TileEntityBottleWorkbench.MODE_BOTTLES : TileEntityBottleWorkbench.MODE_LABELS);
-        } else if (id >= 0 && id < BottleWorkbenchRecipes.getShapes().size() && getMode() == TileEntityBottleWorkbench.MODE_BOTTLES) {
+        } else if (id >= 0 && id < BottleWorkbenchRecipes.getShapes().size() && !labelMode) {
             tileentity.setBottleShape(id);
+        } else if (labelIndex >= 0 && labelIndex < BottleLabel.SHAPES.size() && labelMode) {
+            tileentity.setLabelShape(labelIndex);
+        } else if (id == NO_LABEL_ID && labelMode && BottleLabel.hasLabel(getBottles())) {
+            tileentity.setLabelShape(NO_LABEL);
         } else {
             return false;
         }
@@ -111,11 +135,37 @@ public class BottleWorkbenchContainer extends Container {
             if (selectedShape >= 0 && selectedShape < shapes.size()) {
                 result = BottleWorkbenchRecipes.getResult(getGlass(), getDye(), shapes.get(selectedShape));
             }
+        } else {
+            int selectedLabel = getSelectedLabel();
+            ItemStack bottles = getBottles();
+            if (selectedLabel == NO_LABEL) {
+                if (BottleLabel.hasLabel(bottles)) {
+                    result = BottleLabel.removeLabel(getBatch(bottles));
+                }
+            } else if (selectedLabel >= 0 && selectedLabel < BottleLabel.SHAPES.size() && !bottles.isEmpty()
+                && !tileentity.getStackInSlot(PAPER_SLOT).isEmpty() && !tileentity.getStackInSlot(LABEL_DYE_SLOT).isEmpty()) {
+                result = BottleLabel.withLabel(getBatch(bottles), BottleLabel.SHAPES.get(selectedLabel), getLabelColor());
+            }
         }
         output.setInventorySlotContents(0, result);
     }
 
+    private static ItemStack getBatch(ItemStack bottles) {
+        ItemStack batch = bottles.copy();
+        batch.setCount(Math.min(bottles.getCount(), LABEL_BATCH_SIZE));
+        return batch;
+    }
+
     private void consumeInputs() {
+        if (getMode() == TileEntityBottleWorkbench.MODE_LABELS) {
+            tileentity.decrStackSize(BOTTLES_SLOT, LABEL_BATCH_SIZE);
+            if (getSelectedLabel() != NO_LABEL) {
+                tileentity.decrStackSize(PAPER_SLOT, 1);
+                tileentity.decrStackSize(LABEL_DYE_SLOT, 1);
+            }
+            updateOutput();
+            return;
+        }
         tileentity.decrStackSize(GLASS_SLOT, 1);
         if (!getDye().isEmpty()) {
             tileentity.decrStackSize(BOTTLE_DYE_SLOT, 1);
@@ -163,6 +213,16 @@ public class BottleWorkbenchContainer extends Container {
             return ItemStack.EMPTY;
         }
 
+        if (index == OUTPUT_SLOT && getMode() == TileEntityBottleWorkbench.MODE_LABELS) {
+            while (slot.getHasStack()) {
+                ItemStack labelled = slot.getStack().copy();
+                if (!fitsInPlayerInventory(labelled) || !mergeItemStack(labelled, PLAYER_START, PLAYER_END, true)) {
+                    break;
+                }
+                slot.onTake(playerIn, slot.getStack().copy());
+            }
+            return ItemStack.EMPTY;
+        }
         if (index == OUTPUT_SLOT) {
             // Make bottles until a resource runs out: with a dye in, stop when the dye runs out rather than carrying on with the glass's own colour
             boolean usingDye = !getDye().isEmpty();
@@ -192,6 +252,19 @@ public class BottleWorkbenchContainer extends Container {
             slot.onSlotChanged();
         }
         return original;
+    }
+
+    private boolean fitsInPlayerInventory(ItemStack stack) {
+        int room = 0;
+        for (int i = PLAYER_START; i < PLAYER_END; i++) {
+            ItemStack existing = inventorySlots.get(i).getStack();
+            if (existing.isEmpty()) {
+                room += stack.getMaxStackSize();
+            } else if (ItemStack.areItemsEqual(existing, stack) && ItemStack.areItemStackTagsEqual(existing, stack)) {
+                room += existing.getMaxStackSize() - existing.getCount();
+            }
+        }
+        return room >= stack.getCount();
     }
 
     private boolean moveToInput(ItemStack stack) {

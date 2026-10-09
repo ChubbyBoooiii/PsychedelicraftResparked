@@ -1,6 +1,7 @@
 package com.chubbyboi.psychedelicraftresparked.gui;
 
 import com.chubbyboi.psychedelicraftresparked.Tags;
+import com.chubbyboi.psychedelicraftresparked.block.BottleLabel;
 import com.chubbyboi.psychedelicraftresparked.block.ContainerShape;
 import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.client.rendering.blocks.TileEntityRendererPlacedContainers;
@@ -22,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -83,9 +85,9 @@ public class BottleWorkbenchGui extends GuiContainer {
         super.drawScreen(mouseX, mouseY, partialTicks);
         renderHoveredToolTip(mouseX, mouseY);
 
-        int hovered = getShapeAt(mouseX, mouseY);
+        int hovered = getGridAt(mouseX, mouseY);
         if (hovered >= 0) {
-            drawHoveringText(I18n.format(Tags.MOD_ID + ".shape." + BottleWorkbenchRecipes.getShapes().get(hovered).name), mouseX, mouseY);
+            drawHoveringText(getGridName(hovered), mouseX, mouseY);
         }
         // Like the creative tabs, only the tab you can switch to gets a tooltip
         if (isLabelMode() && isInRect(mouseX, mouseY, TABS_X, BOTTLE_TAB_TOP, TAB_WIDTH, TAB_HEIGHT)) {
@@ -129,10 +131,13 @@ public class BottleWorkbenchGui extends GuiContainer {
         } else {
             drawHint(BottleWorkbenchContainer.GLASS_SLOT, BOTTLES_GLASS_HINT_U);
             drawHint(BottleWorkbenchContainer.BOTTLE_DYE_SLOT, BOTTLES_DYE_HINT_U);
-            drawShapeGrid(mouseX, mouseY);
         }
+        drawGrid(mouseX, mouseY);
 
         ItemStack result = container.getSlot(BottleWorkbenchContainer.OUTPUT_SLOT).getStack();
+        if (result.isEmpty() && isLabelMode()) {
+            result = container.getBottles();
+        }
         if (!result.isEmpty()) {
             drawPreview(result, partialTicks);
         }
@@ -145,18 +150,66 @@ public class BottleWorkbenchGui extends GuiContainer {
         }
     }
 
-    private void drawShapeGrid(int mouseX, int mouseY) {
-        if (container.getGlass().isEmpty()) {
-            return;
+    private List<Integer> getLabelEntries() {
+        List<Integer> entries = new ArrayList<>();
+        if (container.getBottles().isEmpty()) {
+            return entries;
         }
-        List<ContainerShape> shapes = BottleWorkbenchRecipes.getShapes();
-        int hovered = getShapeAt(mouseX, mouseY);
-        for (int i = 0; i < shapes.size(); i++) {
-            int v = i == container.getSelectedShape() ? ySize + BUTTON_SIZE : i == hovered ? ySize + BUTTON_SIZE * 2 : ySize;
+        if (BottleLabel.hasLabel(container.getBottles())) {
+            entries.add(BottleWorkbenchContainer.NO_LABEL);
+        }
+        for (int i = 0; i < BottleLabel.SHAPES.size(); i++) {
+            entries.add(i);
+        }
+        return entries;
+    }
+
+    private int getGridSize() {
+        if (isLabelMode()) {
+            return getLabelEntries().size();
+        }
+        return container.getGlass().isEmpty() ? 0 : BottleWorkbenchRecipes.getShapes().size();
+    }
+
+    private int getGridSelected() {
+        return isLabelMode() ? getLabelEntries().indexOf(container.getSelectedLabel()) : container.getSelectedShape();
+    }
+
+    private ItemStack getGridIcon(int index) {
+        if (isLabelMode()) {
+            ItemStack bottle = BottleLabel.removeLabel(container.getBottles().copy());
+            bottle.setCount(1);
+            int label = getLabelEntries().get(index);
+            return label == BottleWorkbenchContainer.NO_LABEL ? bottle : BottleLabel.withLabel(bottle, BottleLabel.SHAPES.get(label), container.getLabelColor());
+        }
+        return BottleWorkbenchRecipes.getResult(container.getGlass(), container.getDye(), BottleWorkbenchRecipes.getShapes().get(index));
+    }
+
+    private String getGridName(int index) {
+        if (isLabelMode()) {
+            int label = getLabelEntries().get(index);
+            return I18n.format(Tags.MOD_ID + ".label." + (label == BottleWorkbenchContainer.NO_LABEL ? "none" : BottleLabel.SHAPES.get(label)));
+        }
+        return I18n.format(Tags.MOD_ID + ".shape." + BottleWorkbenchRecipes.getShapes().get(index).name);
+    }
+
+    private int getGridId(int index) {
+        if (isLabelMode()) {
+            int label = getLabelEntries().get(index);
+            return label == BottleWorkbenchContainer.NO_LABEL ? BottleWorkbenchContainer.NO_LABEL_ID : BottleWorkbenchContainer.LABEL_SHAPE_ID_START + label;
+        }
+        return index;
+    }
+
+    private void drawGrid(int mouseX, int mouseY) {
+        int size = getGridSize();
+        int hovered = getGridAt(mouseX, mouseY);
+        for (int i = 0; i < size; i++) {
+            int v = i == getGridSelected() ? ySize + BUTTON_SIZE : i == hovered ? ySize + BUTTON_SIZE * 2 : ySize;
             drawTexturedModalRect(guiLeft + getButtonX(i), guiTop + getButtonY(i), 0, v, BUTTON_SIZE, BUTTON_SIZE);
         }
-        for (int i = 0; i < shapes.size(); i++) {
-            ItemStack icon = BottleWorkbenchRecipes.getResult(container.getGlass(), container.getDye(), shapes.get(i));
+        for (int i = 0; i < size; i++) {
+            ItemStack icon = getGridIcon(i);
             GlStateManager.pushMatrix();
             GlStateManager.translate(guiLeft + getButtonX(i) + 1, guiTop + getButtonY(i) + 1, 0.0F);
             GlStateManager.scale(0.75F, 0.75F, 1.0F);
@@ -189,7 +242,8 @@ public class BottleWorkbenchGui extends GuiContainer {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        int clicked = getShapeAt(mouseX, mouseY);
+        int gridIndex = getGridAt(mouseX, mouseY);
+        int clicked = gridIndex >= 0 ? getGridId(gridIndex) : -1;
         if (clicked < 0) {
             if (isLabelMode() && isInRect(mouseX, mouseY, TABS_X, BOTTLE_TAB_TOP, TAB_WIDTH, TAB_HEIGHT)) {
                 clicked = BottleWorkbenchContainer.TAB_BOTTLES_ID;
@@ -218,12 +272,9 @@ public class BottleWorkbenchGui extends GuiContainer {
         return Arrays.asList(new Rectangle(guiLeft + TABS_X, guiTop + TABS_Y, TABS_WIDTH, TABS_HEIGHT));
     }
 
-    private int getShapeAt(int mouseX, int mouseY) {
-        if (isLabelMode() || container.getGlass().isEmpty()) {
-            return -1;
-        }
-        List<ContainerShape> shapes = BottleWorkbenchRecipes.getShapes();
-        for (int i = 0; i < shapes.size(); i++) {
+    private int getGridAt(int mouseX, int mouseY) {
+        int size = getGridSize();
+        for (int i = 0; i < size; i++) {
             if (isInRect(mouseX, mouseY, getButtonX(i), getButtonY(i), BUTTON_SIZE, BUTTON_SIZE)) {
                 return i;
             }

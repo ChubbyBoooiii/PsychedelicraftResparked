@@ -1,6 +1,8 @@
 package com.chubbyboi.psychedelicraftresparked.client.rendering.blocks;
 
 import com.chubbyboi.psychedelicraftresparked.PsychedelicraftResparked;
+import com.chubbyboi.psychedelicraftresparked.Tags;
+import com.chubbyboi.psychedelicraftresparked.block.BottleLabel;
 import com.chubbyboi.psychedelicraftresparked.block.ContainerShape;
 import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import com.chubbyboi.psychedelicraftresparked.fluids.FluidHelper;
@@ -57,12 +59,16 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     private static final class SplitModel {
         private final List<BakedQuad> solid = new ArrayList<>();
         private final List<BakedQuad> seeThrough = new ArrayList<>();
+        private final List<String> seeThroughKeys = new ArrayList<>();
     }
 
     private static final Map<ContainerShape, SplitModel> MODELS = new HashMap<>();
     private static final Map<ContainerShape, SplitModel> CLEAR_MODELS = new HashMap<>();
     private static final Map<ContainerShape, SplitModel> MOLOTOV_MODELS = new HashMap<>();
     private static final Map<ContainerShape, SplitModel> CLEAR_MOLOTOV_MODELS = new HashMap<>();
+
+    private static final Map<ContainerShape, Map<String, Map<String, BakedQuad>>> LABELS = new HashMap<>();
+    private static final Map<ContainerShape, Map<String, Map<String, BakedQuad>>> MOLOTOV_LABELS = new HashMap<>();
     private static final float GLASS_FILTER_STRENGTH = 0.85F;
 
     private static List<ContainerShape> allShapes() {
@@ -87,6 +93,28 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
                 map.registerSprite(new ResourceLocation(texture));
             }
         }
+        for (ContainerShape shape : PlacedContainerType.BOTTLE.getShapes()) {
+            for (String label : BottleLabel.SHAPES) {
+                if (labelTextureExists(shape, label)) {
+                    map.registerSprite(getLabelTexture(shape, label));
+                }
+            }
+        }
+    }
+
+    // Same size and UV layout as the bottle's own texture, transparent except the label
+    private static ResourceLocation getLabelTexture(ContainerShape shape, String label) {
+        return new ResourceLocation(Tags.MOD_ID, "blocks/placed/labels/" + shape.name + "_" + label);
+    }
+
+    private static boolean labelTextureExists(ContainerShape shape, String label) {
+        ResourceLocation texture = getLabelTexture(shape, label);
+        ResourceLocation file = new ResourceLocation(texture.getNamespace(), "textures/" + texture.getPath() + ".png");
+        try (IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(file)) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static void bakeModels() {
@@ -94,6 +122,8 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         CLEAR_MODELS.clear();
         MOLOTOV_MODELS.clear();
         CLEAR_MOLOTOV_MODELS.clear();
+        LABELS.clear();
+        MOLOTOV_LABELS.clear();
         Map<String, BufferedImage> images = new HashMap<>();
         for (ContainerShape shape : allShapes()) {
             bakeModel(shape, shape.model, MODELS, CLEAR_MODELS, images);
@@ -101,6 +131,46 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
                 bakeModel(shape, shape.molotovModel, MOLOTOV_MODELS, CLEAR_MOLOTOV_MODELS, images);
             }
         }
+        for (ContainerShape shape : PlacedContainerType.BOTTLE.getShapes()) {
+            bakeLabels(shape, shape.model, LABELS);
+            if (shape.molotovModel != null) {
+                bakeLabels(shape, shape.molotovModel, MOLOTOV_LABELS);
+            }
+        }
+    }
+
+    private static void bakeLabels(ContainerShape shape, ResourceLocation location, Map<ContainerShape, Map<String, Map<String, BakedQuad>>> labels) {
+        try {
+            IModel model = ModelLoaderRegistry.getModel(location);
+            Map<String, Map<String, BakedQuad>> byLabel = new HashMap<>();
+            for (String label : BottleLabel.SHAPES) {
+                if (!labelTextureExists(shape, label)) {
+                    continue;
+                }
+                ImmutableMap.Builder<String, String> textures = ImmutableMap.builder();
+                for (String key : shape.clearTextures.keySet()) {
+                    textures.put(key, getLabelTexture(shape, label).toString());
+                }
+                Map<String, BakedQuad> byGeometry = new HashMap<>();
+                for (BakedQuad quad : bakeQuads(model.retexture(textures.build()))) {
+                    byGeometry.put(getGeometryKey(quad), quad);
+                }
+                byLabel.put(label, byGeometry);
+            }
+            labels.put(shape, byLabel);
+        } catch (Exception e) {
+            PsychedelicraftResparked.LOGGER.error("Failed to load label models for {}", location, e);
+        }
+    }
+
+    private static List<BakedQuad> bakeQuads(IModel model) {
+        IBakedModel baked = model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter());
+        List<BakedQuad> quads = new ArrayList<>();
+        for (EnumFacing side : EnumFacing.values()) {
+            quads.addAll(baked.getQuads(null, side, 0L));
+        }
+        quads.addAll(baked.getQuads(null, null, 0L));
+        return quads;
     }
 
     private static void bakeModel(ContainerShape shape, ResourceLocation location, Map<ContainerShape, SplitModel> models,
@@ -117,18 +187,45 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     }
 
     private static SplitModel split(IModel model, Map<String, BufferedImage> images) {
-        IBakedModel baked = model.bake(model.getDefaultState(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter());
-        List<BakedQuad> quads = new ArrayList<>();
-        for (EnumFacing side : EnumFacing.values()) {
-            quads.addAll(baked.getQuads(null, side, 0L));
-        }
-        quads.addAll(baked.getQuads(null, null, 0L));
-
+        List<BakedQuad> quads = bakeQuads(model);
         SplitModel split = new SplitModel();
         for (BakedQuad quad : quads) {
-            (isSolid(quad, images) ? split.solid : split.seeThrough).add(quad);
+            if (isSolid(quad, images)) {
+                split.solid.add(quad);
+            } else {
+                split.seeThrough.add(quad);
+                split.seeThroughKeys.add(getGeometryKey(quad));
+            }
         }
         return split;
+    }
+
+    private static String getGeometryKey(BakedQuad quad) {
+        VertexFormat format = quad.getFormat();
+        int positionIndex = -1;
+        for (int i = 0; i < format.getElementCount(); i++) {
+            if (format.getElement(i).getUsage() == VertexFormatElement.EnumUsage.POSITION) {
+                positionIndex = i;
+            }
+        }
+        StringBuilder key = new StringBuilder(String.valueOf(quad.getFace()));
+        float[] data = new float[4];
+        for (int vertex = 0; vertex < 4; vertex++) {
+            LightUtil.unpack(quad.getVertexData(), data, format, vertex, positionIndex);
+            key.append(String.format(":%.4f,%.4f,%.4f", data[0], data[1], data[2]));
+        }
+        return key.toString();
+    }
+
+    @Nullable
+    private static Map<String, BakedQuad> getLabelQuads(TileEntityPlacedContainers.Entry entry) {
+        String label = BottleLabel.getShape(entry.stack);
+        if (label == null || entry.type != PlacedContainerType.BOTTLE) {
+            return null;
+        }
+        boolean molotov = entry.stack.getItem() instanceof ItemMolotovCocktail;
+        Map<String, Map<String, BakedQuad>> byLabel = (molotov ? MOLOTOV_LABELS : LABELS).get(entry.shape);
+        return byLabel != null ? byLabel.get(label) : null;
     }
 
     @Nullable
@@ -288,17 +385,18 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
     private static void addContainer(BufferBuilder buffer, Pending pending, Vec3d camera) {
         SplitModel model = getModel(pending.entry);
         FluidStack fluid = getFluid(pending.entry);
+        Map<String, BakedQuad> labelQuads = getLabelQuads(pending.entry);
 
         for (int section : getSectionOrder(pending, camera)) {
             if (model != null) {
-                addModelQuads(buffer, pending, model.seeThrough, section, false, camera);
+                addModelQuads(buffer, pending, model, labelQuads, section, false, camera);
             }
             if (fluid != null && section != BELOW_FLUID) {
                 addFluid(buffer, pending, fluid, section, false, camera);
                 addFluid(buffer, pending, fluid, section, true, camera);
             }
             if (model != null) {
-                addModelQuads(buffer, pending, model.seeThrough, section, true, camera);
+                addModelQuads(buffer, pending, model, labelQuads, section, true, camera);
             }
         }
     }
@@ -434,12 +532,14 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
         }
     }
 
-    private static void addModelQuads(BufferBuilder buffer, Pending pending, List<BakedQuad> quads, int section, boolean towardCamera, Vec3d camera) {
+    private static void addModelQuads(BufferBuilder buffer, Pending pending, SplitModel model, @Nullable Map<String, BakedQuad> labelQuads, int section, boolean towardCamera, Vec3d camera) {
         Placement placement = pending.placement;
+        int labelColor = labelQuads != null ? BottleLabel.getColor(pending.entry.stack).getColorValue() : 0;
         float[] data = new float[4];
         float[][] positions = new float[4][3];
         float[][] uvs = new float[4][2];
-        for (BakedQuad quad : quads) {
+        for (int quadIndex = 0; quadIndex < model.seeThrough.size(); quadIndex++) {
+            BakedQuad quad = model.seeThrough.get(quadIndex);
             VertexFormat format = quad.getFormat();
             int positionIndex = -1, uvIndex = -1;
             for (int i = 0; i < format.getElementCount(); i++) {
@@ -487,14 +587,43 @@ public class TileEntityRendererPlacedContainers extends TileEntitySpecialRendere
             int green = (int) (((tint >> 8) & 0xFF) * shade);
             int blue = (int) ((tint & 0xFF) * shade);
 
-            for (int vertex = 0; vertex < 4; vertex++) {
-                float[] position = positions[vertex];
-                buffer.pos(placement.worldX(position[0], position[2]), placement.originY + position[1], placement.worldZ(position[0], position[2]))
-                    .color(red, green, blue, 255)
-                    .tex(uvs[vertex][0], uvs[vertex][1])
-                    .lightmap(pending.skyLight, pending.blockLight)
-                    .endVertex();
+            addQuadVertices(buffer, pending, positions, uvs, red, green, blue);
+
+            if (labelQuads != null && quad.hasTintIndex()) {
+                BakedQuad labelQuad = labelQuads.get(model.seeThroughKeys.get(quadIndex));
+                if (labelQuad == null) {
+                    continue;
+                }
+                VertexFormat labelFormat = labelQuad.getFormat();
+                int labelUvIndex = -1;
+                for (int i = 0; i < labelFormat.getElementCount(); i++) {
+                    VertexFormatElement element = labelFormat.getElement(i);
+                    if (element.getUsage() == VertexFormatElement.EnumUsage.UV && element.getIndex() == 0) {
+                        labelUvIndex = i;
+                    }
+                }
+                if (labelUvIndex >= 0) {
+                    for (int vertex = 0; vertex < 4; vertex++) {
+                        LightUtil.unpack(labelQuad.getVertexData(), data, labelFormat, vertex, labelUvIndex);
+                        uvs[vertex][0] = data[0];
+                        uvs[vertex][1] = data[1];
+                    }
+                    addQuadVertices(buffer, pending, positions, uvs,
+                        (int) (((labelColor >> 16) & 0xFF) * shade), (int) (((labelColor >> 8) & 0xFF) * shade), (int) ((labelColor & 0xFF) * shade));
+                }
             }
+        }
+    }
+
+    private static void addQuadVertices(BufferBuilder buffer, Pending pending, float[][] positions, float[][] uvs, int red, int green, int blue) {
+        Placement placement = pending.placement;
+        for (int vertex = 0; vertex < 4; vertex++) {
+            float[] position = positions[vertex];
+            buffer.pos(placement.worldX(position[0], position[2]), placement.originY + position[1], placement.worldZ(position[0], position[2]))
+                .color(red, green, blue, 255)
+                .tex(uvs[vertex][0], uvs[vertex][1])
+                .lightmap(pending.skyLight, pending.blockLight)
+                .endVertex();
         }
     }
 

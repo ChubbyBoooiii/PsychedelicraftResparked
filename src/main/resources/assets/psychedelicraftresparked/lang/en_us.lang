@@ -252,6 +252,9 @@ container.bottle_workbench.tab.bottles=Bottle Crafting
 container.bottle_workbench.tab.labels=Labelling
 psychedelicraftresparked.shape.wine_bottle=Wine Bottle
 psychedelicraftresparked.shape.round_bottle=Round Bottle
+psychedelicraftresparked.label.band=Band
+psychedelicraftresparked.label.sticker=Sticker
+psychedelicraftresparked.label.none=No Label
 psychedelicraftresparked.jei.bottle_workbench.any_glass=Any glass block, the dye sets the colour
 
 

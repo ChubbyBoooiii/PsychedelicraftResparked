@@ -1,5 +1,6 @@
 package com.chubbyboi.psychedelicraftresparked.recipes;
 
+import com.chubbyboi.psychedelicraftresparked.block.BottleLabel;
 import com.chubbyboi.psychedelicraftresparked.block.PlacedContainerType;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -101,6 +102,7 @@ public class RecipeConvertFluidContainer extends IForgeRegistryEntry.Impl<IRecip
         if (source.hasTagCompound() && source.getTagCompound().hasKey(PlacedContainerType.SHAPE_TAG, Constants.NBT.TAG_STRING)) {
             PlacedContainerType.withShape(result, source.getTagCompound().getString(PlacedContainerType.SHAPE_TAG));
         }
+        BottleLabel.copy(source, result);
 
         ItemStack sourceProbe = source.copy();
         sourceProbe.setCount(1);
